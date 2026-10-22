@@ -34,7 +34,11 @@ jobs:
         with:
           python-version: '3.13'
       - run: npm ci --ignore-scripts
+      - name: Audit locked development dependencies
+        run: npm audit --audit-level=high
       - run: npx playwright install --with-deps chromium
+      - name: Generate fictional Office fixtures
+        run: node tests/generate-office.cjs
       - name: Unit, startup, browser, and fallback regressions
         run: npm test
       - name: Build installable extension

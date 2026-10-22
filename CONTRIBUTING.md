@@ -18,6 +18,8 @@ npm test
 
 Dependencies are pinned through `package-lock.json`. Use `npm ci --ignore-scripts` to install the reviewed dependency tree. Intentional dependency updates must include the updated lockfile.
 
+The development-only PowerPoint generator's `image-size` dependency is overridden to patched version 2.0.4 to address its parser denial-of-service advisories. CI regenerates the fictional Office fixtures before running their preview regressions, checking compatibility with this override. No extension runtime bundle is changed by this override.
+
 - `npm run test:unit`: unit, parsing, archive-boundary, and bundled-reader integrity checks.
 - `npm run test:startup`: deliberately delayed-page startup checks.
 - `npm run test:browser`: main Chrome extension regressions, including tool frames and file previews.

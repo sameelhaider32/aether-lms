@@ -11,6 +11,11 @@
     "package": "python scripts/package.py",
     "test:startup": "node tests/startup.cjs"
   },
+  "overrides": {
+    "pptxgenjs": {
+      "image-size": "2.0.4"
+    }
+  },
   "devDependencies": {
     "playwright": "1.62.1",
     "jszip": "3.10.1",
