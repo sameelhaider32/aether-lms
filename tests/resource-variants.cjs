@@ -22,7 +22,10 @@ module.exports=async({page,context,test,go,reportDir,assert,requests})=>{
    if(!response)return r.fallback();requests.push({url:u.href,method:r.request().method(),type:r.request().resourceType()});await r.fulfill(response);
  });
  const panel=page.locator('#aether-resource-preview'),open=async name=>{const id=files.indexOf(name);assert(id>=0);await page.locator(`#managed-${id} [data-ae-preview-open]`).click();await panel.waitFor();};
- const office=()=>page.frameLocator('.ae-preview-office'),close=async()=>{await page.keyboard.press('Escape');assert.equal(await panel.count(),0);};
+ // Routine cleanup uses the parent close control; keyboard dismissal remains
+ // covered explicitly below and in the hover/PDF regressions. Repeatedly
+ // dispatching key-up into an iframe removed on key-down can stall Linux CDP.
+ const office=()=>page.frameLocator('.ae-preview-office'),close=async()=>{await panel.getByRole('button',{name:'Close resource preview',exact:true}).click();assert.equal(await panel.count(),0);};
  await test('Resource variants: TA management form uses cards with original fields and extra context rows',async()=>{
    await go('Resources TA');await page.locator('#managed-resources.ae-card-table').waitFor();assert.equal(await page.locator('#managed-resources .ae-record-card').count(),files.length);assert.equal(await page.locator('#managed-resources>.ae-card-context-row').count(),0);assert.equal(await page.locator('.native-pagination.ae-card-context-row').count(),1);assert.equal(await page.locator('#managed-11 [data-ae-primary="true"] a').last().innerText(),'Bomb.zip');assert.equal(await page.locator('input[name="sakai_csrf_token"]').inputValue(),'fictional-manager-csrf');assert.equal(await page.locator('#manager-upload').getAttribute('type'),'file');assert.equal(await page.locator('#managed-0 [data-ae-primary="true"]').getAttribute('data-ae-type'),'PPTX');await page.screenshot({path:path.join(reportDir,'ta-resources-desktop.png'),fullPage:true});
  });
