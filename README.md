@@ -4,6 +4,9 @@ A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Ch
 
 **Current version: 1.3.0 · Public beta · MIT licensed**
 
+[![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
+[![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
+
 Works on [lms.lums.edu.pk](https://lms.lums.edu.pk). This is an independent project, unaffiliated with LUMS or the Sakai project.
 
 ![Aether Home with course cards, stars, and the folded particle field](docs/images/home.png)
@@ -79,6 +82,8 @@ The v1.3.0 release passed **142 browser checks and 11 unit/security checks** in 
 ## Contributing
 
 The extension runs directly from source. Development tests use Node.js, Python 3, and Playwright. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, testing, packaging, and the source layout. See [CHANGELOG.md](CHANGELOG.md) for release history and [SECURITY.md](SECURITY.md) for reporting security issues.
+
+Contributions go through pull requests, automated Windows/Linux browser regressions, package checks, dependency review, and security analysis before merging. Updates are reviewed by the maintainer; passing tests do not automatically publish or merge changes.
 
 ## License
 

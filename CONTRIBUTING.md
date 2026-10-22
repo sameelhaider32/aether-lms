@@ -11,18 +11,19 @@ Load the repository folder containing `manifest.json` through Chrome's **Load un
 Install a current supported Node.js release with npm, plus Python 3. From the repository root:
 
 ```sh
-npm install
+npm ci --ignore-scripts
 npx playwright install chromium
 npm test
 ```
 
-Direct development dependencies are pinned in `package.json`. Transitive dependencies are resolved by npm during installation; a lockfile is not currently supplied.
+Dependencies are pinned through `package-lock.json`. Use `npm ci --ignore-scripts` to install the reviewed dependency tree. Intentional dependency updates must include the updated lockfile.
 
 - `npm run test:unit`: unit, parsing, archive-boundary, and bundled-reader integrity checks.
 - `npm run test:startup`: deliberately delayed-page startup checks.
 - `npm run test:browser`: main Chrome extension regressions, including tool frames and file previews.
 - `node tests/fallbacks.cjs`: WebGL-disabled and cancellation checks.
 - `node tests/browser.cjs --smoke`: package-oriented checks, including hover dismissal and role/document variants.
+- `node tests/package.cjs`: verifies the built ZIP's hashes, unpacked bytes, licenses, permissions, and exclusion of development/private artifacts. Run the package builder first.
 
 Tests use intercepted fictional Sakai pages and fresh browser profiles. They do not require a university account. Output goes into `reports/`; generated reports are excluded from source ZIP exports. Keep private LMS captures out of commits.
 
@@ -66,3 +67,15 @@ git archive --format=zip --prefix=aether-lms/ --output=aether-lms-source.zip HEA
 The export omits generated reports through `.gitattributes`. A source ZIP is a snapshot; it does not include Git history. Historical reports in the original development repository record fixture results and do not establish compatibility with every live LUMS customization.
 
 Keep dependency licenses and provenance intact. First-party contributions are under the project's [MIT License](LICENSE).
+
+## How changes reach main
+
+Open a pull request from a feature branch. GitHub runs the full suite on Windows and Linux, builds the extension, checks the ZIP, and tests the unpacked release in Chromium. It also reviews dependency changes and runs CodeQL security analysis. Failed checks block merging. Screenshots and test results are retained as short-lived Actions artifacts; they contain fictional fixtures only.
+
+The maintainer decides which contributions to merge. CODEOWNERS requests review from `@sameelhaider32`. Because this is a sole-maintainer repository, no second reviewer is mandatory for the owner's own pull requests. Passing tests do not automatically merge a contribution. Main disallows force-pushes and deletion, and its required checks also apply to the owner.
+
+For each behavior change, reproduce the bug or new use case in a fictional fixture, add a focused assertion, and run the relevant checks locally before opening the pull request. UI changes should cover both student and management views where relevant, keyboard use, tool frames, Aether OFF, and narrow screens. Include permission failures, malformed inputs, and cancellation for preview changes. Existing tests catch regressions in covered behavior; they do not create tests for new features automatically or prove live LUMS compatibility.
+
+Dependabot opens weekly update pull requests for npm development dependencies and pinned workflow actions. Dependency review blocks newly introduced high/critical advisories. Bundled runtime libraries in `vendor/` are not automatically upgraded by these npm updates: maintainers must review their upstream security advisories, update local bundles and notices/provenance together, and exercise the format regressions. CodeQL scans first-party `src/` and `preview/`, rather than minified vendor code.
+
+Outside contributors' workflow runs require maintainer approval. Review workflow changes before approving a run; CI never receives university credentials or document samples. Workflows use pinned action commits, minimal permissions, and no automatic publishing. Read [SECURITY.md](SECURITY.md) for private reporting.

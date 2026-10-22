@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest an improvement or a missing use case.
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What are you trying to do?
+      description: Describe the affected page, role, file format, or workflow without private academic data.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would make it better?
+    validations:
+      required: true
