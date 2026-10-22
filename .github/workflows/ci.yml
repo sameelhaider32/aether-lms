@@ -47,6 +47,7 @@ jobs:
           AETHER_SHARED_RUNNER: '1'
         run: npm run test:startup
       - name: Browser regressions
+        timeout-minutes: 8
         if: '!cancelled()'
         run: npm run test:browser
       - name: Graphics and cancellation regressions
@@ -57,6 +58,7 @@ jobs:
       - name: Verify packaged archive
         run: node tests/package.cjs
       - name: Test packaged extension in Chromium
+        timeout-minutes: 8
         shell: pwsh
         run: |
           $version = (Get-Content manifest.json | ConvertFrom-Json).version

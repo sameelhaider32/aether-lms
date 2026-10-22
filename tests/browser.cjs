@@ -9,7 +9,14 @@ const releaseVersion=JSON.parse(fs.readFileSync(path.join(extension,'manifest.js
 const reportDir=path.resolve(process.env.AETHER_REPORT_DIR||path.join(__dirname,'..','reports',baseline?'baseline':smoke?'package-v'+releaseVersion:'v'+releaseVersion));
 fs.mkdirSync(reportDir,{recursive:true});
 const results=[],requests=[],errors=[];
-const test=async(name,fn)=>{if(process.env.AETHER_TEST_FILTER&&!new RegExp(process.env.AETHER_TEST_FILTER).test(name))return;const start=Date.now();try{await fn();results.push({name,passed:true,ms:Date.now()-start});console.log('PASS',name);}catch(e){results.push({name,passed:false,ms:Date.now()-start,error:e.message});console.log('FAIL',name,e.message);}};
+const test=async(name,fn)=>{
+ if(process.env.AETHER_TEST_FILTER&&!new RegExp(process.env.AETHER_TEST_FILTER).test(name))return;
+ const start=Date.now();if(process.env.CI)console.log('RUN',name);
+ // Playwright action timeouts do not bound every evaluate/protocol operation.
+ const watchdog=setTimeout(()=>{const error='Test exceeded 60 seconds';results.push({name,passed:false,ms:Date.now()-start,error});fs.writeFileSync(path.join(reportDir,'results.json'),JSON.stringify({baseline,smoke,extension,fixtureOnly:true,results,requests,errors,timedOut:true},null,2));console.error('FAIL',name,error);process.exit(1);},60000);
+ watchdog.unref();
+ try{await fn();results.push({name,passed:true,ms:Date.now()-start});console.log('PASS',name);}catch(e){results.push({name,passed:false,ms:Date.now()-start,error:e.message});console.log('FAIL',name,e.message);}finally{clearTimeout(watchdog);}
+};
 (async()=>{
  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'aether-regression-'));
  const context=await chromium.launchPersistentContext(profile,{channel:'chromium',executablePath:process.env.AETHER_CHROMIUM||undefined,ignoreDefaultArgs:['--disable-extensions'],headless:true,args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});
