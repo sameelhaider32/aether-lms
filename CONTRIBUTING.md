@@ -33,6 +33,8 @@ Tests use intercepted fictional Sakai pages and fresh browser profiles. They do 
 
 The optional native-tab visibility probe is `AETHER_HEADFUL=1 node tests/fallbacks.cjs` in a shell that supports that syntax. Some automation hosts do not update `document.hidden` on tab changes; this probe is separate from the default passing suite.
 
+Hosted CI sets `AETHER_SHARED_RUNNER=1` for startup checks: visuals must appear within 150 ms of workspace creation and before the deliberately delayed DOMContentLoaded event. Whole-navigation timings are recorded in `first-load-timing.json`, but the 1.5-second absolute budget is not enforced on shared VMs with variable cold-browser startup. Local startup tests retain that absolute budget by default. This is a functional CI check, not a controlled hardware performance benchmark.
+
 Checked-in PPTX, DOCX, XLSX, ZIP, and audio fixtures contain fictional content. Regenerate them with `node tests/generate-office.cjs` after installing development dependencies.
 
 ## Source layout

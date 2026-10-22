@@ -39,8 +39,19 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Generate fictional Office fixtures
         run: node tests/generate-office.cjs
-      - name: Unit, startup, browser, and fallback regressions
-        run: npm test
+      - name: Unit and security regressions
+        run: npm run test:unit
+      - name: Startup regressions on shared runner
+        if: '!cancelled()'
+        env:
+          AETHER_SHARED_RUNNER: '1'
+        run: npm run test:startup
+      - name: Browser regressions
+        if: '!cancelled()'
+        run: npm run test:browser
+      - name: Graphics and cancellation regressions
+        if: '!cancelled()'
+        run: node tests/fallbacks.cjs
       - name: Build installable extension
         run: python scripts/package.py
       - name: Verify packaged archive
