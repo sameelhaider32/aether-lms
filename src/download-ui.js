@@ -106,7 +106,12 @@
    const tools=el('div','ae-dl-tools');const addTool=(name,fn)=>{const b=button(name,fn);b.dataset.dlIdle='';tools.append(b);};
    addTool('Discover available courses',()=>controller.courses());
    addTool('Select available courses',()=>{for(const id of controller.tree.roots)controller.tree.set(id,true);controller.changed();});
-   addTool('Expand one level',async()=>{for(const id of [...controller.tree.roots,...expanded]){const node=controller.tree.nodes.get(id);if(!node||node.type!=='folder')continue;expanded.add(id);stamp='';if(node.state!=='loaded')await controller.folder(node);for(const child of node.children)if(controller.tree.nodes.get(child)?.type==='folder')expanded.add(child);}stamp='';schedule();});
+   addTool('Expand one level',async()=>{
+    const frontier=new Set(controller.tree.roots.filter(id=>!expanded.has(id)));
+    for(const id of expanded)for(const child of controller.tree.nodes.get(id)?.children||[])if(controller.tree.nodes.get(child)?.type==='folder'&&!expanded.has(child))frontier.add(child);
+    for(const id of frontier){if(!dialog||!enabled())break;const node=controller.tree.nodes.get(id);if(!node)continue;expanded.add(id);stamp='';schedule();if(node.state!=='loaded'&&!await controller.folder(node))break;}
+    stamp='';schedule();
+   });
    addTool('Collapse all',()=>{expanded.clear();stamp='';schedule();});
    const selectedButton=button('Show selected only',()=>{selectedOnly=!selectedOnly;selectedButton.setAttribute('aria-pressed',String(selectedOnly));stamp='';schedule();});selectedButton.setAttribute('aria-pressed','false');tools.append(selectedButton);left.append(tools);
    left.append(el('p','ae-dl-hint','A folder checkbox includes all accessible descendants. Expand to exclude individual children. Search and filters cover discovered metadata and do not change selections.'));

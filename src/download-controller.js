@@ -31,6 +31,7 @@
    if(this.task)return;const task=this.begin('discovering');
    try{await this.identity();await this.discovery.load(node,task.abort.signal,force);this.message=node.error||'Folder metadata loaded. No file contents downloaded.';}
    catch(error){this.message=error.message;}finally{if(this.task===task)this.stage='browsing';this.review=null;this.end(task);}
+   return !task.abort.signal.aborted;
   }
   async courses(){
    if(this.task)return;const task=this.begin('discovering');
