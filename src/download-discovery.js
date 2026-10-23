@@ -82,7 +82,7 @@
     if(depth>=128){n.state='incomplete';n.complete=false;n.error='Folder depth limit reached.';continue;}
     // Explicitly excluded subtrees need no network requests.
     if(!n.available){n.state='failed';n.complete=false;continue;}
-    try{await this.load(n,signal);}catch(error){if(signal.aborted)throw error;}
+    if(this.tree.intent(id))try{await this.load(n,signal);}catch(error){if(signal.aborted)throw error;}
     for(const child of n.children)queue.push({id:child,depth:depth+1});onprogress?.();
    }
    return this.tree.snapshot();

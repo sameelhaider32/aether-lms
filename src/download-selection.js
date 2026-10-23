@@ -23,7 +23,7 @@
   const props=raw.resourceProperties||raw.properties||{};
   const folder=id.endsWith('/');
   const mime=String(raw.mimeType||raw.contentType||props['DAV:getcontenttype']||raw.type||'').toLowerCase();
-  const external=/url|weblink|link/i.test(raw.resourceType||'')||mime==='text/url';
+  const external=/url|weblink|link/i.test(raw.resourceType||raw.type||'')||mime==='text/url';
   const name=String(raw.title||raw.name||raw.displayName||props['DAV:displayname']||tail).slice(0,512);
   const given=raw.url||raw.resourceUrl;
   const url=contentURL(given||ORIGIN+'/access/content'+encodeId(id),id);
@@ -63,7 +63,7 @@
    for(const n of this.nodes.values()){
     const selected=this.intent(n.id);
     if(n.type==='folder'){
-     if(this.status(n.id)!=='unchecked'&&(!n.complete||n.state!=='loaded'))incomplete.push(n);
+     if(selected&&(!n.complete||n.state!=='loaded'))incomplete.push(n);
      if(selected&&n.complete&&n.state==='loaded'&&!n.children.length)empty.push(n);
     }else if(selected){if(n.type==='file'&&n.available)files.push(n);else excluded.push(n);}
    }

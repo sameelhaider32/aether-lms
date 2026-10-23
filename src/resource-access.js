@@ -63,5 +63,54 @@
    const response=await fetch(u.href,{method:'GET',credentials:'same-origin',signal,redirect:'manual',cache:'no-store'});
    if(response.type!=='opaqueredirect'&&!response.ok)throw Error('Copyright acknowledgement failed. Open the original resource.');
  }
- globalThis.AetherResourceAccess={read,resource,accept};
+ // Download streams share the preview's exact URL/notice/acceptance policy,
+ // while avoiding responseBytes() and its rendering-only whole-file limits.
+ async function stream(info,signal,{onbytes=()=>{},idleMs=30000,maxBytes=2*1024**3}={}){
+   const u=info.u;if(!content(u)||u.username||u.password||u.search||u.hash)throw Error('Only verified LMS content references can be exported.');
+   const controller=new AbortController();let timer,reader,closed=false,total=0;
+   const stop=()=>controller.abort(signal?.reason),arm=()=>{clearTimeout(timer);timer=setTimeout(()=>controller.abort(Error('The file stream stalled. Retry this read-only export.')),idleMs);};
+   const cleanup=()=>{if(closed)return;closed=true;clearTimeout(timer);signal?.removeEventListener('abort',stop);};
+   if(signal?.aborted)stop();else signal?.addEventListener('abort',stop,{once:true});arm();
+   try{
+    const response=await fetch(u.href,{method:'GET',credentials:'same-origin',signal:controller.signal,redirect:'manual',cache:'no-store'});arm();
+    if(response.status===401){const e=Error('Your session expired. Export stopped.');e.session=true;throw e;}
+    if(response.type==='opaqueredirect'||response.status>=300&&response.status<400){
+     const requireURL=new URL('/access/require',origin);requireURL.searchParams.set('ref',decodeURIComponent(u.pathname.slice('/access'.length)));requireURL.searchParams.set('url',u.pathname.slice('/access'.length));
+     const result=await read(requireURL,controller.signal,256*1024),copyright=notice(result,u);
+     const e=Error(copyright?'Copyright acknowledgement required.':'Redirect could not be verified. Use Open original in Sakai.');if(copyright)e.notice=copyright;throw e;
+    }
+    if(!response.ok)throw Error(response.status===403?'Access restricted by Sakai.':response.status===404?'Resource no longer available.':'The LMS returned HTTP '+response.status+'.');
+    const lengthHeader=response.headers.get('content-length'),encoding=response.headers.get('content-encoding');
+    const expected=lengthHeader!==null&&!encoding?Number(lengthHeader):null;
+    if(expected!==null&&(!Number.isSafeInteger(expected)||expected<0||expected>maxBytes))throw Error('File exceeds the export size limit.');
+    reader=response.body?.getReader();if(!reader)throw Error('The LMS returned no readable file stream.');
+    const first=await reader.read();arm();
+    if(controller.signal.aborted)throw controller.signal.reason;
+    const mime=(response.headers.get('content-type')||'').toLowerCase(),prefix=new TextDecoder().decode(first.value?.slice(0,1024));
+    const html=/text\/html|application\/xhtml/.test(mime)||/^\s*(?:<!doctype\s+html|<html)/i.test(prefix);
+    if(html&&!/\.html?$/i.test(u.pathname)){
+     const chunks=first.done?[]:[first.value];let size=first.value?.length||0;
+     while(!first.done&&size<=256*1024){const item=await reader.read();arm();if(item.done)break;size+=item.value.length;chunks.push(item.value);}
+     if(size>256*1024)throw Error('The LMS returned an unexpected HTML page. Open original in Sakai.');
+     const bytes=new Uint8Array(size);let at=0;for(const c of chunks){bytes.set(c,at);at+=c.length;}
+     const copyright=notice({bytes,mime},u),e=Error(copyright?'Copyright acknowledgement required.':'The LMS returned a login, notice or error page instead of this file.');if(copyright)e.notice=copyright;throw e;
+    }
+    if(html&&/(?:type\s*=\s*["']?password|id\s*=\s*["']loginForm)/i.test(prefix))throw Error('The LMS returned a login page instead of this file.');
+    let pending=first;
+    const readable=new ReadableStream({
+     async pull(destination){
+      try{
+       if(controller.signal.aborted)throw controller.signal.reason;
+       const item=pending||await reader.read();pending=null;arm();
+       if(controller.signal.aborted)throw controller.signal.reason;
+       if(item.done){if(expected!==null&&total!==expected)throw Error('The file download was truncated.');cleanup();reader.releaseLock();destination.close();return;}
+       total+=item.value.length;if(total>maxBytes)throw Error('File exceeds the export size limit.');onbytes(item.value.length);destination.enqueue(item.value);
+      }catch(error){cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}destination.error(controller.signal.aborted?controller.signal.reason:error);}
+     },
+     async cancel(){controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}
+    },{highWaterMark:1});
+    return {readable,mime,length:expected,cancel:async()=>{controller.abort();cleanup();await reader.cancel().catch(()=>{});}};
+   }catch(error){controller.abort();cleanup();if(reader){await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}throw error;}
+ }
+ globalThis.AetherResourceAccess={read,resource,accept,stream};
 })();

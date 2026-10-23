@@ -1,0 +1,10 @@
+{
+  "name": "@zip.js/zip.js",
+  "license": "BSD-3-Clause",
+  "version": "2.24.0",
+  "integrity": "sha512-WlaVKzdqBK+RF3bdiXZWbdCnvGB6PdO4IHC1mn/2Yfl3bASgqUNegnU3+PNg61iecwoPfUi5BgLUPqBukXpyWw==",
+  "source": "https://registry.npmjs.org/@zip.js/zip.js/-/zip.js-2.24.0.tgz",
+  "files": {
+    "zip-core.min.js": "c0cb190cd5521a894ebb159af251ac3f6bf262e70c1b808e1bc2a5c5a42580ee"
+  }
+}
