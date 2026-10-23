@@ -6,18 +6,18 @@ const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve
 let failures=0,passes=0;
 async function test(name,fn){try{await fn();passes++;console.log('PASS',name);}catch(e){failures++;console.error('FAIL',name,e.message);}}
 function history(){
- const values={},listeners=new Set(),writes=[];let hold=false,account='fictional-a',failure=false,tail=Promise.resolve();
+ const values={},listeners=new Set(),writes=[],queuedWrite=deferred();let hold=false,account='fictional-a',failure=false,tail=Promise.resolve();
  const emit=changes=>{for(const f of listeners)f(changes,'local');};
  const chrome={runtime:{},storage:{local:{
   get(_keys,cb){cb({...values});},
-  set(next,cb){const run=()=>{if(failure){chrome.runtime.lastError={message:'Fixture write failed'};cb();delete chrome.runtime.lastError;return;}const changes={};for(const [key,value]of Object.entries(next)){changes[key]={newValue:value};values[key]=value;}emit(changes);cb();};if(hold)writes.push(run);else run();},
+  set(next,cb){const run=()=>{if(failure){chrome.runtime.lastError={message:'Fixture write failed'};cb();delete chrome.runtime.lastError;return;}const changes={};for(const [key,value]of Object.entries(next)){changes[key]={newValue:value};values[key]=value;}emit(changes);cb();};if(hold){writes.push(run);queuedWrite.resolve();}else run();},
   remove(keys,cb){if(failure){chrome.runtime.lastError={message:'Fixture remove failed'};cb();delete chrome.runtime.lastError;return;}const changes={};for(const key of keys){changes[key]={};delete values[key];}emit(changes);cb();}
  },onChanged:{addListener:f=>listeners.add(f),removeListener:f=>listeners.delete(f)}}};
  const locks={request(_name,fn){const result=tail.then(fn);tail=result.catch(()=>{});return result;}};
  const load=()=>{const events={};const scope={chrome,crypto:require('node:crypto').webcrypto,TextEncoder,TextDecoder,Event,AbortController,setTimeout,clearTimeout,URL,DOMException,navigator:{locks},fetch:async()=>({ok:true,headers:{get:()=>null},json:async()=>({userId:account}),text:async()=>JSON.stringify({userId:account})}),document:{dispatchEvent(e){for(const f of events[e.type]||[])f(e);},addEventListener(n,f){(events[n]||=[]).push(f);}},window:{addEventListener(n,f){(events[n]||=[]).push(f);}},top:{location:{origin:'https://lms.lums.edu.pk',pathname:'/portal'}}};vm.runInNewContext(source('src/file-state.js'),scope);return scope.AetherFileState;};
  const node={getAttribute:n=>n==='data-resource-version'?'one':null,querySelectorAll:()=>[]};
  const file={u:new URL('https://lms.lums.edu.pk/access/content/group/fictional/shared.pdf'),a:node,card:node,kind:'pdf'};
- return {values,file,load,writes,set hold(v){hold=v;},set account(v){account=v;},set failure(v){failure=v;}};
+ return {values,file,load,writes,queuedWrite:queuedWrite.promise,set hold(v){hold=v;},set account(v){account=v;},set failure(v){failure=v;}};
 }
 function reader(kind='pdf',options={}){
  const events={},nodes={},messages=[],imports=[],frames=[],timers=new Map();let destroys=0,renders=0,loading;
@@ -39,7 +39,7 @@ function reader(kind='pdf',options={}){
 }
 (async()=>{
  await test('History: a pending write cannot undo completed clear, including a second tab',async()=>{
-  const h=history(),a=h.load(),b=h.load();await a.describe(h.file);h.hold=true;const opening=a.opened(h.file);for(let i=0;i<20&&!h.writes.length;i++)await tick();assert.equal(h.writes.length,1);
+  const h=history(),a=h.load(),b=h.load();await a.describe(h.file);h.hold=true;const opening=a.opened(h.file);await h.queuedWrite;assert.equal(h.writes.length,1);
   const clearing=b.clear();await tick();h.hold=false;h.writes.shift()();await Promise.all([opening,clearing]);assert.equal(Object.keys(h.values).length,0,'an earlier write must never resurrect cleared history');
  });
  await test('History: shared file is isolated across accounts and logout',async()=>{

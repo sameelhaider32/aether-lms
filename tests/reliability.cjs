@@ -30,6 +30,10 @@ module.exports=async({page,context,test,go,preview,assert})=>{
   await context.route(url,r=>++reads===1?r.fulfill({status:503,body:'Temporary failure'}):r.fulfill({contentType:'text/plain',body:'Recovered fictional preview'}));
   try{await preview('notes.txt');await panel.getByRole('button',{name:'Retry preview',exact:true}).click();await panel.getByText('Recovered fictional preview',{exact:true}).waitFor();assert.equal(reads,2);assert(await panel.getByRole('button',{name:'Open original',exact:true}).isVisible());await close();}finally{await context.unroute(url);}
  });
+ await test('Reliability: retry discards a failed document payload before reading again',async()=>{
+  await go('Resources');const url=origin+'/access/content/group/cs200/Lecture%2001.pdf';let reads=0;await context.route(url,r=>r.fulfill({contentType:'application/pdf',body:++reads===1?'%PDF-1.7\nFictional damaged PDF':require('./fixtures.cjs').pdf()}));
+  try{await preview('Lecture 01.pdf');await panel.getByRole('button',{name:'Retry preview',exact:true}).click();await page.locator('#aether-resource-preview[data-pdf-page="1"]').waitFor();assert.equal(reads,2);await close();}finally{await context.unroute(url);}
+ });
  await test('Reliability: switching authenticated accounts does not share opened indicators',async()=>{
   let account='fictional-account-a';const endpoint=origin+'/direct/session/current.json';await context.route(endpoint,r=>r.fulfill({json:{userId:account}}));
   try{await go('Resources');await preview('notes.txt');await page.locator('#resource-2[data-ae-file-state="opened"]').waitFor();await close();account='fictional-account-b';await page.reload();await page.locator('#resource-2[data-ae-file-state="unopened"]').waitFor();account=null;await page.reload();await page.locator('#resource-2[data-ae-file-state="unavailable"]').waitFor();await preview('notes.txt');await page.locator('.ae-preview-text').waitFor();await close();account='fictional-account-a';await page.reload();await page.locator('#resource-2[data-ae-file-state="opened"]').waitFor();}finally{await context.unroute(endpoint);}

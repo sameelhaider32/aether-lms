@@ -47,7 +47,7 @@
  function status(state,message){if(!active(state))return;state.body.replaceChildren(el('p','ae-preview-message',message));}
  function failure(state,message){
   if(!active(state)||state.failed)return;state.failed=true;clearTimeout(state.timeout);state.frame?.remove();state.frame=null;state.bytes=null;state.objectURL&&URL.revokeObjectURL(state.objectURL);state.objectURL=null;status(state,message);
-  const retry=el('button','ae-preview-open','Retry preview');retry.type='button';retry.onclick=()=>{if(!active(state))return;const card=state.info.card;close();open(card,true);};state.body.append(retry);
+  const retry=el('button','ae-preview-open','Retry preview');retry.type='button';retry.onclick=()=>{if(!active(state))return;const key=state.info.u?.href+'|'+(globalThis.AetherFileState?.version(state.info)||'unversioned'),entry=cache.get(key);if(entry){cacheBytes-=entry.size;cache.delete(key);}const card=state.info.card;close();open(card,true);};state.body.append(retry);
  }
  function position(state){
   let r=state.info.card.getBoundingClientRect(),win=window,left=r.left,topPos=r.top;
