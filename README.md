@@ -2,7 +2,7 @@
 
 A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Chrome extension that adds course cards, document previews, and a glowing starfield to your existing LMS.
 
-**Current version: 1.3.0 · Public beta · MIT licensed**
+**Current version: 1.3.1 · Public beta · MIT licensed**
 
 [![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
 [![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
@@ -81,7 +81,7 @@ Fonts and readers are bundled locally. There are no analytics, external document
 
 ## Compatibility and testing
 
-The v1.3.0 release passed **142 browser checks and 11 unit/security checks** in Chromium 149 on Windows using fictional, intercepted Sakai fixtures. Coverage includes student and TA resources, previews, copyright consent, forms, Gradebook, Roster, toggles, graphics fallbacks, and widths from 360 to 1920 pixels.
+The v1.3.1 reliability checks use fictional, intercepted Sakai fixtures and the real unpacked extension. They cover preview cancellation, history concurrency and account isolation, native controls, copyright consent, startup routes, graphics fallbacks, and large dynamic lists. See the [release audit](docs/V1.3.1_AUDIT.md) and [verification report](docs/V1.3.1_RELEASE_REPORT.md) for results, environment details and limitations.
 
 **Live authenticated LUMS compatibility has not been independently verified.** Custom Sakai tools, permissions, and security policies can vary. Treat this as a public beta and report problems using fictional or redacted examples. If a page looks wrong, switch Aether off to use the native layout.
 
