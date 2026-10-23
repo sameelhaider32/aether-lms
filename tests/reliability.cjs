@@ -13,6 +13,10 @@ module.exports=async({page,context,test,go,preview,assert})=>{
   await go('Resources');await page.evaluate(()=>{document.querySelector('.Mrphs-sakai-resources').removeAttribute('class');document.querySelector('.portal-header .header-tool-title').textContent='Assignments';});await page.locator('#resource-0[data-ae-kind="assignment"]').waitFor();await page.locator('#resource-0 .ae-preview-control:not(.ae-attachment-preview-control)').waitFor({state:'detached'});await page.locator('#resource-0 .ae-attachment-preview-control').waitFor();
   await page.evaluate(()=>document.querySelector('.portal-header .header-tool-title').textContent='Resources');await page.locator('#resource-0[data-ae-kind="resource"] .ae-preview-control:not(.ae-attachment-preview-control)').waitFor();assert.equal(await page.locator('#resource-0 [data-ae-preview-open]').count(),1);
  });
+ await test('Reliability: dynamic attachment dialogs outside main retain preview and cleanup',async()=>{
+  await go('Assignment detail');await page.evaluate(()=>{const form=document.createElement('form');form.id='addSubmissionForm';form.innerHTML='<textarea>Fictional unsaved draft</textarea><ul class="attachList"><li><a href="/access/content/attachment/fictional/dialog.pdf">Dialog attachment.pdf</a></li></ul>';document.body.append(form);});
+  await page.getByRole('button',{name:'Preview Dialog attachment.pdf',exact:true}).click();await page.locator('#aether-resource-preview[data-pdf-page="1"]').waitFor();assert.equal(await page.locator('#addSubmissionForm textarea').inputValue(),'Fictional unsaved draft');await page.locator('#addSubmissionForm').evaluate(n=>n.remove());await panel.waitFor({state:'detached'});
+ });
  await test('Reliability: rapid PDF switching and OFF discard late reader events',async()=>{
   await go('Resources');for(let i=0;i<12;i++){await page.locator('#resource-'+(i%2)+' [data-ae-preview-open]').click();if(i%3===0)await close();}
   if(await panel.count())await close();await preview('Lecture 01.pdf');await page.locator('#aether-resource-preview[data-pdf-page="1"]').waitFor();

@@ -197,7 +197,20 @@
  }
  const schedule=()=>{if(!queued){queued=true;queueMicrotask(sync);}};
  document.addEventListener('aether-file-state-change',schedule);
- const observer=new MutationObserver(records=>{const scope=document.querySelector('main#content,.Mrphs-toolBody,.portletBody,#addSubmissionForm');if(records.every(r=>{const target=r.target.nodeType===1?r.target:r.target.parentElement;return target?.closest(own+',.ae-resource-preview,[data-ae-assignment-badges],#aether-workspace,#aether-global-ambient,#aether-native-toggle')||scope&&!scope.contains(target)&&(!target?.contains(scope)||r.type==='childList'&&![...r.addedNodes,...r.removedNodes].some(n=>n===scope||n.contains?.(scope)));}))return;schedule();});observer.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','hidden','aria-hidden','href','onclick','datetime','data-sort-value','data-resource-version','data-last-modified']});
+ const observer=new MutationObserver(records=>{
+  const scope=document.querySelector('main#content,.Mrphs-toolBody,.portletBody,#addSubmissionForm'),attachmentRoots='.Mrphs-toolBody,.portletBody,.attachList,#addSubmissionForm';
+  const irrelevant=record=>{
+   const target=record.target.nodeType===1?record.target:record.target.parentElement;
+   if(target?.closest(own+',.ae-resource-preview,[data-ae-assignment-badges],#aether-workspace,#aether-global-ambient,#aether-native-toggle'))return true;
+   if(!scope||scope.contains(target)||target?.closest(attachmentRoots))return false;
+   // Sakai can mount attachment dialogs outside main; retain their lifecycle.
+   if(record.type==='attributes'&&target?.querySelector(own))return false;
+   const nodes=record.type==='childList'?[...record.addedNodes,...record.removedNodes]:[];
+   if(nodes.some(node=>node.matches?.(attachmentRoots)||node.querySelector?.(attachmentRoots)))return false;
+   return !target?.contains(scope)||record.type==='childList'&&!nodes.some(node=>node===scope||node.contains?.(scope));
+  };
+  if(!records.every(irrelevant))schedule();
+ });observer.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','hidden','aria-hidden','href','onclick','datetime','data-sort-value','data-resource-version','data-last-modified']});
  const settings=new MutationObserver(schedule);settings.observe(host.documentElement,{attributes:true,attributeFilter:['class']});
  document.addEventListener('pointerover',hover,{passive:true});document.addEventListener('pointerout',leave,{passive:true});
  // Observe the portal as well as an embedded tool, including viewport exits.
