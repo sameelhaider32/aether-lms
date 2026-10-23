@@ -19,7 +19,7 @@
    this.scope=scope;this.checkedAt=Date.now();return scope;
   }
   reset(message='Selections cleared for privacy.'){
-   this.cancel();clearTimeout(this.expiry);this.tree.clear();this.tree.nodes.clear();this.tree.roots.length=0;this.scope=null;this.review=null;this.stage='browsing';this.message=message;this.emit();
+   this.cancel();clearTimeout(this.expiry);this.tree.clear();this.tree.nodes.clear();this.tree.roots.length=0;this.scope=null;this.review=null;this.progress={completed:0,bytes:0,failed:[]};this.discovery=new globalThis.AetherDownloadDiscovery.Discovery(this.tree,globalThis.AetherResourceAccess);this.stage='browsing';this.message=message;this.emit();
   }
   begin(stage){
    if(this.task)throw Error('An operation is already running.');
@@ -85,7 +85,7 @@
     const result=await task.archive.finish();
     if(result.blob){const objectURL=URL.createObjectURL(result.blob),a=document.createElement('a');a.href=objectURL;a.download='Aether LMS Resources.zip';a.hidden=true;a.dataset.aeDownloadControl='true';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectURL),30000);}
     this.stage='completed';this.message=this.progress.completed+' files '+(result.direct?'saved':'prepared for Chrome to save')+(this.progress.failed.length?', '+this.progress.failed.length+' skipped.':'.');
-   }catch(error){await task.archive?.abort();this.stage=error.name==='AbortError'?'cancelled':'failed';this.message=(error.message||'Export failed.')+' No completed archive was saved.'+(handle?' The unfinished write was aborted; Chrome may retain an empty newly chosen file.':'');}
+   }catch(error){if(error.session)this.reset('Your Sakai session expired. Previous selections were cleared.');await task.archive?.abort();this.stage=error.name==='AbortError'?'cancelled':'failed';this.message=(error.message||'Export failed.')+' No completed archive was saved.'+(handle?' The unfinished write was aborted; Chrome may retain an empty newly chosen file.':'');}
    finally{this.notice=null;this.partial=null;this.end(task);}
   }
   async source(node,task){
