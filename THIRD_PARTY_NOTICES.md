@@ -10,7 +10,7 @@ All runtime assets are locally packaged. License texts remain beside their asset
 | Lato Regular/Bold | Unchanged v0.8.1 assets | SIL OFL 1.1, `fonts/OFL.txt` |
 | PDF.js 5.6.205 and worker | Unchanged v0.8.1 assets; [Mozilla PDF.js](https://github.com/mozilla/pdf.js) | Apache 2.0, `vendor/pdfjs/LICENSE` |
 | PDF.js character maps, fonts and decoders | Unchanged v0.8.1 assets | Notices in `vendor/pdfjs/cmaps/`, `standard_fonts/` and `wasm/` |
-| Playwright 1.62.1 | [Microsoft Playwright](https://github.com/microsoft/playwright) | Apache 2.0; development only, excluded from release |
+| Playwright 1.64.1 | [Microsoft Playwright](https://github.com/microsoft/playwright) | Apache 2.0; development only, excluded from release |
 | PPTX renderer 1.4.0 | [aiden0z/pptx-renderer](https://github.com/aiden0z/pptx-renderer) | Apache 2.0; `vendor/office/pptx-renderer/LICENSE` and preserved notices |
 | ECharts 6.0.0 and zrender 6.0.0, bundled in the PPTX renderer | [Apache ECharts](https://github.com/apache/echarts), [zrender](https://github.com/ecomfe/zrender) | Apache 2.0 / BSD 3-Clause; `vendor/office/pptx-renderer/licenses/echarts-LICENSE`, `echarts-NOTICE`, `zrender-LICENSE` |
 | mtx-decompressor 1.4.2, bundled unchanged in the PPTX renderer | [Source v1.4.2](https://github.com/ChristopherVR/mtx-decompressor/tree/v1.4.2) | MPL 2.0; license and source availability in `vendor/office/pptx-renderer/THIRD_PARTY_NOTICES.md` |
