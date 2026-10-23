@@ -2,7 +2,7 @@
 
 A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Chrome extension that adds course cards, document previews, and a glowing starfield to your existing LMS.
 
-**Current version: 1.3.1 · Public beta · MIT licensed**
+**Current version: 1.4.0 · Public beta · MIT licensed**
 
 [![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
 [![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
@@ -35,6 +35,7 @@ To update, back up your current folder, replace its contents with the new versio
 | Folded field | A procedural 3D particle sculpture with progressive startup and a Canvas fallback when WebGL is unavailable. |
 | Course dissolve | Existing pinned course boxes fade at the scroll edges while their titles dissolve into local particles and reform on return. Course links stay native; keyboard focus, reordering, Motion Off, and the system reduced-motion preference show solid cards. |
 | Resources | Cards for student, TA, and instructor browsing views, including supported management lists and embedded Sakai tools. |
+| Resource collections | Select files, nested folders and available courses in one download basket. Exclude individual descendants, review discovery, then export a ZIP preserving the hierarchy. |
 | Native resource controls | Original file and folder links, action menus, selection checkboxes, sorting, pagination, and permitted add/upload/delete controls remain available. Editing fields retain their native layout. |
 | Assignments | Full-card color fills in the v1.3 style and text badges distinguish submitted, not submitted, due soon (24 hours), due shortly (2 hours), overdue, not open, revision, excused, and cancelled states when confirmed by Sakai. Draft, grade, feedback, and confirmed late-submission badges remain separate. Unknown states stay neutral. |
 | Gradebook | Cards for read-only grade summaries, including scores, feedback, and release states. Editable grade grids and comparison tables keep their layout with matching styling. |
@@ -50,6 +51,20 @@ To update, back up your current folder, replace its contents with the new versio
 Native authentication, access permissions, forms, and actions remain in Sakai. Aether does not grant access to hidden grades or restricted files. The Home activity panel uses only the current page; its decorative graphic does not measure grades, progress, or deadlines.
 
 Submitted assignments stay mint even after their deadline. A **Late** badge requires an explicit native late status or a confirmed submission timestamp after the applicable due date. **Draft saved** does not mean submitted. Due dates remain visible in Sakai's original fields, with relative time labels updating automatically. Opened-file history starts when this feature is used and does not reconstruct past reading activity. See [PRIVACY.md](PRIVACY.md) for storage details.
+
+## Download resources
+
+Select **Download resources** in Resources or the Home/course workspace. **Add to download basket** adds an individual record. These controls are separate from Sakai's native management checkboxes and never mark a file Opened.
+
+Expand a course or folder to browse its metadata. Check a folder to include its accessible descendants, then uncheck children to exclude them. **Discover available courses** can add authenticated API results beyond the navigation courses; this is not a guarantee that every LUMS enrollment is listed. Search and file-type filters cover discovered metadata and preserve selections.
+
+Select **Review selection** before exporting. Failed or incomplete enumeration is shown explicitly; retry it or approve an export of only the discovered items. Copyright notices require a separate acceptance for each protected resource, or you can skip it. Failed files are listed, and keeping a partial archive requires confirmation.
+
+**Download ZIP** opens Chrome's save dialog immediately from your click and streams one file at a time. The direct export ceiling is 2 GiB including archive overhead. Where direct saving is unsupported or blocked, the explicit **Download small ZIP (64 MiB)** option has a strict output limit, including unknown-size files. Larger ZIP64 archives are not advertised as supported. Native **Open original** links remain the fallback.
+
+Keep the page open while exporting. The basket lives only in this page's memory, expires after 30 minutes of inactivity, and clears on logout/account change, navigation or Aether OFF. Closing a running operation asks before cancelling; OFF cancels immediately. An aborted save can leave a newly chosen destination empty; it is never reported as a completed ZIP. No background download service or extra Chrome permission is used.
+
+Read the [selection and compatibility report](docs/V1.4_ARCHITECTURE.md) and [verification/limitations](docs/V1.4_RELEASE_REPORT.md). Live authenticated LUMS API compatibility and the native save-dialog destination flow still require manual validation.
 
 ## Preview formats
 

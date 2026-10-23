@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0 — Resource collections & bulk export — 24 October 2026
+
+- Add an independent download basket for mixed files, nested folders and available courses. Folder intentions inherit to newly discovered children; explicit exclusions, tri-state checkboxes and stable identities prevent accidental duplicates.
+- Discover metadata lazily, with retry, bounded pagination, request deduplication and explicit incomplete states. Current visible files remain usable when collection APIs are unavailable. Available courses are never presented as proof of every enrollment.
+- Add a responsive Aether Download Manager with filename/type filters, basket rules, final review, keyboard controls, reduced motion and native-control preservation. Delegated entry handlers also work after Sakai clones a resource row.
+- Stream sequential STORE/ZIP64 entries through locally bundled BSD-licensed zip.js 2.24.0 into File System Access destinations, with a 2 GiB release ceiling. Offer an explicit 64 MiB Blob fallback with actual-byte enforcement; do not reuse preview size limits.
+- Preserve course/folder paths with Unicode-safe sanitation, Windows reserved-name protection and deterministic collision suffixes. Include empty folders; never create successful placeholders for failed downloads.
+- Reuse same-origin read-only access and exact-resource copyright validation. Each acceptance requires explicit consent. Cancel on account changes/OFF/navigation, discard stale baskets, and require confirmation before keeping partial results.
+- Keep baskets in page memory only, with 30-minute inactivity expiry. Export and discovery do not alter Opened history; no extra Chrome permissions, analytics, remote ZIP services or background download service.
+- Add focused model, discovery, controller, streaming, filesystem, security and browser regressions; stress 100 manager lifecycles and a 1,000-file tree. Keep all v1.3.1 preview and academic workflow checks.
+- Document deployment/API/save-dialog manual checks and tested limits. No authenticated LUMS verification or >4 GiB export support is claimed.
+
 ## 1.3.1 — 24 October 2026
 
 - Serialize file-history mutations across LMS tabs and tool frames so an earlier pending write cannot undo Clear. Show storage failures accurately.
