@@ -84,6 +84,10 @@ module.exports=async({page,context,test,go,reportDir,assert,requests})=>{
  await test('Resource variants: declining copyright makes no acknowledgement request',async()=>{
    accepted.clear();await go('Resources TA');const before=acknowledgements.length;await open('Protected.pdf');await panel.getByRole('button',{name:'Cancel',exact:true}).click();assert.equal(await panel.count(),0);assert.equal(acknowledgements.length,before);
  });
+ await test('Resource variants: retry after failed acknowledgement never repeats acceptance',async()=>{
+   accepted.clear();await go('Resources TA');let attempts=0;const endpoint=origin+'/access/accept?**';await context.route(endpoint,r=>{attempts++;return r.fulfill({status:503,body:'Fictional temporary failure'});});
+   try{await open('Protected.pdf');await panel.getByRole('button',{name:'Yes, accept and preview'}).click();await panel.getByRole('button',{name:'Retry preview',exact:true}).click();await panel.getByRole('button',{name:'Yes, accept and preview'}).waitFor();assert.equal(attempts,1);await close();}finally{await context.unroute(endpoint);}
+ });
  await test('Resource variants: hostile copyright links are inert and cannot send external acknowledgements',async()=>{
    await open('Bad copyright.pdf');await panel.locator('.ae-preview-message').waitFor();assert.equal(await panel.getByRole('button',{name:'Yes, accept and preview'}).count(),0);assert(!requests.some(r=>new URL(r.url).hostname==='example.invalid'));await close();
  });

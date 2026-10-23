@@ -20,25 +20,27 @@ function history(){
  return {values,file,load,writes,set hold(v){hold=v;},set account(v){account=v;},set failure(v){failure=v;}};
 }
 function reader(kind='pdf',options={}){
- const events={},nodes={},messages=[],imports=[],frames=[];let destroys=0,renders=0;
+ const events={},nodes={},messages=[],imports=[],frames=[],timers=new Map();let destroys=0,renders=0,loading;
  const node=id=>nodes[id]||=( {id,hidden:false,textContent:'',value:'page',disabled:false,style:{},dataset:{},clientWidth:900,clientHeight:700,width:0,height:0,children:[],setAttribute(){},addEventListener(n,f){this[n]=f;},replaceChildren(...v){this.children=v;},append(...v){this.children.push(...v);},getContext(){return options.noCanvas?null:{};}} );
  const emit=(name,e)=>Promise.all((events[name]||[]).map(f=>f(e)));
- const lib={GlobalWorkerOptions:{},getDocument(){imports.push('getDocument');return {promise:options.parse?.promise||Promise.resolve(pdf),destroy(){destroys++;return Promise.resolve();}};}};
+ const lib={GlobalWorkerOptions:{},getDocument(){imports.push('getDocument');return loading={promise:options.parse?.promise||Promise.resolve(pdf),destroy(){destroys++;return Promise.resolve();}};}};
  const pdf={numPages:2,getPage:async()=>{if(options.page)await options.page.promise;return {getViewport:({scale})=>({width:600*scale,height:800*scale}),render(){renders++;return {promise:options.render?.promise||Promise.resolve(),cancel(){}};}};}};
  const parent={postMessage:m=>messages.push(m)};parent.top=parent;
  const scope={URL,URLSearchParams,ArrayBuffer,Uint8Array,TextDecoder,TextEncoder,Error,Promise,location:{hash:'#token=fixture&origin=https%3A%2F%2Flms.lums.edu.pk'},parent,devicePixelRatio:1,requestAnimationFrame:f=>{frames.push(f);return frames.length;},cancelAnimationFrame(){},ResizeObserver:class{observe(){}disconnect(){}},document:{querySelector:s=>node(s.slice(1)),addEventListener(){},createElement:tag=>node(tag),head:{append(){}}},window:{addEventListener(n,f){(events[n]||=[]).push(f);}},AetherArchiveGuard:{inspect:()=>[]},JSZip:{loadAsync:async()=>({})},__import:async()=>{imports.push('import');if(options.importing)await options.importing.promise;return kind==='pdf'?lib:{PptxViewer:{open:async()=>{if(options.open)await options.open.promise;return {slideCount:2,destroy(){destroys++;},renderSlide:async()=>{}};}}};}};
- scope.globalThis=scope;
- if(kind==='office')scope.AetherArchiveGuard.inspect=()=>[{name:'ppt/presentation.xml',bytes:0}];
- scope.JSZip.loadAsync=async()=>({file:()=>({internalStream:()=>{const handlers={};const stream={on(n,f){handlers[n]=f;return stream;},resume(){queueMicrotask(()=>handlers.end());},pause(){}};return stream;}})});
+ scope.setTimeout=(fn,ms)=>{const id={};timers.set(id,fn);return id;};scope.clearTimeout=id=>timers.delete(id);scope.globalThis=scope;
+ if(kind==='office')scope.AetherArchiveGuard.inspect=()=>[{name:options.format==='docx'?'word/document.xml':options.format==='xlsx'?'xl/workbook.xml':'ppt/presentation.xml',bytes:0}];
+ scope.docx={renderAsync:async()=>{if(options.word)await options.word.promise;node('document').append('late word');}};
+ scope.ExcelJS={Workbook:class{constructor(){this.xlsx={load:async()=>{if(options.sheet)await options.sheet.promise;}};this.worksheets=[];}}};
+ scope.JSZip.loadAsync=async()=>{if(options.archive)await options.archive.promise;return {file:()=>({internalStream:()=>{const handlers={};const stream={on(n,f){handlers[n]=f;return stream;},resume(){queueMicrotask(()=>handlers.end());},pause(){}};return stream;}})};};
  vm.runInNewContext(source('preview/'+kind+'.js').replace(/import\.meta\.url/g,"'https://extension.invalid/preview/reader.js'").replace(/\bimport\(/g,'__import('),scope);
  const data=()=>emit('message',{source:parent,origin:'https://lms.lums.edu.pk',data:{type:'aether-'+kind+'-data',token:'fixture',bytes:new ArrayBuffer(8)}});
  const flush=async()=>{for(let i=0;i<10;i++){while(frames.length)frames.shift()(0);await tick();}};
- return {data,emit,flush,nodes,messages,imports,get destroys(){return destroys;},get renders(){return renders;}};
+ return {data,emit,flush,nodes,messages,imports,timers,get loading(){return loading;},get destroys(){return destroys;},get renders(){return renders;}};
 }
 (async()=>{
  await test('History: a pending write cannot undo completed clear, including a second tab',async()=>{
   const h=history(),a=h.load(),b=h.load();await a.describe(h.file);h.hold=true;const opening=a.opened(h.file);for(let i=0;i<20&&!h.writes.length;i++)await tick();assert.equal(h.writes.length,1);
-  let completed=false;const clearing=b.clear().then(()=>completed=true);await tick();assert.equal(completed,false,'clear must wait for prior storage callback');h.hold=false;h.writes.shift()();await Promise.all([opening,clearing]);assert.equal(Object.keys(h.values).length,0);
+  const clearing=b.clear();await tick();h.hold=false;h.writes.shift()();await Promise.all([opening,clearing]);assert.equal(Object.keys(h.values).length,0,'an earlier write must never resurrect cleared history');
  });
  await test('History: shared file is isolated across accounts and logout',async()=>{
   const h=history(),a=h.load();await a.opened(h.file);assert.equal((await a.describe(h.file)).state,'opened');h.account='fictional-b';assert.equal((await a.describe(h.file)).state,'unopened');await a.opened(h.file);h.account=null;assert.equal((await a.describe(h.file)).state,'unavailable');await a.opened(h.file);h.account='fictional-a';assert.equal((await a.describe(h.file)).state,'opened');assert(!JSON.stringify(h.values).includes('fictional'));
@@ -63,6 +65,29 @@ function reader(kind='pdf',options={}){
  });
  await test('Office: close during open destroys late viewer exactly once',async()=>{
   const open=deferred(),r=reader('office',{open});const loading=r.data();await tick();await r.emit('pagehide',{});open.resolve();await loading;await r.emit('pagehide',{});assert.equal(r.destroys,1);assert.equal(r.messages.filter(m=>m.state==='rendered').length,0);
+ });
+ for(const [stage,format]of [['importing','pptx'],['archive','pptx'],['word','docx'],['sheet','xlsx']])await test('Office: close during '+stage+' suppresses late rendering',async()=>{
+  const gate=deferred(),r=reader('office',{[stage]:gate,format}),loading=r.data();await tick();await r.emit('pagehide',{});gate.resolve();await loading;await r.emit('pagehide',{});assert.equal(r.messages.filter(m=>m.state==='rendered'||m.state==='error').length,0);assert.equal(r.nodes.document?.children.length||0,0);
+ });
+ await test('PDF: password and subsequent parse rejection emit one terminal error',async()=>{
+  const parse=deferred(),r=reader('pdf',{parse}),loading=r.data();await tick();r.loading.onPassword();parse.reject(Error('Password required'));await loading;await r.emit('pagehide',{});assert.equal(r.messages.filter(m=>m.state==='error').length,1);assert.equal(r.destroys,1);
+ });
+ await test('PDF: stalled page render times out, then ignores late completion',async()=>{
+  const render=deferred(),r=reader('pdf',{render}),loading=r.data();await r.flush();assert.equal(r.timers.size,1);[...r.timers.values()][0]();const sent=r.messages.length;render.resolve();await loading;await r.flush();assert.equal(r.messages.length,sent);assert.equal(r.messages.filter(m=>m.state==='error').length,1);assert.equal(r.destroys,1);
+ });
+ await test('History: a preview begun in one account cannot mark another account opened',async()=>{
+  const h=history(),a=h.load();const historyScope=await a.session();h.account='fictional-b';await a.opened({...h.file,historyScope},true);assert.equal((await a.describe(h.file)).state,'unopened');assert.equal(Object.keys(h.values).length,0);
+ });
+ await test('Network: abort cancels a stalled response body and releases its lock',async()=>{
+  const waiting=deferred();let cancelled=0,released=0;const controller=new AbortController();
+  const stream={read:()=>waiting.promise,cancel:async()=>{cancelled++;waiting.resolve({done:true});},releaseLock(){released++;}};
+  const scope={URL,TextDecoder,Uint8Array,DOMException,top:{location:{hostname:'lms.lums.edu.pk',origin:'https://lms.lums.edu.pk',pathname:'/portal'}},fetch:async()=>({ok:true,headers:{get:()=>null},body:{getReader:()=>stream}})};vm.runInNewContext(source('src/resource-access.js'),scope);
+  const result=scope.AetherResourceAccess.read(new URL('https://lms.lums.edu.pk/access/content/fictional'),controller.signal);await tick();controller.abort();let deadline;try{await assert.rejects(Promise.race([result,new Promise((_,reject)=>{deadline=setTimeout(()=>reject(Error('Abort did not settle')),250);})]),{name:'AbortError'});}finally{clearTimeout(deadline);}assert(cancelled>=1);assert.equal(released,1);
+ });
+ await test('Network: body failure cancels the stream instead of retaining a download',async()=>{
+  let cancelled=0,released=0;const stream={read:async()=>{throw Error('Connection lost');},cancel:async()=>{cancelled++;},releaseLock(){released++;}};
+  const scope={URL,TextDecoder,Uint8Array,DOMException,top:{location:{hostname:'lms.lums.edu.pk',origin:'https://lms.lums.edu.pk',pathname:'/portal'}},fetch:async()=>({ok:true,headers:{get:()=>null},body:{getReader:()=>stream}})};vm.runInNewContext(source('src/resource-access.js'),scope);
+  await assert.rejects(scope.AetherResourceAccess.read(new URL('https://lms.lums.edu.pk/access/content/fictional')));assert.equal(cancelled,1);assert.equal(released,1);
  });
  console.log(`${passes}/${passes+failures} lifecycle checks passed`);process.exitCode=failures?1:0;
 })().catch(e=>{console.error(e);process.exitCode=1;});

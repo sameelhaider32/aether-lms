@@ -53,6 +53,9 @@ jobs:
       - name: Graphics and cancellation regressions
         if: '!cancelled()'
         run: node tests/fallbacks.cjs
+      - name: Preview and large-list stress profile
+        if: '!cancelled()'
+        run: npm run test:stress
       - name: Build installable extension
         run: python scripts/package.py
       - name: Verify packaged archive

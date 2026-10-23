@@ -24,6 +24,7 @@ const test=async(name,fn)=>{
  await context.route('https://**/*',async r=>{
   const req=r.request(),u=new URL(req.url());requests.push({url:req.url(),method:req.method(),type:req.resourceType()});
   if(u.origin!==origin)return r.abort();
+  if(u.pathname==='/direct/session/current.json')return r.fulfill({json:{userId:'fictional-browser'}});
   if(u.pathname.startsWith('/portal/')||u.pathname.startsWith('/tool/'))return r.fulfill({contentType:'text/html',body:fixture(u.href)});
   if(u.pathname.startsWith('/direct/content/'))return r.fulfill({json:{content_collection:[{resourceChildren:[{title:'nested-notes.txt',resourceId:'/group/cs200/Week 01/nested-notes.txt'}]}]}});
   if(u.pathname.endsWith('/restricted.pdf'))return r.fulfill({status:403,body:'Permission denied'});
@@ -48,6 +49,7 @@ const test=async(name,fn)=>{
  await test('Same-origin frame resources and top-level preview',async()=>{await go('Frame');const frame=page.frameLocator('iframe[title="Resources tool frame"]');await frame.locator('.ae-record-card').first().waitFor();await frame.locator('#resource-2 [data-ae-preview-open]').click();await page.locator('.ae-preview-text').waitFor();await page.keyboard.press('Escape');});
  await test('OFF restores native records and survives reload',async()=>{await go('Resources');await page.locator('#aether-native-toggle').click();assert.equal(await page.locator('.ae-record-card').count(),0);assert.equal(await page.locator('[data-ae-preview-open]').count(),0);assert.equal(await page.locator('#aether-workspace').isVisible(),false);assert.equal(await page.locator('#records').evaluate(e=>getComputedStyle(e).display),'table');await page.reload();assert.equal(await page.locator('html.aether-enabled').count(),0);await page.locator('#aether-native-toggle').click();await page.locator('.ae-record-card').first().waitFor();});
  if(!baseline)await require('./reader-features.cjs')({page,context,test,go,preview,reportDir,assert});
+ if(!baseline)await require('./reliability.cjs')({page,context,test,go,preview,assert});
  if(!baseline)await require('./status-colors.cjs')({page,context,test,go,preview,reportDir,assert});
  if(!baseline)await require('./course-fade.cjs')({page,test,go,reportDir,assert});
  if(!baseline&&!smoke)await require('./extended.cjs')({page,context,test,go,card,preview,reportDir,assert,requests,errors});
