@@ -1,0 +1,30 @@
+/* Browser resource sampling, with fictional intercepted content only. */
+const {chromium}=require('playwright'),{fixture,pdf,origin,route}=require('./fixtures.cjs');
+const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),assert=require('node:assert/strict');
+const root=path.join(__dirname,'..'),extension=path.resolve(process.env.AETHER_EXTENSION||root),out=path.resolve(process.env.AETHER_REPORT_DIR||path.join(root,'reports/stress'));
+fs.mkdirSync(out,{recursive:true});
+(async()=>{
+ const context=await chromium.launchPersistentContext(fs.mkdtempSync(path.join(os.tmpdir(),'aether-stress-')),{channel:'chromium',headless:true,ignoreDefaultArgs:['--disable-extensions'],args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+ const errors=[],requests=[],samples=[],latencies=[];
+ await context.route('https://**/*',r=>{const u=new URL(r.request().url());requests.push({path:u.pathname,method:r.request().method()});if(u.origin!==origin)return r.abort();if(u.pathname==='/direct/session/current.json')return r.fulfill({json:{userId:'fictional-stress'}});if(u.pathname.startsWith('/portal'))return r.fulfill({contentType:'text/html',body:fixture(u.href)});if(u.pathname.endsWith('.pdf'))return r.fulfill({contentType:'application/pdf',body:pdf()});const name=u.pathname.split('/').pop();if(['preview.pptx','preview.docx','preview.xlsx'].includes(name))return r.fulfill({contentType:'application/octet-stream',body:fs.readFileSync(path.join(__dirname,'data',name))});return r.fulfill({contentType:'text/plain',body:'Fictional text'});});
+ const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
+ const cdp=await context.newCDPSession(page);await cdp.send('Performance.enable');
+ const sample=async(label)=>{await cdp.send('HeapProfiler.collectGarbage');const metrics=(await cdp.send('Performance.getMetrics')).metrics,targets=(await cdp.send('Target.getTargets')).targetInfos;const pick=k=>metrics.find(x=>x.name===k)?.value;samples.push({label,heap:pick('JSHeapUsedSize'),documents:pick('Documents'),nodes:pick('Nodes'),listeners:pick('JSEventListeners'),taskDuration:pick('TaskDuration'),pdfWorkers:targets.filter(t=>t.type==='worker'&&t.url.includes('pdf.worker')).length,previewFrames:page.frames().filter(f=>/\/preview\/(pdf|office)\.html/.test(f.url())).length,...await cdp.send('Memory.getDOMCounters')});console.log('SAMPLE',label);};
+ const panel=page.locator('#aether-resource-preview'),close=()=>panel.getByRole('button',{name:'Close resource preview',exact:true}).click();
+ await page.goto(route('Resources'));await page.locator('#resource-0 [data-ae-preview-open]').waitFor();await sample('start');
+ for(let i=0;i<100;i++){const start=Date.now();await page.locator('#resource-0 [data-ae-preview-open]').click();await page.locator('#aether-resource-preview[data-pdf-page="1"]').waitFor();if(i%10===0){const reader=page.frameLocator('.ae-preview-pdf');await reader.locator('#zoom-in').click();await reader.locator('#fit').selectOption('width');await reader.locator('#next').click();await page.locator('#aether-resource-preview[data-pdf-page="2"]').waitFor();}latencies.push(Date.now()-start);await close();if((i+1)%20===0)await sample('pdf-'+(i+1));}
+ for(const format of ['pptx','docx','xlsx']){
+  await page.locator('#resource-0 a[download]').evaluate((a,format)=>{a.href='/access/content/group/fictional/preview.'+format;a.textContent='preview.'+format;},format);
+  for(let i=0;i<10;i++){await page.locator('#resource-0 [data-ae-preview-open]').click();await page.locator('#aether-resource-preview[data-office-kind]').waitFor();await close();}await sample(format+'-10');
+ }
+ await page.goto(route('Resources'));await page.locator('#resource-0 [data-ae-preview-open]').waitFor();
+ for(let i=0;i<30;i++){await page.locator('#resource-'+(i%2)+' [data-ae-preview-open]').click();if(i%2)await close();}if(await panel.count())await close();await sample('alternating-30');
+ const tableStart=Date.now();await page.evaluate(()=>{const source=document.querySelector('#resource-0'),body=source.parentElement;for(let i=0;i<1000;i++){const row=source.cloneNode(true);row.id='large-'+i;row.querySelectorAll('[data-ae-preview-control]').forEach(n=>n.remove());row.querySelector('a[download]').href='/access/content/group/fictional/large-'+i+'.pdf';body.append(row);}const widget=document.createElement('div');widget.id='unrelated-widget';document.body.append(widget);});
+ await page.waitForFunction(()=>document.querySelectorAll('#records [data-ae-preview-open]').length>=1010);const tableReadyMs=Date.now()-tableStart;
+ const churn=await page.evaluate(async()=>{const gaps=[],widget=document.getElementById('unrelated-widget');for(let i=0;i<30;i++){const start=performance.now();widget.textContent='Fictional clock '+i;await new Promise(requestAnimationFrame);gaps.push(performance.now()-start);}return gaps;});
+ await page.evaluate(()=>document.querySelectorAll('[id^=large-]').forEach(n=>n.remove()));await sample('rows-removed');
+ for(let i=0;i<20;i++){await page.goto(route(i%2?'Resources':'Overview'));await page.locator('#aether-native-toggle').waitFor();}await sample('navigation-20');
+ assert.equal(await panel.count(),0);assert.deepEqual(errors,[]);assert(requests.every(r=>r.method==='GET'));
+ const sorted=latencies.toSorted((a,b)=>a-b),churnSorted=churn.toSorted((a,b)=>a-b);
+ const result={browser:context.browser().version(),platform:process.platform,node:process.version,fixtureOnly:true,forcedGC:true,pdfCycles:100,officeCycles:30,alternations:30,navigations:20,rowsAdded:1000,tableReadyMs,latencyMedianMs:sorted[50],latencyP95Ms:sorted[95],unrelatedMutationMedianMs:churnSorted[15],unrelatedMutationP95Ms:churnSorted[28],samples,errors,requestCount:requests.length};fs.writeFileSync(path.join(out,'stress.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));await context.close();
+})().catch(e=>{console.error(e);process.exitCode=1;});

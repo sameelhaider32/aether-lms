@@ -34,7 +34,7 @@ for p in sorted(files):
     target = release / rel
     target.parent.mkdir(parents=True, exist_ok=True)
     data = p.read_bytes()
-    if p.suffix in {'.js', '.css', '.json', '.md', '.txt', '.html'}:
+    if p.suffix in {'.js', '.mjs', '.css', '.json', '.md', '.txt', '.html'} or p.name.startswith('LICENSE'):
         data = data.replace(b'\r\n', b'\n')
     target.write_bytes(data)
     hashes[rel.as_posix()] = hashlib.sha256(data).hexdigest()
@@ -43,6 +43,7 @@ with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslev
     for rel in sorted(hashes):
         info = zipfile.ZipInfo(f'aether-lms-extension-v{version}/' + rel, date_time=(2026, 10, 22, 0, 0, 0))
         info.compress_type = zipfile.ZIP_DEFLATED
+        info.create_system = 3  # Fixed Unix metadata on Windows and Linux alike.
         info.external_attr = 0o100644 << 16
         z.writestr(info, (release / rel).read_bytes())
 (out / f'release-v{version}-sha256.json').write_text(json.dumps({'archive':hashlib.sha256(archive.read_bytes()).hexdigest(),'files':hashes}, indent=2)+'\n', encoding='utf-8')

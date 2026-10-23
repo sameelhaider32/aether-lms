@@ -64,10 +64,10 @@ module.exports=async({page,context,test,go,preview,reportDir,assert})=>{
  await test('Status colors: file history contains hashes and timestamps only and can be cleared',async()=>{
   await go('Resources');await preview('Lecture 01.pdf');await page.locator('#aether-resource-preview[data-pdf-page="1"]').waitFor();await state(page.locator('#resource-0'),'opened');
   const reader=page.frames().find(frame=>frame.url().includes('/preview/pdf.html'));const values=await reader.evaluate(()=>chrome.storage.local.get(null));
-  const entries=Object.entries(values).filter(([key])=>key.startsWith('aether:v14:file:'));assert(entries.length>0);assert(entries.length<=1000);
-  for(const [key,value]of entries){assert(/^aether:v14:file:[a-f0-9]{64}$/.test(key));assert.deepEqual(Object.keys(value).sort(),['openedAt','version']);assert(Number.isFinite(value.openedAt));assert(value.version===null||/^[a-f0-9]{64}$/.test(value.version));}
+  const entries=Object.entries(values).filter(([key])=>key.startsWith('aether:v131:file:'));assert(entries.length>0);assert(entries.length<=1000);
+  for(const [key,value]of entries){assert(/^aether:v131:file:[a-f0-9]{64}$/.test(key));assert.deepEqual(Object.keys(value).sort(),['openedAt','version']);assert(Number.isFinite(value.openedAt));assert(value.version===null||/^[a-f0-9]{64}$/.test(value.version));}
   const serialized=JSON.stringify(entries);assert(!serialized.includes('/access/content/'));assert(!serialized.includes('Lecture'));assert(!serialized.includes('notes.txt'));
-  await panel.getByRole('button',{name:'Clear file history',exact:true}).click();await state(page.locator('#resource-0'),'unopened');const remaining=await reader.evaluate(async()=>Object.keys(await chrome.storage.local.get(null)).filter(key=>key.startsWith('aether:v14:file:')).length);assert.equal(remaining,0);await close();
+  await panel.getByRole('button',{name:'Clear file history',exact:true}).click();await state(page.locator('#resource-0'),'unopened');const remaining=await reader.evaluate(async()=>Object.keys(await chrome.storage.local.get(null)).filter(key=>key.startsWith('aether:v131:file:')).length);assert.equal(remaining,0);await close();
  });
  await test('Status colors: original file clicks are recorded while native downloads keep working',async()=>{
   await reset();const automatic=page.waitForEvent('download');await page.locator('#resource-2 a[download]').evaluate(a=>a.click());await automatic;await state(notes,'unopened');

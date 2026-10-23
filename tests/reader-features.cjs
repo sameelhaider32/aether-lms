@@ -51,7 +51,7 @@ module.exports=async({page,context,test,go,preview,reportDir,assert})=>{
   assert((await canvas.boundingBox()).width<=(await paper.boundingBox()).width+1);
   await page.screenshot({path:path.join(reportDir,'large-pdf-reader.png')});
   await panel.getByRole('button',{name:'Restore preview size',exact:true}).click();assert(Math.abs((await panel.boundingBox()).width-resized.width)<2);
-  await page.setViewportSize({width:360,height:640});const mobile=await panel.boundingBox();assert(mobile.x>=0&&mobile.x+mobile.width<=360);assert(mobile.y>=0&&mobile.y+mobile.height<=640);assert(await panel.getByRole('button',{name:'Close resource preview',exact:true}).isVisible());
+  await page.setViewportSize({width:360,height:640});await page.waitForFunction(()=>{const r=document.querySelector('#aether-resource-preview')?.getBoundingClientRect();return r&&r.x>=0&&r.right<=innerWidth&&r.y>=0&&r.bottom<=innerHeight;});const mobile=await panel.boundingBox();assert(mobile.x>=0&&mobile.x+mobile.width<=360);assert(mobile.y>=0&&mobile.y+mobile.height<=640);assert(await panel.getByRole('button',{name:'Close resource preview',exact:true}).isVisible());
   await close();await page.setViewportSize({width:1440,height:1000});
  });
  const attachmentRoute=origin+'/access/content/attachment/**',attachmentRequests=[];

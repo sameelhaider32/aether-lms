@@ -227,7 +227,7 @@
     if(Number.isFinite(nextDeadline))deadlineTimer=setTimeout(update,Math.min(2147483000,Math.max(1,nextDeadline-Date.now()+1)));
   }
   function schedule(records){
-    if(records?.length&&records.every(r=>(r.target.nodeType===1?r.target:r.target.parentElement)?.closest('#aether-workspace,#aether-global-ambient,[data-ae-assignment-badges],[data-ae-preview-control]')))return;
+    if(records?.length){const scope=framed?document.body:document.querySelector('main#content');if(records.every(r=>{const target=r.target.nodeType===1?r.target:r.target.parentElement;return target?.closest('#aether-workspace,#aether-global-ambient,.ae-resource-preview,[data-ae-assignment-badges],[data-ae-preview-control]')||scope&&!scope.contains(target)&&(!target?.contains(scope)||r.type==='childList'&&![...r.addedNodes,...r.removedNodes].some(n=>n===scope||n.contains?.(scope)));}))return;}
     // Mutation observers run before rendering. No DOMContentLoaded wait or
     // debounce that exposes the native table for several painted frames.
     if(!timer){timer=1;queueMicrotask(update);}

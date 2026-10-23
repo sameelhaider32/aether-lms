@@ -36,7 +36,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Audit locked development dependencies
         run: npm audit --audit-level=high
-      - run: npx playwright install --with-deps chromium
+      # Tests select channel: chromium; the separate headless shell is unused.
+      - run: npx playwright install --with-deps chromium --no-shell
       - name: Generate fictional Office fixtures
         run: node tests/generate-office.cjs
       - name: Unit and security regressions
@@ -53,6 +54,9 @@ jobs:
       - name: Graphics and cancellation regressions
         if: '!cancelled()'
         run: node tests/fallbacks.cjs
+      - name: Preview and large-list stress profile
+        if: '!cancelled()'
+        run: npm run test:stress
       - name: Build installable extension
         run: python scripts/package.py
       - name: Verify packaged archive

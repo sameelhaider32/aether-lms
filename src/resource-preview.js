@@ -15,7 +15,7 @@
  function contentURL(u){return u?.origin===origin&&/^\/access\/content\//.test(u.pathname);}
  const info=card=>globalThis.AetherResourceInfo.describe(card);
  const read=(...args)=>globalThis.AetherResourceAccess.read(...args);
- function success(state){if(!active(state))return;state.rendered=true;if(state.pinned&&!state.recorded){state.recorded=true;globalThis.AetherFileState?.opened(state.info,true).catch(()=>{});}}
+ function success(state){if(!active(state)||state.failed)return;state.rendered=true;if(state.pinned&&!state.recorded){state.recorded=true;globalThis.AetherFileState?.opened(state.info,true).catch(()=>{});}}
  function problem(state,kind='unavailable'){if(active(state))globalThis.AetherFileState?.problem(state.info,kind).catch(()=>{});}
  function fileBadge(card,wrap){
   const service=globalThis.AetherFileState,data=info(card);if(!service||!data||data.kind==='folder')return;
@@ -38,13 +38,17 @@
  function triggerFor(card){return attachmentControls.get(card)?.querySelector('[data-ae-preview-open]')||card.querySelector('[data-ae-preview-open]');}
  function cancelHover(){clearTimeout(pending);pending=0;hoverCard=null;}
  function close(restoreFocus=false){cancelHover();
-  const state=current;current=null;if(!state)return;state.abort.abort();clearTimeout(state.timeout);clearTimeout(state.requestTimeout);state.objectURL&&URL.revokeObjectURL(state.objectURL);state.panel.remove();if(restoreFocus===true)triggerFor(state.info.card)?.focus({preventScroll:true});
+  const state=current;current=null;if(!state)return;state.abort.abort();clearTimeout(state.timeout);clearTimeout(state.requestTimeout);state.bytes=null;state.frame=null;state.objectURL&&URL.revokeObjectURL(state.objectURL);state.objectURL=null;state.panel.remove();if(restoreFocus===true)triggerFor(state.info.card)?.focus({preventScroll:true});
  }
  const contains=(parent,node)=>!!node?.nodeType&&parent.contains(node);
  function leavePreview(target){if(current&&!current.pinned&&!contains(current.info.card,target)&&!contains(current.panel,target))close();}
  function outside(e){if(hoverCard&&!contains(hoverCard,e.target))cancelHover();leavePreview(e.target);}
  function boundary(e){cancelHover();leavePreview(e.relatedTarget);}
  function status(state,message){if(!active(state))return;state.body.replaceChildren(el('p','ae-preview-message',message));}
+ function failure(state,message){
+  if(!active(state)||state.failed)return;state.failed=true;clearTimeout(state.timeout);state.frame?.remove();state.frame=null;state.bytes=null;state.objectURL&&URL.revokeObjectURL(state.objectURL);state.objectURL=null;status(state,message);
+  const retry=el('button','ae-preview-open','Retry preview');retry.type='button';retry.onclick=()=>{if(!active(state))return;const key=state.info.u?.href+'|'+(globalThis.AetherFileState?.version(state.info)||'unversioned'),entry=cache.get(key);if(entry){cacheBytes-=entry.size;cache.delete(key);}const card=state.info.card;close();open(card,true);};state.body.append(retry);
+ }
  function position(state){
   let r=state.info.card.getBoundingClientRect(),win=window,left=r.left,topPos=r.top;
   while(win!==top){try{const frame=win.frameElement,b=frame.getBoundingClientRect();left+=b.left+frame.clientLeft;topPos+=b.top+frame.clientTop;win=win.parent;}catch{break;}}
@@ -99,7 +103,7 @@
  async function folder(state){
   const {id}=state.info;if(!id)throw Error('Folder listing unavailable. Open the folder in Sakai.');
   const path=id.replace(/\/$/,'').split('/').map(encodeURIComponent).join('/'),endpoint=new URL('/direct/content/resources'+path+'.json?depth=1',origin),key=endpoint.href;
-  let items=cache.get(key)?.value;if(!items){const result=await read(endpoint,state.abort.signal,1024*1024);items=children(JSON.parse(new TextDecoder().decode(result.bytes)));remember(key,items,result.bytes.length);}
+  let items=cache.get(key)?.value;if(!items){const result=await read(endpoint,state.abort.signal,1024*1024);if(!active(state))return;items=children(JSON.parse(new TextDecoder().decode(result.bytes)));remember(key,items,result.bytes.length);}
   if(active(state))folderItems(state,items);
  }
  function viewer(state,kind,bytes){
@@ -107,13 +111,13 @@
   const token=crypto.randomUUID(),frame=el('iframe',kind==='pdf'?'ae-preview-pdf':'ae-preview-office');state.frame=frame;state.token=token;state.bytes=bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength);state.viewerKind=kind;state.viewerOrigin=new URL(chrome.runtime.getURL('/')).origin;
   frame.title=(kind==='pdf'?'PDF pages for ':'Document preview: ')+state.info.title;
   frame.src=chrome.runtime.getURL(kind==='pdf'?'preview/pdf.html':'preview/office.html')+'#'+new URLSearchParams({token,origin});state.body.replaceChildren(frame);position(state);
-  state.timeout=setTimeout(()=>{if(active(state)&&state.frame){state.frame.remove();state.frame=null;problem(state);status(state,'Preview unavailable. Open the original resource.');}},20000);
+  state.timeout=setTimeout(()=>{if(active(state)&&state.frame){problem(state);failure(state,'The document reader timed out. Retry preview or open the original resource.');}},20000);
  }
  async function file(state){
   const {u}=state.info;if(!contentURL(u)){if(state.info.kind!=='link')throw Error('Open the original resource to see its contents.');metadata(state);problem(state);return;}
   const limit=state.info.kind==='text'?128*1024:['office','archive','audio','video','link'].includes(state.info.kind)?32*1024*1024:MAX;
   const cacheKey=u.href+'|'+(globalThis.AetherFileState?.version(state.info)||'unversioned');
-  let result=cache.get(cacheKey)?.value;if(!result){result=await globalThis.AetherResourceAccess.resource(state.info,state.abort.signal,limit);remember(cacheKey,result,result.bytes.length);}
+  let result=cache.get(cacheKey)?.value;if(!result){result=await globalThis.AetherResourceAccess.resource(state.info,state.abort.signal,limit);if(!active(state))return;remember(cacheKey,result,result.bytes.length);}
   if(!active(state))return;
   const {bytes,mime}=result,prefix=new TextDecoder().decode(bytes.slice(0,1024)),zip=bytes[0]===80&&bytes[1]===75;
   let kind=prefix.includes('%PDF-')?'pdf':zip?(state.info.kind==='archive'?'archive':'office'):globalThis.AetherResourceInfo.kind(state.info.extension,mime);
@@ -130,11 +134,11 @@
   if(kind==='text'){if(bytes.length>128*1024)throw Error('This file is too large for a quick preview. Open the original resource.');state.body.replaceChildren(el('pre','ae-preview-text',new TextDecoder().decode(bytes).slice(0,16000)));success(state);return;}
   if(kind==='image'){
    if(!/^image\/(?:png|jpeg|webp|gif|bmp|avif)/i.test(mime))throw Error('Image preview unavailable. Open the original resource.');
-   state.objectURL=URL.createObjectURL(new Blob([bytes],{type:mime}));const image=el('img','ae-preview-image');image.alt=state.info.title;image.onload=()=>success(state);image.onerror=()=>{problem(state);status(state,'Image preview unavailable. Open the original resource.');};image.src=state.objectURL;state.body.replaceChildren(image);return;
+   state.objectURL=URL.createObjectURL(new Blob([bytes],{type:mime}));const image=el('img','ae-preview-image');image.alt=state.info.title;image.onload=()=>success(state);image.onerror=()=>{problem(state);failure(state,'Image preview unavailable. Open the original resource.');};image.src=state.objectURL;state.body.replaceChildren(image);return;
   }
   if(['audio','video'].includes(kind)){
    if(!mime.startsWith(kind+'/'))throw Error('This media format cannot be previewed. Open the original resource.');
-   state.objectURL=URL.createObjectURL(new Blob([bytes],{type:mime}));const media=el(kind,'ae-preview-media');media.controls=true;media.preload='metadata';media.onloadedmetadata=()=>success(state);media.src=state.objectURL;media.setAttribute('aria-label',state.info.title);media.onerror=()=>{problem(state);status(state,'This media codec cannot be played in this browser. Open the original resource.');};state.body.replaceChildren(media);return;
+   state.objectURL=URL.createObjectURL(new Blob([bytes],{type:mime}));const media=el(kind,'ae-preview-media');media.controls=true;media.preload='metadata';media.onloadedmetadata=()=>success(state);media.src=state.objectURL;media.setAttribute('aria-label',state.info.title);media.onerror=()=>{problem(state);failure(state,'This media codec cannot be played in this browser. Open the original resource.');};state.body.replaceChildren(media);return;
   }
   metadata(state);problem(state);state.body.append(el('p','ae-preview-message','A content preview is not available for this format. Open the original resource.'));
  }
@@ -145,8 +149,8 @@
  }
  async function load(state,acceptance=null){
   if(!active(state))return;delete state.panel.dataset.copyright;status(state,'Loading preview…');state.requestTimeout=setTimeout(()=>state.abort.abort(),9000);
-  try{if(acceptance)await globalThis.AetherResourceAccess.accept(acceptance,state.info,state.abort.signal);if(state.info.kind==='folder')await folder(state);else await file(state);}
-  catch(error){if(active(state)){if(error.notice)copyright(state,error.notice);else{problem(state,/permission|forbidden|access denied/i.test(error.message)?'restricted':'unavailable');status(state,error.name==='AbortError'?'Preview timed out. Open the original resource.':error.name==='SyntaxError'&&state.info.kind==='folder'?'Folder listing unavailable. Open the folder in Sakai.':/^(This |Preview |Folder |Open |Image |Copyright )/.test(error.message)?error.message:'Preview unavailable. Open the original resource.');}}}
+  try{state.info.historyScope=await globalThis.AetherFileState?.session();if(!active(state))return;if(acceptance)await globalThis.AetherResourceAccess.accept(acceptance,state.info,state.abort.signal);if(state.info.kind==='folder')await folder(state);else await file(state);}
+  catch(error){if(active(state)){if(error.notice)copyright(state,error.notice);else{problem(state,/permission|forbidden|access denied/i.test(error.message)?'restricted':'unavailable');failure(state,error.name==='AbortError'?'Preview timed out. Open the original resource.':error.name==='SyntaxError'&&state.info.kind==='folder'?'Folder listing unavailable. Open the folder in Sakai.':/^(This |Preview |Folder |Open |Image |Copyright )/.test(error.message)?error.message:'Preview could not be downloaded. Check your connection or open the original resource.');}}}
   finally{clearTimeout(state.requestTimeout);}
  }
  async function open(card,keyboard=false){
@@ -156,7 +160,7 @@
   const head=el('div','ae-preview-head'),title=el('div','');title.append(el('span','ae-preview-kind',data.kind==='pdf'?'PDF preview':data.kind==='folder'?'Folder contents':'Resource preview'),el('h3','',data.title));const dismiss=el('button','ae-preview-close','×');dismiss.type='button';dismiss.setAttribute('aria-label','Close resource preview');dismiss.onclick=()=>close(true);
   const actions=el('div','ae-preview-window-actions'),expand=el('button','ae-preview-expand','Expand');expand.type='button';expand.setAttribute('aria-label','Expand preview');actions.append(expand,dismiss);head.append(title,actions);
   const body=el('div','ae-preview-body'),footer=el('div','ae-preview-footer'),original=el('button','ae-preview-open',data.kind==='folder'?'Open folder':'Open original');original.type='button';original.onclick=()=>{close();originalIntent=data.a;try{data.a.click();}finally{originalIntent=null;}};footer.append(original,el('span','','Preview only'));panel.append(head,body,footer);
-  if(globalThis.AetherFileState){const clear=el('button','ae-preview-clear-history','Clear file history');clear.type='button';clear.title='Forget opened-file history on this device';clear.onclick=async()=>{await globalThis.AetherFileState.clear();clear.textContent='History cleared';};footer.insertBefore(clear,footer.lastChild);}
+  if(globalThis.AetherFileState){const clear=el('button','ae-preview-clear-history','Clear file history');clear.type='button';clear.title='Forget opened-file history on this device';clear.onclick=async()=>{clear.disabled=true;try{await globalThis.AetherFileState.clear();clear.textContent='History cleared';}catch{clear.textContent='Could not clear history · Retry';}finally{clear.disabled=false;}};footer.insertBefore(clear,footer.lastChild);}
   const state={panel,body,info:data,pinned:keyboard,expand,abort:new AbortController()};current=state;host.body.append(panel);resizeControls(state);position(state);
   expand.onclick=()=>{state.pinned=true;state.expanded=!state.expanded;position(state);};
   panel.addEventListener('pointerleave',e=>{if(current===state)leavePreview(e.relatedTarget);});
@@ -193,7 +197,20 @@
  }
  const schedule=()=>{if(!queued){queued=true;queueMicrotask(sync);}};
  document.addEventListener('aether-file-state-change',schedule);
- const observer=new MutationObserver(records=>{if(records.every(r=>(r.target.nodeType===1?r.target:r.target.parentElement)?.closest(own+',.ae-resource-preview,[data-ae-assignment-badges]')))return;schedule();});observer.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','hidden','aria-hidden','href','onclick','datetime','data-sort-value','data-resource-version','data-last-modified']});
+ const observer=new MutationObserver(records=>{
+  const scope=document.querySelector('main#content,.Mrphs-toolBody,.portletBody,#addSubmissionForm'),attachmentRoots='.Mrphs-toolBody,.portletBody,.attachList,#addSubmissionForm';
+  const irrelevant=record=>{
+   const target=record.target.nodeType===1?record.target:record.target.parentElement;
+   if(target?.closest(own+',.ae-resource-preview,[data-ae-assignment-badges],#aether-workspace,#aether-global-ambient,#aether-native-toggle'))return true;
+   if(!scope||scope.contains(target)||target?.closest(attachmentRoots))return false;
+   // Sakai can mount attachment dialogs outside main; retain their lifecycle.
+   if(record.type==='attributes'&&target?.querySelector(own))return false;
+   const nodes=record.type==='childList'?[...record.addedNodes,...record.removedNodes]:[];
+   if(nodes.some(node=>node.matches?.(attachmentRoots)||node.querySelector?.(attachmentRoots)))return false;
+   return !target?.contains(scope)||record.type==='childList'&&!nodes.some(node=>node===scope||node.contains?.(scope));
+  };
+  if(!records.every(irrelevant))schedule();
+ });observer.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','hidden','aria-hidden','href','onclick','datetime','data-sort-value','data-resource-version','data-last-modified']});
  const settings=new MutationObserver(schedule);settings.observe(host.documentElement,{attributes:true,attributeFilter:['class']});
  document.addEventListener('pointerover',hover,{passive:true});document.addEventListener('pointerout',leave,{passive:true});
  // Observe the portal as well as an embedded tool, including viewport exits.
@@ -204,12 +221,14 @@
  document.addEventListener('click',e=>{const a=e.target.closest?.('a[href]');if(!enabled()||!a||!e.isTrusted&&a!==originalIntent||e.defaultPrevented||a.closest('.dropdown-menu,.ae-resource-preview,#aether-workspace'))return;const card=a.closest(targetSelector);if(!card)return;const data=info(card);if(data?.a===a)globalThis.AetherFileState?.opened(data).catch(()=>{});});
  const key=e=>{if(e.key==='Escape'&&current)close(true);};host.addEventListener('keydown',key);
  const scroll=e=>{if(hoverCard&&!hoverCard.matches(':hover'))cancelHover();if(current&&!contains(current.panel,e?.target)){if(current.pinned)position(current);else close();}};host.addEventListener('scroll',scroll,true);window.addEventListener('scroll',scroll,true);top.addEventListener('resize',scroll);
- const message=e=>{const s=current;if(!s?.frame||e.source!==s.frame.contentWindow||e.origin!==s.viewerOrigin||e.data?.type!==(s.viewerKind==='pdf'?'aether-pdf-preview':'aether-office-preview')||e.data.token!==s.token)return;
+ const message=e=>{const s=current;if(!s?.frame||s.failed||!active(s)||e.source!==s.frame.contentWindow||e.origin!==s.viewerOrigin||e.data?.type!==(s.viewerKind==='pdf'?'aether-pdf-preview':'aether-office-preview')||e.data.token!==s.token)return;
   if(e.data.state==='ready'&&s.bytes){const bytes=s.bytes.slice(0);s.frame.contentWindow.postMessage({type:s.viewerKind==='pdf'?'aether-pdf-data':'aether-office-data',token:s.token,bytes,name:s.info.title,extension:s.info.extension},s.viewerOrigin,[bytes]);s.bytes=null;}
-  if(['rendered','error'].includes(e.data.state))clearTimeout(s.timeout);if(e.data.state==='rendered'){success(s);if(s.viewerKind==='pdf')s.panel.dataset.pdfPage=e.data.page;else{s.panel.dataset.officePage=e.data.page;s.panel.dataset.officeKind=e.data.kind;}}if(e.data.state==='error'){problem(s);if(s.viewerKind==='office')status(s,clean(e.data.message).slice(0,600)||'This document cannot be previewed. Open the original resource.');}if(e.data.state==='close')close(true);
+  if(['rendered','error'].includes(e.data.state))clearTimeout(s.timeout);if(e.data.state==='rendered'){success(s);if(s.viewerKind==='pdf')s.panel.dataset.pdfPage=e.data.page;else{s.panel.dataset.officePage=e.data.page;s.panel.dataset.officeKind=e.data.kind;}}if(e.data.state==='error'){problem(s);failure(s,clean(e.data.message).slice(0,600)||'This document cannot be previewed. Open the original resource.');}if(e.data.state==='close')close(true);
  };top.addEventListener('message',message);
- window.addEventListener('pagehide',e=>{if(e.persisted){close();return;}close();observer.disconnect();settings.disconnect();host.removeEventListener('keydown',key);host.removeEventListener('scroll',scroll,true);top.removeEventListener('resize',scroll);top.removeEventListener('message',message);host.removeEventListener('aether-preview-close-all',close);host.removeEventListener('securitypolicyviolation',policy);if(host!==document){host.removeEventListener('pointerover',outside);host.removeEventListener('pointermove',outside);host.documentElement.removeEventListener('pointerleave',boundary);}});
- const policy=e=>{const s=current;if(s?.frame&&/frame-src|child-src/.test(e.effectiveDirective)&&String(e.blockedURI).startsWith('chrome-extension:')){clearTimeout(s.timeout);s.frame.remove();s.frame=null;problem(s);status(s,'This site blocks embedded document previews. Open the original resource.');}};
+ window.addEventListener('pagehide',e=>{if(e.persisted){close();return;}close();observer.disconnect();settings.disconnect();host.removeEventListener('keydown',key);host.removeEventListener('scroll',scroll,true);top.removeEventListener('resize',scroll);top.removeEventListener('message',message);host.removeEventListener('aether-preview-close-all',close);host.removeEventListener('aether-preview-session-change',resetSession);host.removeEventListener('securitypolicyviolation',policy);if(host!==document){host.removeEventListener('pointerover',outside);host.removeEventListener('pointermove',outside);host.documentElement.removeEventListener('pointerleave',boundary);}});
+ const policy=e=>{const s=current;if(s?.frame&&/frame-src|child-src/.test(e.effectiveDirective)&&String(e.blockedURI).startsWith('chrome-extension:')){problem(s);failure(s,'This site blocks embedded document previews. Open the original resource.');}};
+ const resetSession=()=>{close();cache.clear();cacheBytes=0;};host.addEventListener('aether-preview-session-change',resetSession);
+ document.addEventListener('aether-session-change',()=>host.dispatchEvent(new Event('aether-preview-session-change')));
  host.addEventListener('securitypolicyviolation',policy);
  host.addEventListener('aether-preview-close-all',close);
  schedule();

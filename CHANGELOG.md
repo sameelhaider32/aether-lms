@@ -1,6 +1,18 @@
 # Changelog
 
-## Unreleased
+## 1.3.1 — 24 October 2026
+
+- Serialize file-history mutations across LMS tabs and tool frames so an earlier pending write cannot undo Clear. Show storage failures accurately.
+- Scope history to a hash of Sakai's authenticated current-session identity; disable history when identity cannot be established. Discard unscoped legacy history without changing interface preferences.
+- Reserve PDF initialization before importing, reject duplicate data, stop late continuations after close, bound page rendering, and release workers/canvas resources on terminal paths. Preserve PDF zoom, fit, resizing and navigation.
+- Make Office reader cleanup idempotent, dispose late viewers, and guard Word, Excel and archive continuations without weakening archive or active-content restrictions.
+- Cancel stalled response streams and offer an explicit read-only Retry preview. Retry never repeats copyright acknowledgement; Open original remains available.
+- Ignore unrelated widget and preview mutations instead of rescanning Resources. Preserve initial parsing, native dynamic table updates and attachment dialogs mounted outside the main content area.
+- Add deterministic lifecycle/concurrency regressions, account-switch integration checks and a 100-PDF/30-Office stress profile to Windows/Linux checks.
+- Normalize packaged module/license text and ZIP platform metadata so Windows and Linux builds contain consistent runtime assets; verify portable regular-file metadata.
+- Add a restrictive PDF viewer content policy as defense in depth for the documented PDF.js scripting advisory. Keep bundled runtime versions unchanged; see the release audit for advisory scope and deferred upgrades.
+
+### Contributor improvements preserved from PR #3
 
 - Add a reversible scroll fade and particle dissolve to the existing pinned course cards, inspired by the supplied Forma recording. Keep native navigation, keyboard focus, reordering, and reduced-motion behavior; render particles locally without a new library or network service.
 - Restore v1.3 full-card assignment color fills, including its green submitted and red overdue materials, with matching fills for the additional urgency states. Remove the side accent stripe and retain real text badges for submission, draft, grading, feedback, and confirmed lateness.
