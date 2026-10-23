@@ -272,7 +272,7 @@
   const observer=new MutationObserver(records=>{
     for(const r of records){
       const target=r.target.nodeType===1?r.target:r.target.parentElement;
-      if(target?.closest('#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
+      if(target?.closest('#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
       if(target?.closest('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item')){requestRefresh();return;}
       if([...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&n.matches('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item'))){requestRefresh();return;}
       if(target?.closest('#toolMenu,.portal-header')||r.type==='childList'&&(target?.matches('html,body,#pageBody,.portal-main-container,main#content')&&!workspace?.isConnected||[...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&(n.matches('#toolMenu,.portal-header,main#content,.Mrphs-container')||n.querySelector('main#content,#toolMenu'))))){requestRefresh();return;}
