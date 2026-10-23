@@ -11,6 +11,8 @@ const sha=data=>crypto.createHash('sha256').update(data).digest('hex');
   assert(file.name.startsWith(prefix),'Archive root');const rel=file.name.slice(prefix.length);
   assert(!/(^|\/)(?:\.git|node_modules|tests|reports|\.env)(\/|$)/.test(rel),'No development or private artifacts');
   const bytes=await file.async('nodebuffer');assert.equal(sha(bytes),hashes.files[rel],rel);
+  if(/\.(?:m?js|css|json|md|txt|html)$/.test(rel)||path.basename(rel).startsWith('LICENSE'))assert(!bytes.includes(Buffer.from('\r\n')),`Canonical text line endings: ${rel}`);
+  assert.equal(file.unixPermissions,0o100644,`Portable regular-file metadata: ${rel}`);
   assert(bytes.equals(fs.readFileSync(path.join(dist,prefix,rel))),`ZIP/unpacked mismatch: ${rel}`);
  }
  for(const rel of ['manifest.json','LICENSE','THIRD_PARTY_NOTICES.md','PRIVACY.md','preview/pdf.html','preview/office.html','vendor/pdfjs/LICENSE','vendor/office/provenance.json'])assert(zip.file(prefix+rel),rel);

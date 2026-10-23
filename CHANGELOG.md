@@ -9,6 +9,7 @@
 - Cancel stalled response streams and offer an explicit read-only Retry preview. Retry never repeats copyright acknowledgement; Open original remains available.
 - Ignore unrelated widget and preview mutations instead of rescanning Resources. Preserve initial parsing and native dynamic table updates.
 - Add deterministic lifecycle/concurrency regressions, account-switch integration checks and a 100-PDF/30-Office stress profile to Windows/Linux checks.
+- Normalize packaged module/license text and ZIP platform metadata so Windows and Linux builds contain consistent runtime assets; verify portable regular-file metadata.
 - Add a restrictive PDF viewer content policy as defense in depth for the documented PDF.js scripting advisory. Keep bundled runtime versions unchanged; see the release audit for advisory scope and deferred upgrades.
 
 ### Contributor improvements preserved from PR #3
