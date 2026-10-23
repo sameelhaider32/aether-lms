@@ -4,7 +4,7 @@
  let host;try{if(top.location.origin!=='https://lms.lums.edu.pk'||!/^\/+(?:portal(?:\/|$)|$)/.test(top.location.pathname))return;host=top.document;}catch{return;}
  const enabled=()=>host.documentElement.classList.contains('aether-enabled');
  const el=(tag,cls,text)=>{const n=host.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
- const button=(name,fn,cls='')=>{const b=el('button',cls,name);b.type='button';b.onclick=fn;return b;};
+ const button=(name,fn,cls='')=>{const b=el('button',cls,name);b.type='button';b.onclick=event=>{if(event.isTrusted)fn(event);};return b;};
  const size=value=>value>=1024**3?(value/1024**3).toFixed(2)+' GiB':value>=1024**2?(value/1024**2).toFixed(1)+' MiB':value>=1024?(value/1024).toFixed(1)+' KiB':value+' bytes';
  if(window===top){
   let dialog,controller,opener,unsubscribe,paint=0,stamp='',expanded=new Set(),query='',filter='',selectedOnly=false,partialApproved=false;
@@ -89,6 +89,7 @@
      if(!busy)actions.append(button('Select failed files for manual retry',()=>{controller.tree.clear();for(const f of progress.failed)if(f.node.type==='file')controller.tree.set(f.node.id,true);controller.changed();}));
     }
    }
+    if(controller.notice)noticeArea.querySelector('button')?.focus();else if(controller.partial)actions.querySelector('button')?.focus();
    }
    const progressLine=noticeArea.querySelector('.ae-dl-progress');if(progressLine){const p=controller.progress;progressLine.textContent=p.completed+' files added · '+p.failed.length+' failed/skipped · '+size(p.bytes)+' received'+(p.current?' · '+p.current:'');}
   }
@@ -130,7 +131,7 @@
  let queued=false;
  function entry(name,type,cls){const b=el('button',cls,name);b.type='button';b.dataset.aeDownloadEntry=type;b.dataset.aeDownloadControl='true';return b;}
  document.addEventListener('click',event=>{
-  const trigger=event.target.closest?.('[data-ae-download-entry]');if(!trigger||!enabled())return;
+  const trigger=event.target.closest?.('[data-ae-download-entry]');if(!trigger||!event.isTrusted||!enabled())return;
   if(trigger.dataset.aeDownloadEntry==='item'){
    const card=trigger.closest('.ae-record-card[data-ae-kind="resource"]'),data=card&&globalThis.AetherResourceInfo?.describe(card);if(data?.id)top.AetherDownloadUI?.open(document,data.id);
   }else top.AetherDownloadUI?.open(document);
@@ -140,8 +141,14 @@
   if(!enabled()){document.querySelectorAll(own).forEach(n=>n.remove());return;}
   const cards=[...document.querySelectorAll('.ae-record-card[data-ae-kind="resource"]')];
   for(const old of document.querySelectorAll('[data-ae-download-entry="item"]'))if(!old.closest('.ae-record-card[data-ae-kind="resource"]'))old.remove();
-  for(const card of cards){if(card.querySelector(own))continue;const info=globalThis.AetherResourceInfo?.describe(card);if(!info?.id?.startsWith('/group/')||!['folder'].includes(info.kind)&&info.u?.origin!==top.location.origin)continue;
-   const b=entry('Add to download basket','item','ae-dl-add');b.title='Add '+info.title+' to the download basket';(card.querySelector('[data-ae-primary]')||card.lastElementChild||card).append(b);
+  for(const card of cards){if(card.querySelector(own))continue;
+   // Lists already classified this record. Defer full ResourceInfo parsing to
+   // the actual click; repeating it for every row is measurable on large tables.
+   const reference=card.getAttribute('data-resource-id')||card.getAttribute('data-collection-id')||card.querySelector('input[value^="/group/"]')?.value;
+   const links=card.querySelectorAll('[data-ae-primary] a[href]');
+   const content=[...links].some(a=>{try{const u=new URL(a.href);return u.origin===top.location.origin&&u.pathname.startsWith('/access/content/group/');}catch{return false;}});
+   if(!reference?.startsWith('/group/')&&!content)continue;
+   const b=entry('Add to download basket','item','ae-dl-add');b.title='Add this resource to the download basket';(card.querySelector('[data-ae-primary]')||card.lastElementChild||card).append(b);
   }
   if(cards.length&&!document.querySelector('[data-ae-download-entry="toolbar"]')){const area=cards[0].closest('table,ul,ol'),toolbar=document.querySelector('.resource-toolbar,.navIntraTool,.tool-toolbar');const b=entry('Download resources','toolbar','ae-dl-entry');if(toolbar)toolbar.append(b);else area?.before(b);}
   if(!cards.length)document.querySelectorAll('[data-ae-download-entry="toolbar"]').forEach(n=>n.remove());

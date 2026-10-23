@@ -1,5 +1,6 @@
 /* The committed browser ZIP engine, independently extracted with JSZip/Python. */
-const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict'),os=require('node:os'),cp=require('node:child_process'),JSZip=require('jszip');
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict'),os=require('node:os'),cp=require('node:child_process'),crypto=require('node:crypto'),JSZip=require('jszip');
+const provenance=require('../vendor/zip/provenance.json');assert.equal(provenance.version,'2.24.0');for(const [file,hash]of Object.entries(provenance.files))assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'../vendor/zip',file))).digest('hex'),hash,file);
 const zip=require('../vendor/zip/zip-core.min.js');zip.configure({useWebWorkers:false,chunkSize:64*1024});
 const context={TextEncoder,Blob,WritableStream,ReadableStream,DOMException,URL,AbortController};
 vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../src/download-archive.js'),'utf8'),context);const A=context.AetherDownloadArchive;

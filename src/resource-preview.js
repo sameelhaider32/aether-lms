@@ -202,6 +202,7 @@
   const irrelevant=record=>{
    const target=record.target.nodeType===1?record.target:record.target.parentElement;
    if(target?.closest(own+',.ae-resource-preview,[data-ae-assignment-badges],#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-global-ambient,#aether-native-toggle'))return true;
+   if(record.type==='childList'){const changed=[...record.addedNodes,...record.removedNodes];if(changed.length&&changed.every(n=>n.nodeType===1&&n.matches('[data-ae-download-control]')))return true;}
    if(!scope||scope.contains(target)||target?.closest(attachmentRoots))return false;
    // Sakai can mount attachment dialogs outside main; retain their lifecycle.
    if(record.type==='attributes'&&target?.querySelector(own))return false;

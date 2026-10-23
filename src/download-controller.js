@@ -23,7 +23,7 @@
   }
   begin(stage){
    if(this.task)throw Error('An operation is already running.');
-   const task={abort:new AbortController(),archive:null,timer:null};this.task=task;this.stage=stage;this.touch();
+   const task={abort:new AbortController(),archive:null,timer:null};this.task=task;this.stage=stage;this.touch();this.message=stage==='choosing'?'Choose where to save the ZIP. Cancelling preserves your selection.':'Discovering requested metadata. No file contents are being downloaded.';
    task.timer=setInterval(()=>this.identity().catch(()=>task.abort.abort(Error('Session verification failed.'))),30000);this.emit();return task;
   }
   end(task){clearInterval(task.timer);if(this.task===task)this.task=null;this.touch();this.emit();}
@@ -40,7 +40,7 @@
   async prepare(){
    if(this.task)return;const task=this.begin('discovering');this.message='Resolving selected folders. Counts remain provisional until scanning finishes.';
    try{await this.identity();const review=await this.discovery.resolve(task.abort.signal,()=>this.emit());if(task.abort.signal.aborted)throw task.abort.signal.reason;
-    this.review=review;this.stage='ready';this.message=review.incomplete.length?'Discovery is incomplete. Retry the affected folders or explicitly approve the partial selection.':'Selection reviewed. Choose your save destination to begin.';
+    this.review=review;this.stage='ready';this.message=review.incomplete.length?'Discovery is incomplete. Retry the affected folders or explicitly approve the partial selection.':review.excluded.length?'Selection reviewed. '+review.excluded.length+' restricted or unsupported items are excluded; confirm these omissions below.':'Selection reviewed. Choose your save destination to begin.';
    }catch(error){this.stage='browsing';this.message=error.message||'Discovery cancelled.';}finally{this.end(task);}
   }
   cancel(){if(this.task){this.task.abort.abort(new DOMException('Export cancelled.','AbortError'));clearInterval(this.task.timer);}this.notice?.resolve(false);this.notice=null;this.partial?.resolve(false);this.partial=null;}
@@ -61,7 +61,7 @@
     document.dispatchEvent(new Event('aether-preview-close-all'));
     task.archive=await archiveAPI.create(handle,task.abort.signal);
     const mapping=archiveAPI.paths(this.tree,[...selected.files,...selected.empty]);
-    this.progress={completed:0,bytes:0,current:'',failed:selected.excluded.map(node=>({node,reason:'Restricted or unsupported resource'})),total:selected.files.length,knownBytes:selected.knownBytes,unknown:selected.unknown};this.stage='downloading';this.emit();
+    this.progress={completed:0,bytes:0,current:'',failed:selected.excluded.map(node=>({node,reason:'Restricted or unsupported resource'})),total:selected.files.length,knownBytes:selected.knownBytes,unknown:selected.unknown};this.stage='downloading';this.message='Downloading the reviewed selection. Keep this page open.';this.emit();
     for(const node of [...selected.files].sort((a,b)=>mapping.get(a.id).localeCompare(mapping.get(b.id)))){
      if(task.abort.signal.aborted)throw task.abort.signal.reason;
      if(Date.now()-this.checkedAt>=15000)await this.identity();
@@ -85,16 +85,16 @@
     const result=await task.archive.finish();
     if(result.blob){const objectURL=URL.createObjectURL(result.blob),a=document.createElement('a');a.href=objectURL;a.download='Aether LMS Resources.zip';a.hidden=true;a.dataset.aeDownloadControl='true';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectURL),30000);}
     this.stage='completed';this.message=this.progress.completed+' files '+(result.direct?'saved':'prepared for Chrome to save')+(this.progress.failed.length?', '+this.progress.failed.length+' skipped.':'.');
-   }catch(error){await task.archive?.abort();this.stage=error.name==='AbortError'?'cancelled':'failed';this.message=(error.message||'Export failed.')+' No completed archive was saved.';}
+   }catch(error){await task.archive?.abort();this.stage=error.name==='AbortError'?'cancelled':'failed';this.message=(error.message||'Export failed.')+' No completed archive was saved.'+(handle?' The unfinished write was aborted; Chrome may retain an empty newly chosen file.':'');}
    finally{this.notice=null;this.partial=null;this.end(task);}
   }
   async source(node,task){
    const read=()=>globalThis.AetherResourceAccess.stream({u:new URL(node.url)},task.abort.signal,{onbytes:bytes=>{this.progress.bytes+=bytes;this.emit();},maxBytes:task.archive.limit});
    try{return await read();}catch(error){
     if(!error.notice)throw error;
-    const approved=await new Promise(resolve=>{this.notice={node,text:error.notice.text,resolve};this.stage='copyright';this.emit();});this.notice=null;
+    const approved=await new Promise(resolve=>{this.notice={node,text:error.notice.text,resolve};this.stage='copyright';this.message='Copyright acknowledgement required for '+node.name+'. Accept or skip this resource.';this.emit();});this.notice=null;
     if(task.abort.signal.aborted)throw task.abort.signal.reason;
-    this.stage='downloading';if(!approved)return null;
+    this.stage='downloading';this.message='Continuing the resource export.';if(!approved)return null;
     await this.identity();if(task.abort.signal.aborted)throw task.abort.signal.reason;
     const controller=new AbortController(),abort=()=>controller.abort(task.abort.signal.reason),timer=setTimeout(()=>controller.abort(),20000);task.abort.signal.addEventListener('abort',abort,{once:true});
     try{await globalThis.AetherResourceAccess.accept(error.notice.accept,{u:new URL(node.url)},controller.signal);}

@@ -228,7 +228,7 @@
     document.dispatchEvent(new Event('aether-records-change'));
   }
   function schedule(records){
-    if(records?.length){const scope=framed?document.body:document.querySelector('main#content');if(records.every(r=>{const target=r.target.nodeType===1?r.target:r.target.parentElement;return target?.closest('#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-global-ambient,.ae-resource-preview,[data-ae-assignment-badges],[data-ae-preview-control]')||scope&&!scope.contains(target)&&(!target?.contains(scope)||r.type==='childList'&&![...r.addedNodes,...r.removedNodes].some(n=>n===scope||n.contains?.(scope)));}))return;}
+    if(records?.length){const scope=framed?document.body:document.querySelector('main#content');if(records.every(r=>{const target=r.target.nodeType===1?r.target:r.target.parentElement,changed=r.type==='childList'?[...r.addedNodes,...r.removedNodes]:[];return changed.length&&changed.every(n=>n.nodeType===1&&n.matches('[data-ae-download-control]'))||target?.closest('#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-global-ambient,.ae-resource-preview,[data-ae-assignment-badges],[data-ae-preview-control]')||scope&&!scope.contains(target)&&(!target?.contains(scope)||r.type==='childList'&&![...r.addedNodes,...r.removedNodes].some(n=>n===scope||n.contains?.(scope)));}))return;}
     // Mutation observers run before rendering. No DOMContentLoaded wait or
     // debounce that exposes the native table for several painted frames.
     if(!timer){timer=1;queueMicrotask(update);}
