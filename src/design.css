@@ -60,6 +60,19 @@ html.aether-enabled #aether-workspace .ae-course-card:hover{border-color:var(--a
 #aether-workspace .ae-card-name{font:500 23px/1.2 var(--ae-display);letter-spacing:0;overflow-wrap:anywhere}
 #aether-workspace .ae-card-bottom{font:500 10px/1.4 var(--ae-ui);letter-spacing:.04em;color:var(--ae-soft);border-color:var(--ae-line)}
 #aether-workspace .ae-card-arrow{color:var(--ae-cyan)}
+/* Course boxes dissolve at the viewport edges; real link text stays accessible. */
+html.aether-enabled #aether-workspace .ae-course-card{opacity:var(--ae-course-opacity,1);overflow:clip}
+#aether-workspace .ae-course-card .ae-course-link:focus-visible{outline:2px solid var(--ae-cyan);outline-offset:-3px}
+#aether-workspace .ae-course-card .ae-card-name{position:relative}
+#aether-workspace .ae-course-title-ink{opacity:var(--ae-title-opacity,1)}
+#aether-workspace .ae-course-particles{position:absolute;left:-32px;top:-32px;max-width:none;pointer-events:none!important;opacity:var(--ae-particle-opacity,0)}
+html.aether-enabled #aether-workspace .ae-course-card:focus-within{opacity:1}
+#aether-workspace .ae-course-card:focus-within .ae-course-title-ink{opacity:1}
+#aether-workspace .ae-course-card:focus-within .ae-course-particles{opacity:0}
+html.aether-reduced-motion #aether-workspace .ae-course-card{opacity:1}
+html.aether-reduced-motion #aether-workspace .ae-course-title-ink{opacity:1}
+html.aether-reduced-motion #aether-workspace .ae-course-particles{display:none}
+@media(prefers-reduced-motion:reduce){html.aether-enabled #aether-workspace .ae-course-card{opacity:1}#aether-workspace .ae-course-title-ink{opacity:1}#aether-workspace .ae-course-particles{display:none}}
 #aether-workspace .ae-tool-row{gap:8px}
 #aether-workspace .ae-tool-item{transform:perspective(950px) translateY(var(--ae-lift,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
 #aether-workspace .ae-tool-link{border-radius:2px;font-family:var(--ae-ui);background:#12151b;border:1px solid var(--ae-line);font-size:13px;padding:10px 13px}

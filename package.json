@@ -5,11 +5,11 @@
   "license": "MIT",
   "description": "MV3 presentation enhancement for the original LUMS Sakai workspace",
   "scripts": {
-    "test": "node tests/unit.cjs && node tests/startup.cjs && node tests/browser.cjs && node tests/fallbacks.cjs",
+    "test": "node tests/unit.cjs && npm run test:startup && node tests/browser.cjs && node tests/fallbacks.cjs",
     "test:browser": "node tests/browser.cjs",
     "test:unit": "node tests/unit.cjs",
     "package": "python scripts/package.py",
-    "test:startup": "node tests/startup.cjs"
+    "test:startup": "node tests/startup.cjs && node tests/portal-startup.cjs"
   },
   "overrides": {
     "pptxgenjs": {

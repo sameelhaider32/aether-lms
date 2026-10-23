@@ -3,7 +3,7 @@
   'use strict';
   let topDoc;
   try {
-    if(top.location.hostname!=='lms.lums.edu.pk'||!/^\/portal(?:\/|$)/.test(top.location.pathname))return;
+    if(top.location.hostname!=='lms.lums.edu.pk'||!/^\/+(?:portal(?:\/|$)|$)/.test(top.location.pathname))return;
     topDoc=top.document;
   } catch {return;}
   const root=document.documentElement,framed=window!==top;
@@ -44,6 +44,7 @@
   }
   function restore(select=()=>true){
     for(const [el,values]of journal){if(!select(el))continue;
+      if(values.has('data-ae-assignment-state'))el.querySelectorAll('[data-ae-assignment-badges]').forEach(n=>n.remove());
       for(const [name,old]of values){
         if(name==='class'){
           for(const c of ownedClasses)if(!(old||'').split(/\s+/).includes(c)&&el.classList.contains(c))el.classList.remove(c);
@@ -127,11 +128,31 @@
     klass(row,'ae-record-card');attr(row,'data-ae-kind',type);attr(row,'data-ae-index',String(index+1).padStart(2,'0'));
   }
   function assignment(row,labels){
-    const status=labels?row.cells[labels.findIndex(s=>/^(?:submission\s+)?status$/i.test(s))]:row.querySelector('[data-submission-status],.submissionStatus,.submission-status');
-    const due=labels?row.cells[labels.findIndex(s=>/^due(?:\s+(?:date|time|on))?$/i.test(s))]:row.querySelector('[data-due-date],.dueDate,.due-date');
-    const info=globalThis.AetherAssignmentState.read(status,due,scanTime);
+    const status=labels?row.cells[labels.findIndex(s=>/^(?:submission\s+)?status$/i.test(s))]:row.matches('[data-submission-status]')?row:row.querySelector('[data-submission-status],.submissionStatus,.submission-status');
+    const due=labels?row.cells[labels.findIndex(s=>/^due(?:\s+(?:date|time|on))?$/i.test(s))]:row.matches('[data-due-date]')?row:row.querySelector('[data-due-date],.dueDate,.due-date');
+    const column=pattern=>labels?row.cells[labels.findIndex(s=>pattern.test(s))]:null;
+    const machine=(name,fallback)=>row.getAttribute(name)||row.querySelector('['+name+']')?.getAttribute(name)||globalThis.AetherAssignmentState.dateValue(fallback);
+    const info=globalThis.AetherAssignmentState.read(status,due,scanTime,{
+      openAt:machine('data-open-date',column(/^open(?:\s+date)?$/i)),
+      submittedAt:machine('data-submitted-at',column(/^(?:submitted|submission)(?:\s+(?:date|time))$/i)),
+      acceptUntil:machine('data-accept-until',column(/^(?:accept until|close date)$/i)),
+      grade:row.getAttribute('data-grade')||row.querySelector('[data-grade]')?.getAttribute('data-grade')||text(column(/^grade(?:\s+received)?$/i)||row.querySelector('.assignment-grade')),
+      feedback:row.getAttribute('data-feedback-status')||row.querySelector('[data-feedback-status]')?.getAttribute('data-feedback-status')||text(column(/^feedback$/i))
+    });
     attr(row,'data-ae-assignment-state',info.state);attr(row,'data-ae-state-label',info.label);
-    if(info.due>=scanTime)nextDeadline=Math.min(nextDeadline,info.due);
+    nextDeadline=Math.min(nextDeadline,info.nextChange);
+    const parent=row.querySelector('[data-ae-primary="true"]')||row;
+    let badges=row.querySelector('[data-ae-assignment-badges]');
+    if(!badges){badges=document.createElement('span');badges.setAttribute('data-ae-assignment-badges','');badges.className='ae-assignment-badges';parent.append(badges);}
+    const signature=JSON.stringify([info.state,info.label,info.badges]);
+    if(badges.dataset.signature!==signature){
+      badges.dataset.signature=signature;badges.replaceChildren();
+      for(const entry of [{kind:info.state,label:info.label,primary:true},...info.badges]){
+        const badge=document.createElement('span');badge.className=entry.primary?'ae-status-badge ae-assignment-status':'ae-status-badge';badge.dataset.statusKind=entry.kind;
+        const glyph=document.createElement('span');glyph.setAttribute('aria-hidden','true');glyph.textContent=entry.kind==='submitted'?'✓ ':['overdue','revision'].includes(entry.kind)?'! ':'• ';
+        badge.append(glyph,document.createTextNode(entry.label));badges.append(badge);
+      }
+    }
   }
   function applyTable(plan){
     const {group,header,rows,contextRows,labels,primary,type}=plan;
@@ -143,7 +164,6 @@
     for(const row of contextRows){klass(row,'ae-card-context-row');attr(row,'role','row');for(const cell of row.cells)attr(cell,'role',cell.tagName==='TH'?'rowheader':'cell');}
     rows.forEach((row,index)=>{
       markCard(row,type,index);attr(row,'role','row');
-      if(type==='assignment')assignment(row,labels);
       const nativePrimary=type==='resource'?[...row.cells].findIndex(c=>c.matches('[headers~="title"],.specialLink')):-1,rowPrimary=nativePrimary>=0?nativePrimary:primary;
       Array.from(row.cells).forEach((cell,i)=>{
         const headerId=(cell.getAttribute('headers')||'').split(/\s+/).find(id=>[...header.cells].some(h=>h.id===id)),column=headerId?[...header.cells].findIndex(h=>h.id===headerId):i;
@@ -158,6 +178,7 @@
         attr(cell,'data-ae-primary',i===rowPrimary?'true':null);
         attr(cell,'data-ae-type',i===rowPrimary?labelType(row,type,cell):null);
       });
+      if(type==='assignment')assignment(row,labels);
     });
   }
   function applyList(plan){
@@ -206,7 +227,7 @@
     if(Number.isFinite(nextDeadline))deadlineTimer=setTimeout(update,Math.min(2147483000,Math.max(1,nextDeadline-Date.now()+1)));
   }
   function schedule(records){
-    if(records?.length&&records.every(r=>r.target.parentElement?.closest('#aether-workspace,#aether-global-ambient')))return;
+    if(records?.length&&records.every(r=>(r.target.nodeType===1?r.target:r.target.parentElement)?.closest('#aether-workspace,#aether-global-ambient,[data-ae-assignment-badges],[data-ae-preview-control]')))return;
     // Mutation observers run before rendering. No DOMContentLoaded wait or
     // debounce that exposes the native table for several painted frames.
     if(!timer){timer=1;queueMicrotask(update);}
@@ -228,7 +249,7 @@
   }
   function boot(){
     update();
-    const bodyObserver=new MutationObserver(schedule);bodyObserver.observe(root,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['colspan','rowspan','hidden','datetime','data-due-date','data-submission-status','data-sort-value']});observers.push(bodyObserver);
+    const bodyObserver=new MutationObserver(schedule);bodyObserver.observe(root,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['colspan','rowspan','hidden','datetime','data-due-date','data-submission-status','data-sort-value','data-open-date','data-submitted-at','data-accept-until','data-grade','data-feedback-status']});observers.push(bodyObserver);
     const stateObserver=new MutationObserver(()=>schedule());stateObserver.observe(topDoc.documentElement,{attributes:true,attributeFilter:['class']});observers.push(stateObserver);
     const header=topDoc.querySelector('.portal-header .header-tool-title');
     if(header){const titleObserver=new MutationObserver(()=>schedule());titleObserver.observe(header,{childList:true,subtree:true,characterData:true});observers.push(titleObserver);}

@@ -29,6 +29,7 @@
       "js": [
         "src/prepaint.js",
         "src/motion.js",
+        "src/course-fade.js",
         "src/scene.js",
         "src/ambient.js",
         "src/dashboard.js",
@@ -46,6 +47,7 @@
         "src/classifier.js",
         "src/assignment-state.js",
         "src/resource-info.js",
+        "src/file-state.js",
         "src/resource-access.js",
         "src/lists.js",
         "src/resource-preview.js"

@@ -1,7 +1,7 @@
 /* Bounded same-origin reads and explicit native Sakai copyright acknowledgement. */
 (() => {
  'use strict';
- let origin;try{if(top.location.hostname!=='lms.lums.edu.pk'||!/^\/portal(?:\/|$)/.test(top.location.pathname))return;origin=top.location.origin;}catch{return;}
+ let origin;try{if(top.location.hostname!=='lms.lums.edu.pk'||!/^\/+(?:portal(?:\/|$)|$)/.test(top.location.pathname))return;origin=top.location.origin;}catch{return;}
  const MAX=12*1024*1024;
  const content=u=>u?.origin===origin&&u.pathname.startsWith('/access/content/');
  function canonical(value){try{return decodeURIComponent(new URL(value,origin).pathname);}catch{return '';}}

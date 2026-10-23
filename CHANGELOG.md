@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+- Add a reversible scroll fade and particle dissolve to the existing pinned course cards, inspired by the supplied Forma recording. Keep native navigation, keyboard focus, reordering, and reduced-motion behavior; render particles locally without a new library or network service.
+- Restore v1.3 full-card assignment color fills, including its green submitted and red overdue materials, with matching fills for the additional urgency states. Remove the side accent stripe and retain real text badges for submission, draft, grading, feedback, and confirmed lateness.
+- Keep submitted work mint after deadlines and update urgency/countdowns automatically without inferring lateness from the current clock.
+- Add local Unopened/Opened/Updated file states and temporary failure labels, recording deliberate opens and successful explicit previews only. Version changes invalidate the preview cache.
+- Bound opened history to 1,000 hashed resource/version entries with timestamps, and add Clear file history without storing filenames, raw URLs, documents, or grades.
+- Open larger file readers with an expand/restore control and pointer/keyboard resizing; PDF pages redraw on resize and offer zoom and fit-width controls.
+- Preview existing assignment and draft attachments, including supported slides and Office files, without replacing their native links, forms, or submission controls.
+- Build the Home course deck and count from native pinned sites, excluding Recent entries, updating after pin changes, and showing an empty state when no courses are pinned.
+- Start Aether automatically on the bare LMS domain (`/`) and Sakai entry URLs with repeated leading slashes, including `//portal`, while retaining the LMS host and route restrictions.
+- Apply the theme, Aether toggle, and ambient field to the public gateway without adding a course workspace or replacing the native sign-in form.
+- Add real-extension regressions for entry routes, late Home markup, gateway form submission and toggles, double-slash file previews, and unrelated-path exclusion.
+
 ## 1.3.0 — 23 October 2026
 
 - Generalized Resources cards for TA/instructor management forms, native action selectors, extra columns, pagination/context rows and same-origin tool frames.

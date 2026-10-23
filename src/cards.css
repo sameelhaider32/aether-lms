@@ -106,20 +106,35 @@ html.aether-reduced-motion #toolMenu .site-page-list>li>a{transform:none!importa
 
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card [data-ae-primary] a[href$=".pdf" i]::after{content:none!important;}
 
-/* Status remains readable in native cells; these labels also explain the color. */
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-assignment-state="submitted-open"]{
- --ae-surface-a:#0a2417;--ae-surface-b:#06170f;--ae-hover-a:#123d27;--ae-hover-b:#0a2819;--ae-edge:#3d8761;--ae-card-accent:#a2efbd;--ae-card-light:#63df932b;
+/* v1.3 full-card materials, extended to the current assignment states. */
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-assignment-state]{
+ --ae-status:#94a3b8;--ae-card-accent:var(--ae-status);--ae-edge:#657374;
+ --ae-surface-a:#303637;--ae-surface-b:#202627;--ae-hover-a:#3b4344;--ae-hover-b:#282f30;--ae-card-light:#d8eeee24;
 }
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-assignment-state="submitted-closed"]{
- --ae-surface-a:#303637;--ae-surface-b:#202627;--ae-hover-a:#3b4344;--ae-hover-b:#282f30;--ae-edge:#657374;--ae-card-accent:#d6dede;--ae-card-light:#d8eeee24;
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-assignment-state="not-submitted"]{
+ --ae-status:#60a5fa;--ae-surface-a:#172d48;--ae-surface-b:#101f34;--ae-hover-a:#203d61;--ae-hover-b:#142940;--ae-edge:#4776a5;--ae-card-light:#60a5fa26;
+}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card:is([data-ae-assignment-state="due-soon"],[data-ae-assignment-state="revision"]){
+ --ae-status:#fbbf24;--ae-surface-a:#443619;--ae-surface-b:#2b230f;--ae-hover-a:#594621;--ae-hover-b:#392c13;--ae-edge:#a98539;--ae-card-light:#fbbf2426;
+}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-assignment-state="due-shortly"]{
+ --ae-status:#fb923c;--ae-surface-a:#4c2e19;--ae-surface-b:#301b10;--ae-hover-a:#643c20;--ae-hover-b:#3c2413;--ae-edge:#af7442;--ae-card-light:#fb923c26;
 }
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-assignment-state="overdue"]{
- --ae-surface-a:#52272c;--ae-surface-b:#30171d;--ae-hover-a:#653039;--ae-hover-b:#3b1c24;--ae-edge:#b56370;--ae-card-accent:#ffc4cd;--ae-card-light:#ff879b24;
+ --ae-status:#fb7185;--ae-surface-a:#52272c;--ae-surface-b:#30171d;--ae-hover-a:#653039;--ae-hover-b:#3b1c24;--ae-edge:#b56370;--ae-card-light:#ff879b24;
 }
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-state-label]::after{
- content:attr(data-ae-state-label);position:static;grid-column:1/-1;order:9;justify-self:start;max-width:100%;padding:5px 9px;border:1px solid currentColor;border-radius:6px;color:var(--ae-card-accent);font:700 10px/1.5 "Aether Lato",Arial,sans-serif;letter-spacing:.025em;
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-assignment-state="submitted"]{
+ --ae-status:#6ee7b7;--ae-surface-a:#0a2417;--ae-surface-b:#06170f;--ae-hover-a:#123d27;--ae-hover-b:#0a2819;--ae-edge:#3d8761;--ae-card-light:#63df932b;
 }
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card :is(button,input,select,textarea){font-family:"Aether Lato",Arial,sans-serif;}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card[data-ae-state-label]::after{content:none}
+.ae-assignment-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;grid-column:1/-1}
+.ae-status-badge{display:inline-flex;max-width:100%;align-items:baseline;gap:3px;padding:4px 8px;border:1px solid currentColor;border-radius:4px;background:#ffffff07;color:#94a3b8;font:600 11px/1.45 "Segoe UI",Arial,sans-serif;letter-spacing:0;overflow-wrap:anywhere}
+.ae-assignment-status{color:var(--ae-status,#94a3b8)}
+.ae-status-badge[data-status-kind="draft"]{color:#c4b5fd}
+.ae-status-badge:is([data-status-kind="late"],[data-status-kind="late-allowed"]){color:#fbbf24}
+.ae-status-badge[data-status-kind="graded"]{color:#6ee7b7}
+.ae-status-badge[data-status-kind="feedback"]{color:#38bdf8}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card :is(button,input,select,textarea){font-family:"Aether Lato",Arial,sans-serif;}
 
 /* Native Assignment controls need sufficient contrast on the dark tool surface. */
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-container :is(button.btn,a.btn,input[type="submit"],input[type="button"]),

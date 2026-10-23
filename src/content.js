@@ -4,7 +4,7 @@
 (() => {
   "use strict";
   if (window.top !== window || location.hostname !== "lms.lums.edu.pk") return;
-  if (!/^\/portal(?:\/|$)/.test(location.pathname)) return;
+  if (!/^\/+(?:portal(?:\/|$)|$)/.test(location.pathname)) return;
   const doc = document.documentElement;
   if (doc.dataset.aetherV08 === "installed") return;
   doc.dataset.aetherV08 = "installed";
@@ -28,7 +28,8 @@
   function sites(){return [...document.querySelectorAll("#toolMenu li.site-list-item")].map(item=>{
     const a=item.querySelector("a.sidebar-site-title, .site-link-block a[href]");
     const title=label(a?.textContent);const href=safeUrl(a?.getAttribute("href"));
-    return {title,href,id:href?fingerprint(new URL(href).pathname):"",active:item.classList.contains("is-current-site"),home:/^home$/i.test(title)};
+    const pinned=item.dataset.type?item.dataset.type==='pinned':Boolean(item.closest('#pinned-site-list')||item.querySelector('.site-opt-pin[data-pinned="true"]'));
+    return {title,href,id:href?fingerprint(new URL(href).pathname):"",active:item.classList.contains("is-current-site"),home:/^home$/i.test(title),pinned};
   }).filter(s=>s.href&&s.title);}
   function iconFor(anchor){
     const selector='.site-page-icon,.tool-icon,[class*="icon-"],.bi,.fa,.si,[class*="fa-"]';
@@ -80,13 +81,16 @@
     return label((visible||titles[0])?.textContent);
   }
   function context(){const main=document.querySelector("main#content.portal-main-content");if(!main)return null;
+    // The public gateway keeps Sakai's original sign-in form and welcome content.
+    if(document.body?.classList.contains('is-logged-out')||document.querySelector('.portal-header input[type="password"],#loginForm input[type="password"]'))return null;
     const collection=sites(),active=collection.find(s=>s.active), isHome=active?.home||(!active&&!!main.querySelector(".Mrphs-sakai-summary-calendar"));
     const title=pageTitle();
     const assignment=/^assignments?$/i.test(title)||!!main.querySelector(".Mrphs-sakai-assignment-grades"),menu=tools();
     const resources=!!main.querySelector(".Mrphs-sakai-resources,.Mrphs-sakai-resources-tool") || /^resources$/i.test(title);
     const courseCodeText=active&&!active.home?courseCode(active.title):"";
     const activity=[...main.querySelectorAll('.Mrphs-sakai-summary-calendar a,.Mrphs-sakai-summary-assignment a,.Mrphs-sakai-synoptic-announcement a,.announcement-item a')].filter(a=>!a.closest('#aether-workspace')).map(a=>a.href+a.textContent).join('|');
-    return {main,sites:collection,active,home:Boolean(isHome),assignment,resources,toolTitle:title,courseCode:courseCodeText,menu,courseTitle:active&&!active.home?active.title:"",signature:[location.pathname,active?.href||"",isHome,assignment,resources,title,activity,collection.map(x=>x.id+x.title+x.active).join(","),menu.map(x=>x.id+x.text+(x.icon?.outerHTML||"")).join(",")].join("|")};}
+    return {main,sites:collection,active,home:Boolean(isHome),assignment,resources,toolTitle:title,courseCode:courseCodeText,menu,courseTitle:active&&!active.home?active.title:"",signature:[location.pathname,active?.href||"",isHome,assignment,resources,title,activity,collection.map(x=>x.id+x.title+x.active+x.pinned).join(","),menu.map(x=>x.id+x.text+(x.icon?.outerHTML||"")).join(",")].join("|")};}
+  function pinnedCourses(ctx){return [...new Map(ctx.sites.filter(s=>!s.home&&s.pinned).map(s=>[s.href,s])).values()];}
   function sorted(data,type){const rank=orders[type]||[];return [...data].sort((a,b)=>{
     const ai=rank.indexOf(a.id),bi=rank.indexOf(b.id);return (ai<0?999:ai)-(bi<0?999:bi);
   });}
@@ -105,7 +109,7 @@
     const t=toolbar?.querySelector(".ae-toggle-word");if(t)t.textContent=enabled?"ON":"OFF";
     if(scene)scene.setMotion(enabled&&motion);
     if(ambientScene)ambientScene.setMotion(enabled&&motion);
-    if(enabled)scheduleEffects(effectCanvas);else{cancelEffectsStart();disposeAmbient();}
+    if(enabled){mountAmbient();scheduleEffects(effectCanvas);}else{cancelEffectsStart();disposeAmbient();}
     doc.classList.toggle("ae-page-resources",enabled&&Boolean(context()?.resources));
     try{localStorage.setItem(K.enabled,String(enabled));}catch{}
     window.dispatchEvent(new Event("aether-settings-change"));
@@ -166,7 +170,7 @@
     const pause=btn("ae-motion-btn","",()=>setMotion(!motionRequested));actions.append(pause);copy.append(actions);
     if(ctx.home)copy.append(make("div","ae-hero-micro","BUILT FOR THE WORK THAT MATTERS."));
     hero.append(copy);
-    if(ctx.home){const plate=make('div','ae-instrument');plate.setAttribute('aria-hidden','true');plate.append(make('span','ae-instrument-number',String(ctx.sites.filter(s=>!s.home).length).padStart(2,'0')),make('span','','PINNED COURSES'),make('span','ae-instrument-mark','↗'));hero.append(plate);const caption=make('div','ae-sculpture-caption','FIG. 01 / FOLDED FIELD · PROCEDURAL');caption.setAttribute('aria-hidden','true');hero.append(caption);}
+    if(ctx.home){const plate=make('div','ae-instrument');plate.setAttribute('aria-hidden','true');plate.append(make('span','ae-instrument-number',String(pinnedCourses(ctx).length).padStart(2,'0')),make('span','','PINNED COURSES'),make('span','ae-instrument-mark','↗'));hero.append(plate);const caption=make('div','ae-sculpture-caption','FIG. 01 / FOLDED FIELD · PROCEDURAL');caption.setAttribute('aria-hidden','true');hero.append(caption);}
     return {hero,canvas};
   }
   function moveItem(section,item,step,type){const cards=[...section.querySelectorAll("[data-order-item]")];const index=cards.indexOf(item),target=cards[index+step];
@@ -194,8 +198,9 @@
   function appendHead(section,subtitle,title,note){const row=make("div","ae-section-head");const left=make("div","");left.append(make("div","ae-overline",subtitle),make("h2","ae-section-title",title));row.append(left);
     const right=make("div","ae-head-right");right.append(make("span","ae-section-meta",note));
     const edit=btn("ae-customize",editMode?"DONE":"REORDER ↕",()=>{editMode=!editMode;requestRefresh(true);});edit.setAttribute("aria-pressed",String(editMode));right.append(edit);row.append(right);section.append(row);}
-  function makeCourses(ctx){const courses=sorted(ctx.sites.filter(s=>!s.home).slice(0,14),"courses");if(!ctx.home||!courses.length)return null;
+  function makeCourses(ctx){if(!ctx.home)return null;const courses=sorted(pinnedCourses(ctx),"courses");
     const section=make("section","ae-section ae-courses");section.id="aether-course-dock";section.setAttribute("aria-label","Your pinned course shortcuts");appendHead(section,"01  /  YOUR WORKSPACE","Your courses",`${courses.length} PINNED`);
+    if(!courses.length){section.querySelector('.ae-customize').disabled=true;section.append(make('p','ae-courses-empty','Pin courses in the Sakai sidebar to add shortcuts here.'));return section;}
     const deck=make("div","ae-course-deck");deck.dataset.edit=editMode?"true":"false";
     courses.forEach((s,i)=>{
       const card=make("article","ae-course-card");card.dataset.orderItem="1";card.dataset.key=s.id;
@@ -243,9 +248,10 @@
       }catch(error){console.debug('Aether scene unavailable',error);}
     });});
   }
-  function render(force=false){mountToolbar();const ctx=context();if(!ctx)return;
+  function render(force=false){mountToolbar();const ctx=context();if(!ctx){if(enabled)mountAmbient();return;}
     if(!force&&ctx.signature===renderedSignature&&workspace?.isConnected)return;
     const key=[ctx.home,ctx.courseTitle,ctx.toolTitle,ctx.resources,ctx.assignment].join('|');
+    const count=workspace?.querySelector('.ae-instrument-number');if(count)count.textContent=String(pinnedCourses(ctx).length).padStart(2,'0');
     const oldHero=key===heroSignature?workspace?.querySelector('.ae-hero'):null;
     if(!oldHero){cancelEffectsStart();scene?.dispose();scene=null;}
     workspace?.remove();renderedSignature=ctx.signature;heroSignature=key;
@@ -257,7 +263,7 @@
     const radar=globalThis.AetherDashboard?.create(ctx);if(radar)workspace.append(radar);
     const tools=makeTools(ctx);if(tools)workspace.append(tools);
     const status=make('div','ae-screen-reader-only');status.id='aether-reorder-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');workspace.append(status);
-    ctx.main.prepend(workspace);globalThis.AetherMotion?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
+    ctx.main.prepend(workspace);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
   }
   function requestRefresh(force=false){refreshForced ||= force;if(refreshPending)return;refreshPending=true;
     queueMicrotask(()=>{refreshPending=false;const forced=refreshForced;refreshForced=false;render(forced);});
@@ -272,7 +278,7 @@
       if(target?.closest('#toolMenu,.portal-header')||r.type==='childList'&&(target?.matches('html,body,#pageBody,.portal-main-container,main#content')||[...r.addedNodes].some(n=>n.nodeType===1&&(n.matches('#toolMenu,.portal-header,main#content,.Mrphs-container')||n.querySelector('main#content,#toolMenu'))))){requestRefresh();return;}
     }
   });
-  observer.observe(doc,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','href','title','aria-current']});
+  observer.observe(doc,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','href','title','aria-current','data-type','data-pinned']});
   document.addEventListener('DOMContentLoaded',()=>{render();scheduleEffects(effectCanvas);},{once:true});
   window.addEventListener('pageshow',()=>requestRefresh());
   const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');

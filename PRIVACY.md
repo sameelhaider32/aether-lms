@@ -14,6 +14,10 @@ The extension does not collect credentials or upload academic files to another s
 
 The sole declared extension permission is `storage`. Aether remembers interface preferences, motion settings, and shortcut order using extension-local/browser storage. It does not use Chrome storage sync.
 
+Opened-file history is stored in `chrome.storage.local` on this device, with a limit of 1,000 file entries. Each entry contains a SHA-256 hash of the LMS resource origin/path, an opened timestamp, and a hash of reliable version/modification metadata when available. Raw URLs, filenames, document contents, grades, and assignment statuses are not stored in this history. File-open history is not sent to Sakai or any external service.
+
+History begins when you use this feature; Aether cannot reconstruct earlier file opens. A successful explicit preview or deliberate original-file click records **Opened**. Hovering alone, automatic script clicks, and failed previews do not. **Opened** describes an action in this browser, not proof that a file was read. **Updated** requires a known change in native version/modification metadata; unavailable or ambiguous metadata is not treated as a new version. Select **Clear file history** in any preview footer to remove all opened-file entries. This does not clear your other preferences or delete LMS files. Access/preview failure indicators are temporary and are not persisted.
+
 Preview content has a memory-only cache of up to six entries and 24 MB total. The browser can also apply its normal network caching. Aether does not create a separate persistent document library or account. Closing a preview or switching Aether off cancels pending reads. Native downloads remain controlled by Chrome and Sakai.
 
 ## Local readers

@@ -2,7 +2,8 @@
 (() => {
   "use strict";
   if (window.top !== window || location.hostname !== "lms.lums.edu.pk") return;
-  if (!/^\/portal(?:\/|$)/.test(location.pathname)) return;
+  // Sakai serves the gateway and Home at / as well as /portal and //portal.
+  if (!/^\/+(?:portal(?:\/|$)|$)/.test(location.pathname)) return;
   try {
     const enabled = localStorage.getItem("aether:v02:enabled") !== "false";
     document.documentElement.classList.toggle("aether-enabled", enabled);

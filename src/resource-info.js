@@ -15,7 +15,7 @@
    return 'link';
  }
  function describe(card,primary=card.querySelector('[data-ae-primary="true"]')||card){
-   const links=[...primary.querySelectorAll('a')].filter(a=>!a.closest('.dropdown-menu,[data-ae-preview-control]'));
+   const links=(primary.matches('a')?[primary]:[...primary.querySelectorAll('a')]).filter(a=>!a.closest('.dropdown-menu,[data-ae-preview-control]'));
    const a=links.find(a=>/\.[a-z0-9]{1,7}$/i.test(label(a)))||links.find(a=>label(a))||links[0];if(!a)return null;
    const code=a.getAttribute('onclick')||'',copyright=code.match(/\bopenCopyrightWindow\s*\(\s*(['"])([^'"\r\n]+)\1\s*[,)]/);
    let u=url(copyright?.[2]||a.getAttribute('href')),noticeURL=null;
