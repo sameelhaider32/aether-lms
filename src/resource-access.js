@@ -68,11 +68,13 @@
  async function stream(info,signal,{onbytes=()=>{},idleMs=30000,maxBytes=2*1024**3}={}){
    const u=info.u;if(!content(u)||u.username||u.password||u.search||u.hash)throw Error('Only verified LMS content references can be exported.');
    const controller=new AbortController();let timer,reader,closed=false,total=0;
+   const deadline=setTimeout(()=>controller.abort(Error('File export exceeded 30 minutes. Retry or choose a smaller scope.')),30*60*1000);
+   const cancelReader=()=>{reader?.cancel().catch(()=>{});};controller.signal.addEventListener('abort',cancelReader,{once:true});
    const stop=()=>controller.abort(signal?.reason),arm=()=>{clearTimeout(timer);timer=setTimeout(()=>controller.abort(Error('The file stream stalled. Retry this read-only export.')),idleMs);};
-   const cleanup=()=>{if(closed)return;closed=true;clearTimeout(timer);signal?.removeEventListener('abort',stop);};
+   const cleanup=()=>{if(closed)return;closed=true;clearTimeout(timer);clearTimeout(deadline);signal?.removeEventListener('abort',stop);controller.signal.removeEventListener('abort',cancelReader);};
    if(signal?.aborted)stop();else signal?.addEventListener('abort',stop,{once:true});arm();
    try{
-    const response=await fetch(u.href,{method:'GET',credentials:'same-origin',signal:controller.signal,redirect:'manual',cache:'no-store'});arm();
+    const response=await fetch(u.href,{method:'GET',credentials:'same-origin',signal:controller.signal,redirect:'manual',cache:'no-store'});arm();if(controller.signal.aborted)throw controller.signal.reason;
     if(response.status===401){const e=Error('Your session expired. Export stopped.');e.session=true;throw e;}
     if(response.type==='opaqueredirect'||response.status>=300&&response.status<400){
      const requireURL=new URL('/access/require',origin);requireURL.searchParams.set('ref',decodeURIComponent(u.pathname.slice('/access'.length)));requireURL.searchParams.set('url',u.pathname.slice('/access'.length));
@@ -109,7 +111,7 @@
      },
      async cancel(){controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}
     },{highWaterMark:1});
-    return {readable,mime,length:expected,cancel:async()=>{controller.abort();cleanup();await reader.cancel().catch(()=>{});}};
+    return {readable,mime,length:expected,cancel:async()=>{controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}};
    }catch(error){controller.abort();cleanup();if(reader){await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}throw error;}
  }
  globalThis.AetherResourceAccess={read,resource,accept,stream};

@@ -12,12 +12,13 @@
   function dismiss(force=false){
    if(!dialog)return;
    if(controller.task&&!force&&!confirm('Cancel the running export and close Download resources? The unfinished output will be discarded.'))return;
-   controller.cancel();controller.listeners.delete(unsubscribe);cancelAnimationFrame(paint);paint=0;dialog.close();dialog.remove();dialog=null;opener?.focus({preventScroll:true});
+   controller.cancel();controller.listeners.delete(unsubscribe);cancelAnimationFrame(paint);paint=0;dialog.close();dialog.remove();dialog=null;opener?.focus({preventScroll:true});opener=null;
+   treeArea=basket=summary=status=actions=noticeArea=scopeLabel=reviewButton=downloadButton=smallButton=partialLabel=partialBox=null;expanded.clear();
   }
   function schedule(){if(!paint)paint=requestAnimationFrame(()=>{paint=0;render();});}
   function change(node,checked){if(controller.task)return;controller.tree.set(node.id,checked);partialApproved=false;controller.changed();}
   function visible(node){
-   if(node.type==='folder')return true;
+   if(node.type==='folder')return !selectedOnly||controller.tree.status(node.id)!=='unchecked';
    if(selectedOnly&&!controller.tree.intent(node.id))return false;
    if(query&&!node.name.toLocaleLowerCase().includes(query))return false;
    const ext=node.name.split('.').at(-1).toLowerCase();return !filter||filter.split(',').includes(ext);
@@ -28,7 +29,7 @@
    function row(node,depth){
     const li=el('li','ae-dl-node'),line=el('div','ae-dl-line');line.style.setProperty('--depth',Math.min(depth,12));
     if(node.type==='folder'){
-     const open=expanded.has(node.id),disclose=button(open?'−':'+',async()=>{if(expanded.has(node.id)){expanded.delete(node.id);stamp='';schedule();}else{expanded.add(node.id);stamp='';schedule();if(node.state!=='loaded')await controller.folder(node);}},'ae-dl-disclose');
+     const open=expanded.has(node.id)||Boolean(query||filter||selectedOnly),disclose=button(open?'−':'+',async()=>{if(expanded.has(node.id)){expanded.delete(node.id);stamp='';schedule();}else{expanded.add(node.id);stamp='';schedule();if(node.state!=='loaded')await controller.folder(node);}},'ae-dl-disclose');
      disclose.setAttribute('aria-label',(open?'Collapse ':'Expand ')+node.name);disclose.setAttribute('aria-expanded',String(open));disclose.dataset.aeDownloadNode=node.id;disclose.dataset.aeDownloadAction='expand';line.append(disclose);
     }else line.append(el('span','ae-dl-spacer'));
     const label=el('label','ae-dl-item'),checkbox=el('input');checkbox.type='checkbox';checkbox.dataset.aeDownloadNode=node.id;checkbox.dataset.aeDownloadAction='select';
@@ -36,7 +37,7 @@
     checkbox.onchange=()=>change(node,checkbox.checked);label.append(checkbox,el('span','ae-dl-name',node.name));line.append(label);
     const meta=node.type==='folder'?node.state==='loaded'?node.children.length+' items':node.state:node.type!=='file'?node.type:!node.available?'restricted':node.size===null?'size unknown':size(node.size);
     line.append(el('span','ae-dl-meta',meta));li.append(line);
-    if(node.type==='folder'&&expanded.has(node.id)){
+    if(node.type==='folder'&&(expanded.has(node.id)||query||filter||selectedOnly)){
      const shortcuts=el('div','ae-dl-folder-actions');
      const recursive=button(node.parent?'Select folder recursively':'Select all in this course',()=>change(node,true));recursive.disabled=!!controller.task;shortcuts.append(recursive);
      if(node.state==='loaded'||node.state==='incomplete'){const direct=button('Select all in this folder',()=>{for(const id of node.children){const child=controller.tree.nodes.get(id);if(child?.type==='file'&&child.available)controller.tree.set(id,true);}controller.changed();});direct.disabled=!!controller.task;shortcuts.append(direct);}li.append(shortcuts);
@@ -94,7 +95,7 @@
   function open(doc,selected){
    if(!enabled())return;
    if(dialog){if(selected&&!controller.task){controller.collect(doc);controller.tree.set(selected,true);controller.changed();}dialog.focus();return;}
-   controller=globalThis.AetherDownloads.get();if(Date.now()-controller.lastUsed>30*60*1000)controller.reset('The previous basket expired.');controller.lastUsed=Date.now();controller.collect(doc);if(selected)controller.tree.set(selected,true);
+   controller=globalThis.AetherDownloads.get();if(Date.now()-controller.lastUsed>30*60*1000)controller.reset('The previous basket expired.');controller.touch();const revision=controller.tree.revision;controller.collect(doc);if(selected)controller.tree.set(selected,true);if(revision!==controller.tree.revision)controller.changed();
    document.dispatchEvent(new Event('aether-preview-close-all'));opener=host.activeElement;expanded=new Set();query='';filter='';selectedOnly=false;partialApproved=false;stamp='';
    dialog=el('dialog','ae-download-manager');noticeStamp='';dialog.id='aether-download-manager';dialog.setAttribute('aria-labelledby','ae-dl-title');dialog.dataset.aeDownloadControl='true';
    const header=el('header','ae-dl-header'),heading=el('div');heading.append(el('p','ae-dl-eyebrow','AETHER / FILE OPERATIONS'));const h=el('h2','','Download resources');h.id='ae-dl-title';heading.append(h);scopeLabel=el('p','ae-dl-scope');heading.append(scopeLabel);header.append(heading,button('Close',()=>dismiss()));dialog.append(header);
@@ -127,17 +128,24 @@
  // Per-frame entry points; the manager and selection live in the portal's
  // isolated extension world. No page-script message bridge is required.
  let queued=false;
+ function entry(name,type,cls){const b=el('button',cls,name);b.type='button';b.dataset.aeDownloadEntry=type;b.dataset.aeDownloadControl='true';return b;}
+ document.addEventListener('click',event=>{
+  const trigger=event.target.closest?.('[data-ae-download-entry]');if(!trigger||!enabled())return;
+  if(trigger.dataset.aeDownloadEntry==='item'){
+   const card=trigger.closest('.ae-record-card[data-ae-kind="resource"]'),data=card&&globalThis.AetherResourceInfo?.describe(card);if(data?.id)top.AetherDownloadUI?.open(document,data.id);
+  }else top.AetherDownloadUI?.open(document);
+ });
  function controls(){
   queued=false;const own='[data-ae-download-entry]';
   if(!enabled()){document.querySelectorAll(own).forEach(n=>n.remove());return;}
   const cards=[...document.querySelectorAll('.ae-record-card[data-ae-kind="resource"]')];
   for(const old of document.querySelectorAll('[data-ae-download-entry="item"]'))if(!old.closest('.ae-record-card[data-ae-kind="resource"]'))old.remove();
   for(const card of cards){if(card.querySelector(own))continue;const info=globalThis.AetherResourceInfo?.describe(card);if(!info?.id?.startsWith('/group/')||!['folder'].includes(info.kind)&&info.u?.origin!==top.location.origin)continue;
-   const b=button('Add to download basket',()=>{const data=globalThis.AetherResourceInfo.describe(card);if(data?.id)top.AetherDownloadUI?.open(document,data.id);},'ae-dl-add');b.dataset.aeDownloadEntry='item';b.dataset.aeDownloadControl='true';b.title='Add '+info.title+' to the download basket';(card.querySelector('[data-ae-primary]')||card.lastElementChild||card).append(b);
+   const b=entry('Add to download basket','item','ae-dl-add');b.title='Add '+info.title+' to the download basket';(card.querySelector('[data-ae-primary]')||card.lastElementChild||card).append(b);
   }
-  if(cards.length&&!document.querySelector('[data-ae-download-entry="toolbar"]')){const area=cards[0].closest('table,ul,ol'),toolbar=document.querySelector('.resource-toolbar,.navIntraTool,.tool-toolbar');const b=button('Download resources',()=>top.AetherDownloadUI?.open(document),'ae-dl-entry');b.dataset.aeDownloadEntry='toolbar';b.dataset.aeDownloadControl='true';if(toolbar)toolbar.append(b);else area?.before(b);}
+  if(cards.length&&!document.querySelector('[data-ae-download-entry="toolbar"]')){const area=cards[0].closest('table,ul,ol'),toolbar=document.querySelector('.resource-toolbar,.navIntraTool,.tool-toolbar');const b=entry('Download resources','toolbar','ae-dl-entry');if(toolbar)toolbar.append(b);else area?.before(b);}
   if(!cards.length)document.querySelectorAll('[data-ae-download-entry="toolbar"]').forEach(n=>n.remove());
-  if(window===top){const workspace=document.querySelector('#aether-workspace .ae-hero-copy');if(workspace&&!workspace.querySelector(own)){const b=button('Download resources',()=>globalThis.AetherDownloadUI.open(document),'ae-dl-global');b.dataset.aeDownloadEntry='global';b.dataset.aeDownloadControl='true';workspace.append(b);}}
+  if(window===top){const workspace=document.querySelector('#aether-workspace .ae-hero-copy');if(workspace&&!workspace.querySelector(own))workspace.append(entry('Download resources','global','ae-dl-global'));}
  }
  function scheduleControls(){if(!queued){queued=true;queueMicrotask(controls);}}
  document.addEventListener('aether-records-change',scheduleControls);window.addEventListener('aether-settings-change',scheduleControls);document.addEventListener('DOMContentLoaded',scheduleControls,{once:true});window.addEventListener('pageshow',scheduleControls);

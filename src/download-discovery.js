@@ -9,7 +9,7 @@
     try{const u=new URL(anchor.href);const match=u.pathname.match(/^\/+portal\/site\/([^/]+)\/?$/);if(u.origin===origin&&match)this.tree.root(decodeURIComponent(match[1]),anchor.textContent.trim(),'navigation');}catch{}
    }
    for(const card of doc.querySelectorAll('.ae-record-card[data-ae-kind="resource"]')){
-    const info=globalThis.AetherResourceInfo?.describe(card);if(!info?.id?.startsWith('/group/'))continue;
+    const info=(doc.defaultView?.AetherResourceInfo||globalThis.AetherResourceInfo)?.describe(card);if(!info?.id?.startsWith('/group/'))continue;
     const parts=info.id.split('/'),root=this.tree.root(parts[2],this.tree.nodes.get('/group/'+parts[2]+'/')?.name||parts[2],'visible');if(!root)continue;
     let parent=root;
     const segments=info.id.slice(root.id.length).split('/').filter(Boolean);
@@ -78,7 +78,7 @@
   async resolve(signal,onprogress){
    const queue=this.tree.roots.map(id=>({id,depth:0})),visited=new Set();
    while(queue.length){
-    if(signal.aborted)throw signal.reason;const {id,depth}=queue.shift(),n=this.tree.nodes.get(id);if(!n||visited.has(id)||n.type!=='folder'||this.tree.status(id)==='unchecked')continue;visited.add(id);
+    if(signal.aborted)throw signal.reason;const {id,depth}=queue.shift(),n=this.tree.nodes.get(id);if(!n||visited.has(id)||n.type!=='folder'||!this.tree.intent(id)&&this.tree.status(id)==='unchecked')continue;visited.add(id);
     if(depth>=128){n.state='incomplete';n.complete=false;n.error='Folder depth limit reached.';continue;}
     // Explicitly excluded subtrees need no network requests.
     if(!n.available){n.state='failed';n.complete=false;continue;}

@@ -7,24 +7,26 @@
   constructor(){
    this.tree=new Tree();this.discovery=new globalThis.AetherDownloadDiscovery.Discovery(this.tree,globalThis.AetherResourceAccess);
    this.stage='browsing';this.message='Choose files, folders or courses. Expand folders independently from selection.';this.listeners=new Set();this.task=null;this.review=null;this.scope=null;this.checkedAt=0;this.lastUsed=Date.now();this.progress={completed:0,bytes:0,failed:[]};
+   this.touch();
   }
+  touch(){this.lastUsed=Date.now();clearTimeout(this.expiry);this.expiry=setTimeout(()=>{if(this.task){this.touch();return;}this.reset('Your basket expired after 30 minutes of inactivity.');},30*60*1000);}
   emit(){for(const fn of this.listeners)fn();}
   collect(doc){this.discovery.visible(document);if(doc&&doc!==document)this.discovery.visible(doc);}
-  changed(){if(this.task)return;this.review=null;this.stage='browsing';this.lastUsed=Date.now();this.emit();}
+  changed(){if(this.task)return;this.review=null;this.stage='browsing';this.touch();this.emit();}
   async identity(){
    const scope=await globalThis.AetherFileState?.session();
    if(!scope||this.scope&&this.scope!==scope){this.reset('Session changed or unavailable. Reopen the manager after signing in.');throw Error('The authenticated Sakai session could not be verified.');}
    this.scope=scope;this.checkedAt=Date.now();return scope;
   }
   reset(message='Selections cleared for privacy.'){
-   this.cancel();this.tree.clear();this.tree.nodes.clear();this.tree.roots.length=0;this.scope=null;this.review=null;this.stage='browsing';this.message=message;this.emit();
+   this.cancel();clearTimeout(this.expiry);this.tree.clear();this.tree.nodes.clear();this.tree.roots.length=0;this.scope=null;this.review=null;this.stage='browsing';this.message=message;this.emit();
   }
   begin(stage){
    if(this.task)throw Error('An operation is already running.');
-   const task={abort:new AbortController(),archive:null,timer:null};this.task=task;this.stage=stage;
+   const task={abort:new AbortController(),archive:null,timer:null};this.task=task;this.stage=stage;this.touch();
    task.timer=setInterval(()=>this.identity().catch(()=>task.abort.abort(Error('Session verification failed.'))),30000);this.emit();return task;
   }
-  end(task){clearInterval(task.timer);if(this.task===task)this.task=null;this.emit();}
+  end(task){clearInterval(task.timer);if(this.task===task)this.task=null;this.touch();this.emit();}
   async folder(node,force=false){
    if(this.task)return;const task=this.begin('discovering');
    try{await this.identity();await this.discovery.load(node,task.abort.signal,force);this.message=node.error||'Folder metadata loaded. No file contents downloaded.';}
@@ -93,6 +95,7 @@
     const approved=await new Promise(resolve=>{this.notice={node,text:error.notice.text,resolve};this.stage='copyright';this.emit();});this.notice=null;
     if(task.abort.signal.aborted)throw task.abort.signal.reason;
     this.stage='downloading';if(!approved)return null;
+    await this.identity();if(task.abort.signal.aborted)throw task.abort.signal.reason;
     const controller=new AbortController(),abort=()=>controller.abort(task.abort.signal.reason),timer=setTimeout(()=>controller.abort(),20000);task.abort.signal.addEventListener('abort',abort,{once:true});
     try{await globalThis.AetherResourceAccess.accept(error.notice.accept,{u:new URL(node.url)},controller.signal);}
     finally{clearTimeout(timer);task.abort.signal.removeEventListener('abort',abort);}

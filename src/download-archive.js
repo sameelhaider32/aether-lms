@@ -17,7 +17,7 @@
    const parent=node.parent?tree.nodes.get(node.parent):null,base=parent?path(parent):'',segment=safeSegment(node.name),key=base.toLocaleLowerCase('en-US');
    if(!used.has(key))used.set(key,new Set());const names=used.get(key);let unique=segment,index=2;
    const extension=node.type==='file'?(segment.match(/\.[^.]+$/)?.[0]||''):'';
-   while(names.has(unique.toLocaleLowerCase('en-US')))unique=segment.slice(0,segment.length-extension.length)+' ('+index+++')'+extension;
+   while(names.has(unique.toLocaleLowerCase('en-US')))unique=segment.slice(0,segment.length-extension.length)+' ('+(index++)+')'+extension;
    names.add(unique.toLocaleLowerCase('en-US'));const result=base+unique+(node.type==='folder'?'/':'');
    if(new TextEncoder().encode(result).length>4096)throw Error('Archive path is too long. Select a shallower scope.');assigned.set(node.id,result);return result;
   }

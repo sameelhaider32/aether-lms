@@ -49,11 +49,18 @@
    this.nodes.set(node.id,node);const parent=this.nodes.get(node.parent);if(parent&&!parent.children.includes(node.id))parent.children.push(node.id);this.revision++;return node;
   }
   intent(id){for(let n=this.nodes.get(id);n;n=this.nodes.get(n.parent))if(this.rules.has(n.id))return this.rules.get(n.id);return false;}
+  available(node){for(let n=node;n;n=this.nodes.get(n.parent))if(!n.available)return false;return true;}
   set(id,value){if(!this.nodes.has(id))return;for(const key of this.rules.keys())if(key===id||key.startsWith(id.endsWith('/')?id:id+'/'))this.rules.delete(key);this.rules.set(id,!!value);this.revision++;}
   clear(){this.rules.clear();this.revision++;}
   status(id){
    const node=this.nodes.get(id);if(!node)return 'unchecked';
    if(node.type!=='folder')return this.intent(id)?'checked':'unchecked';
+   if(node.complete&&node.children.length){
+    const states=node.children.map(child=>this.status(child));
+    if(states.every(state=>state==='unchecked'))return 'unchecked';
+    if(states.every(state=>state==='checked'))return 'checked';
+    return 'mixed';
+   }
    let yes=this.intent(id),no=!yes;
    for(const [key,value]of this.rules)if(key!==id&&key.startsWith(id)){yes||=value;no||=!value;}
    return yes&&no?'mixed':yes?'checked':'unchecked';
@@ -65,7 +72,7 @@
     if(n.type==='folder'){
      if(selected&&(!n.complete||n.state!=='loaded'))incomplete.push(n);
      if(selected&&n.complete&&n.state==='loaded'&&!n.children.length)empty.push(n);
-    }else if(selected){if(n.type==='file'&&n.available)files.push(n);else excluded.push(n);}
+    }else if(selected){if(n.type==='file'&&this.available(n))files.push(n);else excluded.push(n);}
    }
    return {files,empty,incomplete,excluded,knownBytes:files.reduce((v,n)=>v+(n.size||0),0),unknown:files.filter(n=>n.size===null).length,revision:this.revision};
   }
