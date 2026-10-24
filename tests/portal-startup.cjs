@@ -19,6 +19,9 @@ function entryPage(url){
 (async()=>{
  const context=await chromium.launchPersistentContext(fs.mkdtempSync(path.join(os.tmpdir(),'aether-entry-')),{channel:'chromium',executablePath:process.env.AETHER_CHROMIUM||undefined,ignoreDefaultArgs:['--disable-extensions'],headless:true,args:[`--load-extension=${extension}`,`--disable-extensions-except=${extension}`],viewport:{width:1440,height:1000}});
  context.setDefaultTimeout(5000);
+  // Cold shared-runner navigation includes browser/font startup. Keep the
+  // independent UI activation assertions at five seconds.
+  context.setDefaultNavigationTimeout(process.env.CI?20000:10000);
  try{
   await context.route('https://**/*',route=>{
    const u=new URL(route.request().url());requests.push(u.origin+u.pathname);
