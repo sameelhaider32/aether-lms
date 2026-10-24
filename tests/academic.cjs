@@ -1,5 +1,41 @@
 const fs=require('node:fs'),path=require('node:path'),{origin,route}=require('./fixtures.cjs');
 module.exports=async({page,context,test,go,reportDir,assert})=>{
+ await test('Academic legacy Wicket statistics: surface, chart, native controls and OFF smoke',async()=>{
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.goto(route('Gradebook student','&legacyStats=1'));
+  await page.locator('html.ae-academic-surface').waitFor();
+  if(await page.locator('.ae-motion-btn').getAttribute('aria-pressed')==='false')await page.locator('.ae-motion-btn').click();
+  const trigger=page.locator('#grade-item-0 .gb-summary-grade-stats');await trigger.click();
+  const shell=page.locator('.wicket-modal'),surface=shell.locator('.w_content_1'),chart=surface.locator('canvas');
+  assert.equal(await surface.evaluate(e=>getComputedStyle(e).borderRadius),'14px');
+  assert((await surface.evaluate(e=>getComputedStyle(e).backgroundImage)).includes('radial-gradient'));
+  assert.equal(await shell.evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
+  for(const layer of ['.w_content_2','.w_content_3','.w_content'])assert.equal(await shell.locator(layer).evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
+  assert.equal(await surface.locator('dd').allTextContents().then(a=>a.join('|')),'16.25|17|2.5|10|20');
+  const chartBox=await chart.boundingBox(),shellBox=await shell.boundingBox();
+  await surface.locator('.w_captionText').hover({position:{x:10,y:10}});
+  assert.notEqual(await surface.evaluate(e=>e.style.getPropertyValue('--ae-hover-x')),'');
+  assert.deepEqual(await chart.boundingBox(),chartBox);assert.deepEqual(await shell.boundingBox(),shellBox);
+  await chart.hover({position:{x:45,y:40}});
+  assert.equal(await chart.getAttribute('data-hovered'),'true');
+  assert.equal(await surface.evaluate(e=>e.style.getPropertyValue('--ae-hover-x')),'');
+  assert(await chart.evaluate(e=>e===window.fixtureStatsCanvas&&e.width===400&&e.height===180&&e.getContext('2d').getImageData(25,35,1,1).data[3]===255));
+  await page.evaluate(()=>document.querySelector('.ae-motion-btn').click());
+  await page.locator('html.ae-list-reduced-motion').waitFor();
+  await surface.locator('.w_captionText').hover({position:{x:20,y:10}});
+  assert.equal(await surface.evaluate(e=>getComputedStyle(e).getPropertyValue('--ae-stats-light-x').trim()),'50%');
+  assert.equal(await surface.evaluate(e=>getComputedStyle(e).transitionDuration),'0s');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.evaluate(()=>document.querySelector('#aether-native-toggle').click());
+  await page.locator('html.ae-academic-surface').waitFor({state:'detached'});
+  assert.equal(await surface.evaluate(e=>getComputedStyle(e).borderRadius),'0px');
+  assert.equal(await shell.locator('.w_content').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
+  await surface.getByRole('button',{name:'Done',exact:true}).click();
+  assert.equal(await page.locator('.wicket-modal').count(),0);assert(await trigger.evaluate(e=>e===document.activeElement));
+  await page.locator('#aether-native-toggle').click();await page.locator('html.ae-academic-surface').waitFor();
+  await trigger.click();await page.getByRole('link',{name:'Close',exact:true}).click();assert.equal(await page.locator('.wicket-modal').count(),0);
+  await trigger.click();await page.getByRole('dialog').press('Escape');assert.equal(await page.locator('.wicket-modal').count(),0);
+ });
  await test('Academic Gradebook statistics card: native chart, motion and OFF smoke',async()=>{
   await page.emulateMedia({reducedMotion:'no-preference'});
   for(const tool of ['Gradebook student','Gradebook frame']){

@@ -17,17 +17,32 @@ function gradeStatsFixture(){return `<style>
 .gb-modal-dialog{width:500px;margin:32px auto;background:white;color:#222;border:1px solid #888}
 .gb-modal-titlebar{padding:10px;background:#eee}.gb-modal-close{float:right}
 .gb-modal-content{padding:10px}
+/* Wicket 6 modal.js/modal.css nesting, with native positioning and fixed content. */
+.wicket-modal{position:fixed;left:calc(50% - 250px);top:32px;width:500px;z-index:20001}
+.wicket-modal .w_top,.wicket-modal .w_bottom{height:11px}
+.wicket-modal .w_right_1{margin-left:10px}.wicket-modal .w_content_1{margin-right:10px;background:white}
+.wicket-modal .w_caption{height:1.4em;position:relative;overflow:hidden;background:white;color:#666}
+.wicket-modal .w_captionText{position:absolute;left:0;height:1.4em;margin:0 0 0 3px}
+.wicket-modal .w_close{position:absolute;right:3px;width:16px;height:16px;overflow:hidden}
+.wicket-modal .w_content_2,.wicket-modal .w_content{width:100%;background:white}
+.wicket-modal .w_content_3{border:1px solid #bbb}.wicket-modal .w_content_container{position:relative;height:440px;overflow:auto}
 </style><script>
 window.fixtureGradeStats=function(trigger){
  const overlay=document.createElement('div');overlay.className='gb-modal-overlay';
  overlay.innerHTML='<div class="gb-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="fixture-stats-title" tabindex="-1"><div class="gb-modal-titlebar"><span id="fixture-stats-title" class="gb-modal-title">Item statistics</span><a class="gb-modal-close" href="#" aria-label="Close">&#10005;</a></div><div class="gb-modal-content"><canvas width="400" height="180" aria-label="Fictional grade distribution"></canvas><div><dl class="row"><dt class="col-sm-4">Average</dt><dd class="col-sm-8">16.25</dd><dt class="col-sm-4">Median</dt><dd class="col-sm-8">17</dd><dt class="col-sm-4">Standard deviation</dt><dd class="col-sm-8">2.5</dd><dt class="col-sm-4">Lowest</dt><dd class="col-sm-8">10</dd><dt class="col-sm-4">Highest</dt><dd class="col-sm-8">20</dd></dl></div><div><input type="button" class="button_color" value="Done" aria-label="Done"></div></div></div>';
+ if(new URLSearchParams(location.search).has('legacyStats')){
+  const content=overlay.querySelector('.gb-modal-content');
+  const modal=document.createElement('div');modal.className='wicket-modal';
+  modal.innerHTML='<div class="w_blue"><div class="w_top_1"><div class="w_topLeft"></div><div class="w_topRight"></div><div class="w_top"></div></div><div class="w_left"><div class="w_right_1"><div class="w_right"><div class="w_content_1" role="dialog" aria-modal="true" aria-labelledby="fixture-stats-title" tabindex="-1"><div class="w_caption"><a class="w_close" href="#" aria-label="Close"></a><h3 class="w_captionText" id="fixture-stats-title">Item statistics</h3></div><div class="w_content_2"><div class="w_content_3"><div class="w_content"><div class="w_content_container"></div></div></div></div></div></div></div></div><div class="w_bottom_1"><div class="w_bottomLeft"></div><div class="w_bottomRight"></div><div class="w_bottom"></div></div></div>';
+  modal.querySelector('.w_content_container').append(...content.childNodes);overlay.replaceChildren(modal);
+ }
  document.body.append(overlay);
- const dialog=overlay.firstElementChild,canvas=overlay.querySelector('canvas');
+ const dialog=overlay.querySelector('[role="dialog"]'),canvas=overlay.querySelector('canvas');
  window.fixtureStatsCanvas=canvas;canvas.getContext('2d').fillRect(20,30,40,100);
  canvas.addEventListener('pointermove',()=>canvas.dataset.hovered='true');
  function close(){overlay.remove();document.removeEventListener('keydown',escape);trigger.focus();}
  function escape(e){if(e.key==='Escape')close();}
- overlay.querySelector('.gb-modal-close').onclick=e=>{e.preventDefault();close();};
+ overlay.querySelector('.gb-modal-close,.w_close').onclick=e=>{e.preventDefault();close();};
  overlay.querySelector('input').onclick=close;document.addEventListener('keydown',escape);dialog.focus();
 };
 </script>`;}

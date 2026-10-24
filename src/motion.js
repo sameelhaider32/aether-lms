@@ -37,7 +37,7 @@
     if(!animations.size||[...animations.values()].every(s=>s.springs.every(p=>p.resting))){stopCards();stopCards=null;}
   });}
   // Sakai statistics use only the pointer light; the native chart never tilts.
-  const statsSelector='html.ae-academic-surface .gb-modal-dialog:has(> .gb-modal-content > canvas)';
+  const statsSelector='html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas))';
   const cardSelector='.ae-course-card,.ae-tool-item,.ae-record-card,'+statsSelector;
   function pointer(e){
     if(!moving()||coarse.matches)return;
