@@ -71,8 +71,8 @@ html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) > .gb-modal-content{padding:20px 22px;background:transparent;color:inherit}
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) .gb-modal-content > div:last-child{margin-top:18px}
-/* A light backing preserves legibility of native chart labels/colors. No sizing. */
-html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) canvas{background:#eef5f0;border-radius:8px}
+/* Chart.js owns chart colors; retain a transparent canvas and native sizing. */
+html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) canvas{background:transparent;border-radius:8px}
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) dl{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;margin:18px 0 0;
   border:1px solid #56857380;border-radius:10px;overflow:hidden;background:#07171366;
