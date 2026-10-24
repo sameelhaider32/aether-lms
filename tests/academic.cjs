@@ -1,6 +1,46 @@
 const fs=require('node:fs'),path=require('node:path'),{origin,route}=require('./fixtures.cjs');
 module.exports=async({page,context,test,go,reportDir,assert})=>{
- await test('Academic Gradebook: published item cards preserve scores and category controls',async()=>{await go('Gradebook student');await page.locator('#gradeSummaryTable.ae-card-table').waitFor();assert.equal(await page.locator('#gradeSummaryTable .ae-record-card[data-ae-kind="grade"]').count(),3);assert.equal(await page.locator('.gb-summary-category-row.ae-card-context-row').count(),1);assert.equal(await page.locator('#grade-item-0 .gb-summary-grade-score').innerText(),'18 / 20');assert.equal(await page.locator('#grade-item-2 .gb-summary-grade-score').innerText(),'Not released');assert.equal(await page.locator('.gb-summary-course-grade-value').innerText(),'B+');await page.locator('#grade-item-0 .gb-summary-grade-stats').click();assert.equal(await page.locator('#grade-item-0 .gb-summary-grade-stats').getAttribute('data-opened'),'true');await page.locator('#toggle-category').click();assert.equal(await page.locator('.gb-summary-assignments-tbody').isVisible(),false);await page.locator('#toggle-category').click();assert(await page.locator('#grade-item-0').isVisible());await page.screenshot({path:path.join(reportDir,'gradebook-desktop.png'),fullPage:true});});
+ await test('Academic Gradebook statistics card: native chart, motion and OFF smoke',async()=>{
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  for(const tool of ['Gradebook student','Gradebook frame']){
+   await go(tool);
+   if(await page.locator('.ae-motion-btn').getAttribute('aria-pressed')==='false')await page.locator('.ae-motion-btn').click();
+   const view=tool==='Gradebook frame'?page.frameLocator('iframe[title="Gradebook tool frame"]'):page;
+   await view.locator('html.ae-academic-surface').waitFor();
+   const trigger=view.locator('#grade-item-0 .gb-summary-grade-stats');await trigger.click();
+   const dialog=view.getByRole('dialog'),chart=dialog.locator('canvas');
+   assert.equal(await dialog.evaluate(e=>getComputedStyle(e).borderRadius),'14px');
+   assert.equal(await dialog.getAttribute('aria-labelledby'),'fixture-stats-title');
+   assert.equal(await dialog.locator('dd').allTextContents().then(a=>a.join('|')),'16.25|17|2.5|10|20');
+   const before=await chart.boundingBox();
+   await dialog.locator('.gb-modal-title').hover({position:{x:20,y:10}});
+   assert.notEqual(await dialog.evaluate(e=>e.style.getPropertyValue('--ae-hover-x')),'');
+   assert.deepEqual(await chart.boundingBox(),before);
+   await chart.hover({position:{x:45,y:40}});
+   assert.equal(await chart.getAttribute('data-hovered'),'true');
+   assert.equal(await dialog.evaluate(e=>e.style.getPropertyValue('--ae-hover-x')),'');
+   assert(await chart.evaluate(e=>e===window.fixtureStatsCanvas&&e.width===400&&e.height===180&&e.getContext('2d').getImageData(25,35,1,1).data[3]===255));
+   await page.emulateMedia({reducedMotion:'reduce'});
+   assert.equal(await dialog.evaluate(e=>getComputedStyle(e).transitionDuration),'0s');
+   await page.evaluate(()=>document.querySelector('#aether-native-toggle').click());
+   await view.locator('html.ae-academic-surface').waitFor({state:'detached'});
+   assert.equal(await dialog.evaluate(e=>getComputedStyle(e).borderRadius),'0px');
+   assert.equal(await dialog.evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
+   await dialog.getByRole('button',{name:'Done',exact:true}).click();
+   assert.equal(await view.getByRole('dialog').count(),0);
+   assert(await trigger.evaluate(e=>e===document.activeElement));
+   await page.locator('#aether-native-toggle').click();
+   await view.locator('html.ae-academic-surface').waitFor();
+   await trigger.click();await view.getByRole('link',{name:'Close',exact:true}).click();
+   assert.equal(await view.getByRole('dialog').count(),0);
+   await trigger.click();await view.locator('.gb-modal-dialog').press('Escape');
+   assert.equal(await view.getByRole('dialog').count(),0);
+   await page.emulateMedia({reducedMotion:'no-preference'});
+  }
+  await page.emulateMedia({reducedMotion:'reduce'});
+ });
+
+ await test('Academic Gradebook: published item cards preserve scores and category controls',async()=>{await go('Gradebook student');await page.locator('#gradeSummaryTable.ae-card-table').waitFor();assert.equal(await page.locator('#gradeSummaryTable .ae-record-card[data-ae-kind="grade"]').count(),3);assert.equal(await page.locator('.gb-summary-category-row.ae-card-context-row').count(),1);assert.equal(await page.locator('#grade-item-0 .gb-summary-grade-score').innerText(),'18 / 20');assert.equal(await page.locator('#grade-item-2 .gb-summary-grade-score').innerText(),'Not released');assert.equal(await page.locator('.gb-summary-course-grade-value').innerText(),'B+');await page.locator('#grade-item-0 .gb-summary-grade-stats').click();assert.equal(await page.locator('#grade-item-0 .gb-summary-grade-stats').getAttribute('data-opened'),'true');await page.getByRole('button',{name:'Done',exact:true}).click();await page.locator('#toggle-category').click();assert.equal(await page.locator('.gb-summary-assignments-tbody').isVisible(),false);await page.locator('#toggle-category').click();assert(await page.locator('#grade-item-0').isVisible());await page.screenshot({path:path.join(reportDir,'gradebook-desktop.png'),fullPage:true});});
  await test('Academic Gradebook: editing and comparison tables get matching styling and native geometry',async()=>{await go('Gradebook');assert.equal(await page.locator('#gradebook .ae-record-card').count(),0);assert.equal(await page.locator('#gradebook').evaluate(e=>getComputedStyle(e).display),'table');await page.getByRole('spinbutton',{name:'Grade'}).fill('91');assert.equal(await page.getByRole('spinbutton',{name:'Grade'}).inputValue(),'91');assert.equal(await page.locator('#gradebook').getAttribute('data-ae-layout'),'sensitive');assert.equal(await page.locator('#gradebook th').first().evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(27, 41, 50)');await go('Gradebook comparison');assert.equal(await page.locator('#grade-comparison .ae-record-card').count(),0);assert.equal(await page.locator('#grade-comparison').evaluate(e=>getComputedStyle(e).display),'table');assert.equal(await page.locator('#grade-comparison th[scope="row"]').innerText(),'Fixture Student');});
  await test('Academic Gradebook: live read-only and edit transitions restore the previous mode',async()=>{await go('Gradebook student');await page.locator('#gradeSummaryTable.ae-card-table').waitFor();await page.evaluate(()=>{window.nativeGradeNode=document.querySelector('.gb-summary-grade-title');const input=document.createElement('input');input.type='number';input.id='inline-grade';input.value='18';document.querySelector('.gb-summary-grade-score').append(input);});await page.locator('#gradeSummaryTable.ae-native-table').waitFor();assert.equal(await page.locator('#gradeSummaryTable .ae-record-card').count(),0);assert.equal(await page.locator('#gradeSummaryTable').evaluate(e=>getComputedStyle(e).display),'table');await page.locator('#inline-grade').fill('19');await page.evaluate(()=>document.querySelector('#inline-grade').remove());await page.locator('#gradeSummaryTable.ae-card-table').waitFor();assert.equal(await page.locator('#gradeSummaryTable .ae-record-card').count(),3);assert(await page.evaluate(()=>window.nativeGradeNode===document.querySelector('.gb-summary-grade-title')));});
  await test('Academic Roster: native cards retain photos, profiles, email and group handlers',async()=>{await go('Roster');await page.locator('#roster-members.ae-card-list').waitFor();assert.equal(await page.locator('.roster-member-card.ae-record-card[data-ae-kind="person"]').count(),3);assert.equal(await page.locator('.roster-member-card img').count(),3);await page.locator('.roster-member-card .profile').first().click();assert.equal(await page.locator('.roster-member-card .profile').first().getAttribute('data-opened'),'true');assert.equal(await page.locator('.roster-member-card a[href^="mailto:"]').first().getAttribute('href'),'mailto:fixture-0@example.invalid');await page.locator('.roster-groups-selector').first().selectOption('Lab B');assert.equal(await page.locator('.roster-groups-selector').first().getAttribute('data-changed'),'true');await page.screenshot({path:path.join(reportDir,'roster-desktop.png'),fullPage:true});});

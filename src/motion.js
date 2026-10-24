@@ -36,19 +36,25 @@
     }
     if(!animations.size||[...animations.values()].every(s=>s.springs.every(p=>p.resting))){stopCards();stopCards=null;}
   });}
-  const cardSelector='.ae-course-card,.ae-tool-item,.ae-record-card';
+  // Sakai statistics use only the pointer light; the native chart never tilts.
+  const statsSelector='html.ae-academic-surface .gb-modal-dialog:has(> .gb-modal-content > canvas)';
+  const cardSelector='.ae-course-card,.ae-tool-item,.ae-record-card,'+statsSelector;
   function pointer(e){
     if(!moving()||coarse.matches)return;
     const card=e.target.closest?.(cardSelector);
     if(card!==current)settle();
+    const stats=card?.matches(statsSelector);
+    if(stats&&e.target.closest('canvas')){clearCard(card);animations.delete(card);current=null;return;}
     // Native editing and open dropdowns remain geometrically stable.
     if(!card||card.querySelector('textarea,select,[contenteditable="true"],input[type="file"],input[type="number"],.dropdown-menu.show,[aria-expanded="true"]'))return;
-    current=card;
-    let s=animations.get(card);if(!s){s={springs:[spring(),spring(),spring()]};animations.set(card,s);}
     const r=card.getBoundingClientRect(),x=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));
-    s.springs[0].target=-5.5;s.springs[1].target=(.5-y)*3.2;s.springs[2].target=(x-.5)*4;
     for(const key of ['--ae-hover-x','--mx'])card.style.setProperty(key,(x*100).toFixed(2)+'%');
     for(const key of ['--ae-hover-y','--my'])card.style.setProperty(key,(y*100).toFixed(2)+'%');
+    // Lighting needs no animation state or retained reference to a removed modal.
+    if(stats)return;
+    current=card;
+    let s=animations.get(card);if(!s){s={springs:[spring(),spring(),spring()]};animations.set(card,s);}
+    s.springs[0].target=-5.5;s.springs[1].target=(.5-y)*3.2;s.springs[2].target=(x-.5)*4;
     startCards();
     if(window!==top)top.postMessage({type:'aether-pointer-v051',x:e.clientX/innerWidth,y:e.clientY/innerHeight},location.origin);
   }
