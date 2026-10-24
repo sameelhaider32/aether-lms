@@ -11,7 +11,7 @@
   for(const table of doc.querySelectorAll('.Mrphs-sakai-assignment-grades table,form[name="listAssignmentsForm"] table,table#assignments,table#assignmentList,table#assignments-list')){
    if(!visible(table)||table.querySelector('input[type="checkbox"],input[type="number"],textarea,th#num_submissions,th#remove'))continue;
    const head=table.querySelector('thead tr')||[...table.querySelectorAll('tr')].find(r=>r.querySelector('th'));if(!head)continue;
-   const labels=[...head.children].map(n=>D.clean(n.textContent)),column=(id,re)=>{const at=[...head.children].findIndex(n=>n.id===id);return at>=0?at:labels.findIndex(x=>re.test(x));},title=column('title',/assignment|^title/i),status=column('status',/^status|submission status/i),due=column('dueDate',/due/i),open=column('openDate',/open/i);
+   const labels=[...head.children].map(n=>D.clean(n.textContent)),column=(id,re)=>{const at=[...head.children].findIndex(n=>n.id===id);return at>=0?at:labels.findIndex(x=>re.test(x));},title=column('title',/^(?:assignment|title)\b/i),status=column('status',/^(?:status|submission status)\b/i),due=column('dueDate',/due/i),open=column('openDate',/open/i);
    // A student status column is essential: never parse an instructor's list.
    if(title<0||status<0)continue;assignmentListSupported=true;
    for(const row of [...table.querySelectorAll('tbody tr')].slice(0,300)){
