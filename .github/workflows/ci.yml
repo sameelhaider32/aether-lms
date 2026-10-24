@@ -51,6 +51,9 @@ jobs:
         timeout-minutes: 8
         if: '!cancelled()'
         run: npm run test:browser
+      - name: Mission Control fixture checks
+        if: '!cancelled()'
+        run: npm run test:mission
       - name: Graphics and cancellation regressions
         if: '!cancelled()'
         run: node tests/fallbacks.cjs

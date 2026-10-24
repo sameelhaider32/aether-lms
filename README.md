@@ -2,14 +2,14 @@
 
 A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Chrome extension that adds course cards, document previews, and a glowing starfield to your existing LMS.
 
-**Current version: 1.4.0 · Public beta · MIT licensed**
+**Current version: 1.5.0 · Mission Control · Public beta · MIT licensed**
 
 [![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
 [![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
 
 Works on [lms.lums.edu.pk](https://lms.lums.edu.pk). This is an independent project, unaffiliated with LUMS or the Sakai project.
 
-![Aether Home with course cards, stars, and the folded particle field](docs/images/home.png)
+![Aether Mission Control with observed coursework, course cards and the folded particle field](docs/images/mission-control.png)
 
 *Screenshot uses fictional courses and test content.*
 
@@ -29,7 +29,7 @@ To update, back up your current folder, replace its contents with the new versio
 
 | Area | What Aether adds |
 |---|---|
-| Home | A redesigned workspace with cards for your pinned courses, course shortcuts, and links to activity found on the current page. Recent unpinned courses are excluded. |
+| Home | Mission Control under the original hero: observed academic counts, Next Up, a planning timeline, announcements and course outlook. Pinned course cards and saved order remain available. |
 | Navigation | Reorder course and tool shortcuts with drag-and-drop or keyboard buttons; your order is saved locally. |
 | Appearance | Dark panels, mint and cyan accents, bundled fonts, page-wide stars, glowing sparkles, pointer glow, and contour lines. |
 | Folded field | A procedural 3D particle sculpture with progressive startup and a Canvas fallback when WebGL is unavailable. |
@@ -48,7 +48,31 @@ To update, back up your current folder, replace its contents with the new versio
 | Accessibility | Keyboard controls, visible focus, Escape to close previews, responsive layouts, and support for your system's reduced-motion preference. |
 | Your choice | **AETHER ON/OFF** restores the original Sakai layout. **MOTION ON/OFF** controls animation separately and saves your preference. |
 
-Native authentication, access permissions, forms, and actions remain in Sakai. Aether does not grant access to hidden grades or restricted files. The Home activity panel uses only the current page; its decorative graphic does not measure grades, progress, or deadlines.
+Native authentication, access permissions, forms, and actions remain in Sakai. Aether does not grant access to hidden grades or restricted files. Mission Control reports observed records and explicitly labels partial or unavailable coverage; it cannot guarantee a complete semester inventory.
+
+## Mission Control (1.5)
+
+Home now brings accessible coursework into one read-only planning view. **Next Up** orders observed deadlines and events, keeps unknown submission states neutral, distinguishes drafts from submitted work, and highlights confirmed overdue work. The summary strip counts observed assignments due in seven days, verified items needing attention, upcoming events and newly observed announcements. Missing sources or a missing prior announcement baseline show **—**, never a fabricated zero.
+
+Combine **Course**, **7 / 14 / 30 days**, **Type**, **Status** and **Sort**. Status filters use verified submission facts only. Timeline arrows move through the period; **Today** returns to the current period. Density bars and course outlook count actual dated assignments/events, without estimating difficulty. Undated records stay available in Next Up. Announcements use the selected number of recent days rather than a future timeline period. Controls keep their selection during in-page updates and do not refetch metadata.
+
+Use **Refresh** for a fresh check. Returning to a visible Home tab refreshes data older than five minutes; there is no continuous background course scan. Original item links remain native. API calendar/announcement records open the discovered original course tool where available, otherwise the course page; choose its Calendar or Announcements tool for the full record. **Clear session data** clears this view and its announcement baseline. OFF, navigation, logout and observed account changes cancel reads and clear the view. The next check establishes a new baseline.
+
+### Sources and current limits
+
+- Identity reuses Aether's authenticated `/direct/session/current.json` helper. If identity is unavailable or anonymous, academic reads are blocked.
+- Courses combine original navigation with one bounded `/direct/site.json?select=access&_limit=50&_start=0` read. This is accessible-site discovery, not proof of every enrollment.
+- Assignments use discovered **native student assignment lists**, including supported Sakai tool frames and the modern/legacy `listAssignmentsForm` template. Titles, links, due dates and student status cells are read; instructor lists, hidden rows and future opening dates are excluded. Ambiguous dates remain unavailable, and missing status remains unknown. Only the current native list page is read; pagination is not driven.
+- `/direct/assignment/my.json` and `/direct/assignment/site/{siteId}.json` were investigated but are **not requested**. The [upstream provider](https://github.com/sakaiproject/sakai/blob/4debc94780cc41758aebfbbe2583d11364edd09b/assignment/tool/src/java/org/sakaiproject/assignment/entityproviders/AssignmentEntityProvider.java) enumerates context assignments and its generic list contract does not establish student release/group visibility. Assignment canonical status is not submission status. No other students' submissions, grades or assignment instructions are imported.
+- Events use one date-bounded `/direct/calendar/my.json` read (30 days back / 90 days ahead). The [upstream calendar provider](https://github.com/sakaiproject/sakai/blob/4debc94780cc41758aebfbbe2583d11364edd09b/calendar/calendar-tool/tool/src/java/org/sakaiproject/calendar/entityproviders/CalendarEventEntityProvider.java) applies calendar access checks but can silently skip inaccessible calendars. `/direct/calendar/site/{siteId}.json` exists upstream but is not additionally scanned. Assignment-generated events are excluded to avoid revealing unreleased assignment titles or duplicating student-list deadlines. Recurrences are displayed only as returned; no occurrences are invented. Visible native summary events remain the fallback.
+- Announcements use `/direct/announcement/site/{siteId}.json?n=20&d=30`, with native course/Home summaries as fallback. The [upstream announcement provider](https://github.com/sakaiproject/sakai/blob/4debc94780cc41758aebfbbe2583d11364edd09b/announcement/announcement-tool/tool/src/java/org/sakaiproject/announcement/entityprovider/AnnouncementEntityProviderImpl.java) checks read permission, viewability, date ranges and drafts. Bodies and attachments are not retained. **Newly observed** means absent from the previous successful check in this tab, never newly published; an old post can be newly observed.
+- Checks scan at most eight discovered courses, prioritize existing navigation, deduplicate reads, use at most three concurrent requests, cap individual metadata responses at 2 MiB and total metadata at 16 MiB, and time out requests after eight seconds. English native schemas are recognized conservatively. Unsupported layouts and missing tool links are reported in **Sources & coverage**.
+
+**Authenticated LUMS deployment compatibility is unverified.** Upstream contracts and fictional intercepted-browser checks do not establish the deployed Sakai version, endpoint availability, native markup or enrollment coverage. If APIs fail, supported native student lists and visible summaries still supply useful observed records. If those also cannot be recognized, the dashboard says unavailable and retains original course navigation; this is limited functionality, not a fully verified cross-course release.
+
+After reloading the extension in the existing folder, check Home against two real course assignment lists: course association, exact due time/timezone, submitted versus draft status, one Calendar event and one announcement. Inspect **Sources & coverage**, follow original links, then try OFF and verify that Sakai's original interface returns. Do not make a test submission. If Sakai omits timezone information, confirm the displayed time against its original field.
+
+Mission Control keeps normalized records and its bounded announcement comparison baseline only in page memory. It adds no permissions, durable academic storage, analytics or remote processing. See [PRIVACY.md](PRIVACY.md).
 
 Submitted assignments stay mint even after their deadline. A **Late** badge requires an explicit native late status or a confirmed submission timestamp after the applicable due date. **Draft saved** does not mean submitted. Due dates remain visible in Sakai's original fields, with relative time labels updating automatically. Opened-file history starts when this feature is used and does not reconstruct past reading activity. See [PRIVACY.md](PRIVACY.md) for storage details.
 
@@ -95,6 +119,8 @@ The extension requests `storage` to remember preferences and runs only on `https
 Fonts and readers are bundled locally. There are no analytics, external document uploads, or cloud conversion services. See [PRIVACY.md](PRIVACY.md) for details.
 
 ## Compatibility and testing
+
+The focused `npm run test:mission` check uses fictional intercepted requests with the real unpacked extension, including modern/legacy student lists, tool frames, cross-course records, filters, source failures, hidden/future exclusions, account/OFF cancellation, native actions and desktop/phone layouts. Existing startup, sign-in, assignment-state, Gradebook and shared downloader checks remain available; no live LMS credentials or test submissions are required.
 
 The v1.3.1 reliability checks use fictional, intercepted Sakai fixtures and the real unpacked extension. They cover preview cancellation, history concurrency and account isolation, native controls, copyright consent, startup routes, graphics fallbacks, and large dynamic lists. See the [release audit](docs/V1.3.1_AUDIT.md) and [verification report](docs/V1.3.1_RELEASE_REPORT.md) for results, environment details and limitations.
 

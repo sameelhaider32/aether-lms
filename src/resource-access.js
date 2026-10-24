@@ -28,19 +28,19 @@
    if(!text||text.length>64000)return null;
    return {text,accept:accept.href};
  }
- async function responseBytes(response,signal,limit){
-   if(!response.ok)throw Error(response.status===401||response.status===403?'This resource needs permission. Open it in Sakai.':'Preview unavailable. Open the original resource.');
+ async function responseBytes(response,signal,limit,onbytes=()=>{}){
+   if(!response.ok){const error=Error(response.status===401||response.status===403?'This resource needs permission. Open it in Sakai.':'Preview unavailable. Open the original resource.');error.httpStatus=response.status;throw error;}
    if(Number(response.headers.get('content-length'))>limit)throw Error('This file is too large for a quick preview. Open the original resource.');
    const reader=response.body?.getReader();if(!reader)throw Error('Preview unavailable. Open the original resource.');
    let size=0;const chunks=[],cancel=()=>{reader.cancel().catch(()=>{});};signal?.addEventListener('abort',cancel,{once:true});
-   try{while(true){if(signal?.aborted)throw new DOMException('Aborted','AbortError');const {done,value}=await reader.read();if(signal?.aborted)throw new DOMException('Aborted','AbortError');if(done)break;size+=value.length;if(size>limit)throw Error('This file is too large for a quick preview. Open the original resource.');chunks.push(value);}}
+   try{while(true){if(signal?.aborted)throw new DOMException('Aborted','AbortError');const {done,value}=await reader.read();if(signal?.aborted)throw new DOMException('Aborted','AbortError');if(done)break;size+=value.length;onbytes(value.length);if(size>limit)throw Error('This file is too large for a quick preview. Open the original resource.');chunks.push(value);}}
    catch(error){await reader.cancel().catch(()=>{});throw error;}finally{signal?.removeEventListener('abort',cancel);reader.releaseLock();}
    const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
    return {bytes,mime:(response.headers.get('content-type')||'').toLowerCase()};
  }
- async function read(u,signal,limit=MAX){
+ async function read(u,signal,limit=MAX,{cache='default',onbytes}={}){
    if(u.origin!==origin)throw Error('Open the original resource to view this external file.');
-   return responseBytes(await fetch(u.href,{method:'GET',credentials:'same-origin',signal,redirect:'error',cache:'default'}),signal,limit);
+   return responseBytes(await fetch(u.href,{method:'GET',credentials:'same-origin',signal,redirect:'error',cache}),signal,limit,onbytes);
  }
  async function resource(info,signal,limit=MAX){
    const u=info.u;if(!content(u))throw Error('Open the original resource to see its contents.');

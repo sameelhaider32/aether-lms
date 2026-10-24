@@ -1,6 +1,6 @@
 {
   "name": "aether-lms",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": true,
   "license": "MIT",
   "description": "MV3 presentation enhancement for the original LUMS Sakai workspace",
@@ -11,7 +11,8 @@
     "test:downloads": "node tests/download-browser.cjs && node tests/download-stress.cjs",
     "test:stress": "node tests/stress.cjs",
     "package": "python scripts/package.py",
-    "test:startup": "node tests/startup.cjs && node tests/portal-startup.cjs"
+    "test:startup": "node tests/startup.cjs && node tests/portal-startup.cjs",
+    "test:mission": "node tests/mission-control.cjs"
   },
   "overrides": {
     "pptxgenjs": {
