@@ -18,6 +18,7 @@ All runtime assets are locally packaged. License texts remain beside their asset
 | docx-preview 0.4.1 | [docxjs](https://github.com/VolodymyrBaydalka/docxjs) | Apache 2.0; `vendor/office/docx-preview/LICENSE` |
 | ExcelJS 4.4.0 | [ExcelJS](https://github.com/exceljs/exceljs) | MIT; `vendor/office/exceljs/LICENSE` |
 | JSZip 3.10.1 | [JSZip](https://github.com/Stuk/jszip) | MIT option of the dual MIT/GPL license; full notice in `vendor/office/jszip/LICENSE.markdown` |
+| zip.js 2.24.0 core | [zip.js](https://github.com/gildas-lormeau/zip.js), npm `@zip.js/zip.js` | BSD-3-Clause; `vendor/zip/LICENSE`, pinned package integrity and core SHA-256 in `vendor/zip/provenance.json`. Imported only for export, sequential STORE entries without workers/codecs. |
 | PptxGenJS 4.0.1 | [PptxGenJS](https://github.com/gitbrent/PptxGenJS) | MIT; development fixture generation only, excluded from the release |
 
 Segoe UI is an installed-system font fallback; no Microsoft fonts are redistributed. Graphics use native browser APIs without Three.js, Lenis or D3 runtime dependencies. No racing-reference branding, photographs or models are included.

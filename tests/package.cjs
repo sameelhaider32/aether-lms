@@ -15,7 +15,7 @@ const sha=data=>crypto.createHash('sha256').update(data).digest('hex');
   assert.equal(file.unixPermissions,0o100644,`Portable regular-file metadata: ${rel}`);
   assert(bytes.equals(fs.readFileSync(path.join(dist,prefix,rel))),`ZIP/unpacked mismatch: ${rel}`);
  }
- for(const rel of ['manifest.json','LICENSE','THIRD_PARTY_NOTICES.md','PRIVACY.md','preview/pdf.html','preview/office.html','vendor/pdfjs/LICENSE','vendor/office/provenance.json'])assert(zip.file(prefix+rel),rel);
+ for(const rel of ['manifest.json','LICENSE','THIRD_PARTY_NOTICES.md','PRIVACY.md','preview/pdf.html','preview/office.html','vendor/pdfjs/LICENSE','vendor/office/provenance.json','vendor/zip/LICENSE','vendor/zip/provenance.json','vendor/zip/zip-core.min.js'])assert(zip.file(prefix+rel),rel);
  const manifest=JSON.parse(await zip.file(prefix+'manifest.json').async('string'));
  assert.deepEqual(manifest.permissions,['storage']);
  for(const group of manifest.content_scripts){assert.deepEqual(group.matches,['https://lms.lums.edu.pk/*']);for(const file of [...group.js,...group.css])assert(zip.file(prefix+file),file);}

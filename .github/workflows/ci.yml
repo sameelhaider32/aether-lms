@@ -54,6 +54,9 @@ jobs:
       - name: Graphics and cancellation regressions
         if: '!cancelled()'
         run: node tests/fallbacks.cjs
+      - name: Downloader browser, streaming and retention checks
+        if: '!cancelled()'
+        run: npm run test:downloads
       - name: Preview and large-list stress profile
         if: '!cancelled()'
         run: npm run test:stress
@@ -69,6 +72,8 @@ jobs:
           $env:AETHER_EXTENSION = (Resolve-Path "dist/aether-lms-extension-v$version").Path
           $env:AETHER_REPORT_DIR = Join-Path $PWD 'reports/packaged-ci'
           node tests/browser.cjs --smoke
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node tests/download-browser.cjs
           exit $LASTEXITCODE
       - name: Save test evidence
         if: always()

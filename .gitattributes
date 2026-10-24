@@ -12,3 +12,4 @@ reports/ export-ignore
 
 # Preserve byte-exact third-party bundles and provenance hashes.
 vendor/office/** -text
+vendor/zip/** -text

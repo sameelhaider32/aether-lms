@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Aether LMS — The Academic Interface",
+  "name": "Aether LMS \u2014 The Academic Interface",
   "description": "An editorial academic workspace with local procedural graphics, tactile records and protected native Sakai workflows.",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "minimum_chrome_version": "109",
   "icons": {
     "16": "icons/aether-16.png",
@@ -24,7 +24,8 @@
         "src/workspace.css",
         "src/preview.css",
         "src/design.css",
-        "src/academic.css"
+        "src/academic.css",
+        "src/download.css"
       ],
       "js": [
         "src/prepaint.js",
@@ -50,7 +51,12 @@
         "src/file-state.js",
         "src/resource-access.js",
         "src/lists.js",
-        "src/resource-preview.js"
+        "src/resource-preview.js",
+        "src/download-selection.js",
+        "src/download-discovery.js",
+        "src/download-archive.js",
+        "src/download-controller.js",
+        "src/download-ui.js"
       ],
       "css": [
         "src/resource-frame.css",
@@ -58,7 +64,8 @@
         "src/cards.css",
         "src/preview.css",
         "src/design.css",
-        "src/academic.css"
+        "src/academic.css",
+        "src/download.css"
       ],
       "run_at": "document_start",
       "all_frames": true,
@@ -87,7 +94,8 @@
         "vendor/pdfjs/*",
         "vendor/pdfjs/cmaps/*",
         "vendor/pdfjs/standard_fonts/*",
-        "vendor/pdfjs/wasm/*"
+        "vendor/pdfjs/wasm/*",
+        "vendor/zip/zip-core.min.js"
       ],
       "matches": [
         "https://lms.lums.edu.pk/*"

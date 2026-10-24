@@ -11,7 +11,7 @@
   const journal=new Map(),observers=[];
   const ownedClasses=['ae-card-table','ae-card-list','ae-record-card','ae-card-container','ae-card-heading-static','ae-card-header-row','ae-card-context-row','ae-academic-tool','ae-native-table'];
   const pointerKeys=['--ae-hover-x','--ae-hover-y','--ae-rx','--ae-ry'];
-  const excluded='#aether-workspace,#aether-native-toggle,#aether-global-ambient,nav,[role="navigation"],[role="menu"],[role="menubar"],[role="tablist"],[role="tree"],.nav,.nav-tabs,.nav-pills,.breadcrumb,.pagination,.dropdown-menu,.navIntraTool,.itemAction,.act,.btn-group,.tool-toolbar,.resource-toolbar,[contenteditable="true"],.cke,.tox,.ui-datepicker';
+  const excluded='#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,nav,[role="navigation"],[role="menu"],[role="menubar"],[role="tablist"],[role="tree"],.nav,.nav-tabs,.nav-pills,.breadcrumb,.pagination,.dropdown-menu,.navIntraTool,.itemAction,.act,.btn-group,.tool-toolbar,.resource-toolbar,[contenteditable="true"],.cke,.tox,.ui-datepicker';
   let live=null,timer=0,deadlineTimer=0,nextDeadline=Infinity,scanTime=0,raf=0,pending=null,lastCard=null;
   function remember(el,name){
     live?.add(el);
@@ -225,9 +225,10 @@
     root.classList.toggle('ae-list-reduced-motion',!moving());
     if(!moving())for(const [el,values]of journal)if(values.has('style'))restoreStyles(el);
     if(Number.isFinite(nextDeadline))deadlineTimer=setTimeout(update,Math.min(2147483000,Math.max(1,nextDeadline-Date.now()+1)));
+    document.dispatchEvent(new Event('aether-records-change'));
   }
   function schedule(records){
-    if(records?.length){const scope=framed?document.body:document.querySelector('main#content');if(records.every(r=>{const target=r.target.nodeType===1?r.target:r.target.parentElement;return target?.closest('#aether-workspace,#aether-global-ambient,.ae-resource-preview,[data-ae-assignment-badges],[data-ae-preview-control]')||scope&&!scope.contains(target)&&(!target?.contains(scope)||r.type==='childList'&&![...r.addedNodes,...r.removedNodes].some(n=>n===scope||n.contains?.(scope)));}))return;}
+    if(records?.length){const scope=framed?document.body:document.querySelector('main#content');if(records.every(r=>{const target=r.target.nodeType===1?r.target:r.target.parentElement,changed=r.type==='childList'?[...r.addedNodes,...r.removedNodes]:[];return changed.length&&changed.every(n=>n.nodeType===1&&n.matches('[data-ae-download-control]'))||target?.closest('#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-global-ambient,.ae-resource-preview,[data-ae-assignment-badges],[data-ae-preview-control]')||scope&&!scope.contains(target)&&(!target?.contains(scope)||r.type==='childList'&&![...r.addedNodes,...r.removedNodes].some(n=>n===scope||n.contains?.(scope)));}))return;}
     // Mutation observers run before rendering. No DOMContentLoaded wait or
     // debounce that exposes the native table for several painted frames.
     if(!timer){timer=1;queueMicrotask(update);}

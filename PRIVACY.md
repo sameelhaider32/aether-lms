@@ -23,6 +23,20 @@ History begins when you use this feature; Aether cannot reconstruct earlier file
 
 Preview content has a memory-only cache of up to six entries and 24 MB total. The browser can also apply its normal network caching. Aether does not create a separate persistent document library or account. Closing a preview or switching Aether off cancels pending reads. Native downloads remain controlled by Chrome and Sakai.
 
+## Resource collections and ZIP export (1.4)
+
+The download manager reads same-origin Resources metadata only when opened or when you request expansion, discovery or selection review. Available-course discovery uses authenticated GET `/direct/site.json?select=access` with bounded pagination; folder discovery uses depth-1 `/direct/content/resources/...json`. It does not guess site IDs, scan courses at startup, query archived hosts or contact Zambeel. A server's accessible listing is not evidence of every enrollment or restricted resource.
+
+The basket contains names, same-origin resource references and selection intentions **only in the current page's memory**. It is not written to Chrome storage, localStorage, IndexedDB or a remote service. There is no migration or attribution of old baskets. It expires after 30 minutes of inactivity, clears on navigation/logout/account change/OFF, and cannot survive a browser restart. File contents are never stored in tree nodes or extension storage.
+
+Export uses the signed-in session, GET requests, manual redirect handling and the preview's exact-resource copyright validation. Each acknowledgement needs your separate explicit acceptance. A retry repeats read-only discovery/download, never an earlier acknowledgement. External links and unsupported references are excluded. Export and metadata scans do not update opened-file history.
+
+One file streams at a time through locally bundled zip.js into a user-chosen File System Access destination (maximum 2 GiB output). The manager does not use persistent temporary document storage. If direct saving is unavailable, the explicitly selected small-export mode retains up to 64 MiB of archive bytes in page memory before giving Chrome a Blob download. Unknown lengths are subject to the same byte ceiling. A temporary download Blob URL is revoked after 30 seconds. Browser/OS download handling follows Chrome's normal policies.
+
+Identity is revalidated before discovery, export, finalization and explicit copyright acceptance, at file boundaries after 15 seconds, and every 30 seconds only while an operation is active. Account changes stop requests and clear stale metadata. Missing authoritative identity blocks managed export; native Sakai remains available. This cannot detect an account change before Sakai exposes it to the extension.
+
+Cancellation aborts requests and unfinished writes. Chrome may retain an empty newly chosen destination, and Aether never deletes a pre-existing destination to clean up a failed save. Partial exports require confirmation and contain only successful entries in the ZIP directory; interrupted entry bytes may remain as unindexed ZIP data. The UI reports failures without creating empty successful placeholders. File paths are sanitized and collision-resolved locally. No telemetry or remote diagnostics were added.
+
 ## Local readers
 
 Fonts, PDF.js, and Office readers are bundled with the extension. Office documents render in a separate extension-owned frame whose policy blocks network connections, forms, and child frames. External document media is blocked, links are inert, and Office macros are not executed. XLSX previews show stored formula results without evaluating formulas.
