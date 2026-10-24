@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.0 — Mission Control — 25 October 2026
+
+- Replace Home's decorative activity panel with observed academic summary counts, Next Up, a navigable 7/14/30-day timeline, recent announcements and course item counts. Retain the original hero, procedural scene, course cards and preferences.
+- Add composable course/type/status/range filters, chronological/course sort, manual refresh, original Sakai navigation, keyboard focus, responsive cards, loading and partial/unavailable states, with reduced-motion support.
+- Add modular memory-only academic contracts, conservative deduplication, bounded authenticated GET adapters and native student assignment/summary fallbacks. Reuse assignment-state semantics and the authoritative account helper. Never equate a successful API response with complete course coverage.
+- Use candidate calendar/announcement APIs only for their reviewed read contracts. Disable generic assignment API lists because their contract does not establish safe student release/group visibility. Exclude hidden/future native records and assignment-generated calendar events. Unknown submission status remains neutral; draft is distinct from submitted.
+- Cancel and discard session data on OFF/navigation/logout/account change. Compare announcements only across successful checks in this tab and label them newly observed, not newly published. Add a clear-data control without changing other preferences.
+- Preserve Manifest V3, the storage-only permission and LUMS-only origin; no framework, backend, remote scripts or persistent academic storage.
+- Validate fictional cross-course records, filters, ranges, duplicates, hidden/unreleased exclusion, failed API fallbacks, session cancellation, native forms, Gradebook and desktop/phone layouts. Actual authenticated LUMS APIs and native markup remain unverified; see README limitations and live checks.
+
 ## 1.4.0 — Resource collections & bulk export — 24 October 2026
 
 - Add an independent download basket for mixed files, nested folders and available courses. Folder intentions inherit to newly discovered children; explicit exclusions, tri-state checkboxes and stable identities prevent accidental duplicates.

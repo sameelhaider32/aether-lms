@@ -37,6 +37,14 @@ Identity is revalidated before discovery, export, finalization and explicit copy
 
 Cancellation aborts requests and unfinished writes. Chrome may retain an empty newly chosen destination, and Aether never deletes a pre-existing destination to clean up a failed save. Partial exports require confirmation and contain only successful entries in the ZIP directory; interrupted entry bytes may remain as unindexed ZIP data. The UI reports failures without creating empty successful placeholders. File paths are sanitized and collision-resolved locally. No telemetry or remote diagnostics were added.
 
+## Mission Control (1.5)
+
+On enabled, authenticated Home pages, Mission Control reads accessible-site metadata, a bounded cross-course calendar feed, course announcement lists and discovered native course/student-assignment pages with the existing same-origin Sakai session and GET requests. Requests do not drive forms, pagination, submissions, quizzes, grading or copyright acceptance. Generic assignment listing APIs are not queried because their release/group visibility contract is insufficient. No other students' submission data is imported.
+
+Normalized academic titles, course IDs, original links, dates and verified native student statuses live only in the current page's memory. API response bodies and native documents are temporary parsing inputs, never stored in extension storage. Announcement bodies, attachments and grade cells are not copied into dashboard records. Mission Control adds no localStorage, sessionStorage, IndexedDB or Chrome storage entries, account or analytics service. Requests use no-store caching.
+
+The newly-observed announcement baseline holds at most the bounded returned announcement identifiers in this tab; it is account-scoped in memory through the existing authoritative identity helper. It does not claim a publication date or reconstruct prior activity. **Clear session data**, OFF, navigation, pagehide/logout and observed account changes discard records and baseline and cancel pending reads. Identity is rechecked on refresh, focus/restoration and every 30 seconds only while a check is active; an account change cannot be detected before Sakai exposes it. Other Aether preferences and file history are unaffected. The source/request limits and deployment uncertainty are documented in the README.
+
 ## Local readers
 
 Fonts, PDF.js, and Office readers are bundled with the extension. Office documents render in a separate extension-owned frame whose policy blocks network connections, forms, and child frames. External document media is blocked, links are inert, and Office macros are not executed. XLSX previews show stored formula results without evaluating formulas.
