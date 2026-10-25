@@ -12,7 +12,7 @@
   width:100%!important;max-width:100%;min-width:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;
 }
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table{display:block;}
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table>caption{display:block;padding:6px 0 12px;color:#9cb5aa;font:600 10px/1.5 "Aether Lato",Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;text-align:left;}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table>caption{display:block;padding:6px 0 12px;color:#9cb5aa;font:600 10px/1.5 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);letter-spacing:.1em;text-transform:uppercase;text-align:left;}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table>thead{display:block;margin-bottom:9px;}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-header-row.ae-card-header-row{display:flex;flex-wrap:wrap;gap:8px;grid-column:1/-1;}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-header-row.ae-card-header-row>th{display:block;width:auto;border:0!important;border-radius:7px;padding:6px 9px!important;background:#172522!important;color:#a9c9ba!important;}
@@ -29,7 +29,7 @@
 }
 
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card{
-  font-family:"Aether Lato",Arial,sans-serif;--ae-surface-a:#182624;--ae-surface-b:#0e1918;--ae-hover-a:#1c302a;--ae-hover-b:#101d1b;
+  font-family:var(--ae-ui,"Aether Space","Segoe UI",sans-serif);--ae-surface-a:#182624;--ae-surface-b:#0e1918;--ae-hover-a:#1c302a;--ae-hover-b:#101d1b;
   --ae-card-accent:var(--ae-accent,#a2f5d1);--ae-card-light:var(--ae-light,rgba(116,248,195,.19));
   position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:13px 16px;min-width:0;margin:0;
   padding:20px!important;border:1px solid var(--ae-edge,rgba(143,223,188,.24))!important;border-radius:17px!important;
@@ -45,7 +45,7 @@
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card:is([data-ae-kind="discussion"],[data-ae-kind="message"],[data-ae-kind="announcement"]){--ae-document:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23a7d9ee' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16v12H9l-5 4zM8 8h8M8 12h5'/%3E%3C/svg%3E");}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card[data-ae-kind="person"]{--ae-document:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%239df8d6' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3Cpath d='M4 21v-3c0-6 16-6 16 0v3z'/%3E%3C/svg%3E");}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card::after{
-  content:attr(data-ae-index);position:absolute;right:18px;top:22px;pointer-events:none;color:#638579;font:500 10px/1.4 "Aether Lato",Arial,sans-serif;letter-spacing:.12em;
+  content:attr(data-ae-index);position:absolute;right:18px;top:22px;pointer-events:none;color:#638579;font:500 10px/1.4 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);letter-spacing:.12em;
 }
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card:has([data-ae-cell="selection"])::after{right:48px;}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card:hover,
@@ -65,17 +65,17 @@
 }
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="meta"]::before,
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="actions"]::before{
-  content:attr(data-ae-label);display:block;margin-bottom:4px;font:600 9px/1.5 "Aether Lato",Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#8cab9d;
+  content:attr(data-ae-label);display:block;margin-bottom:4px;font:600 9px/1.5 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);letter-spacing:.09em;text-transform:uppercase;color:#8cab9d;
 }
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="primary"]{order:-2;grid-column:1/-1;padding-bottom:13px!important;margin-bottom:1px;border-bottom:1px solid #9ddab512!important;}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="primary"]::before,
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-list.ae-card-list>.ae-record-card::before{
   content:attr(data-ae-type);display:block;grid-column:1/-1;min-height:31px;padding:8px 48px 9px 36px;margin-bottom:16px;
   background-image:var(--ae-document);background-repeat:no-repeat;background-position:left center;background-size:26px;
-  color:var(--ae-card-accent);font:600 9px/1.4 "Aether Lato",Arial,sans-serif;letter-spacing:.14em;
+  color:var(--ae-card-accent);font:600 9px/1.4 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);letter-spacing:.14em;
 }
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="primary"],
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="primary"] a[href]{font:500 17px/1.4 "Aether Lato",Arial,sans-serif!important;letter-spacing:-.025em;color:#edfff4!important;text-decoration:none;}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="primary"] a[href]{font:500 17px/1.4 var(--ae-ui,"Aether Space","Segoe UI",sans-serif)!important;letter-spacing:-.025em;color:#edfff4!important;text-decoration:none;}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="selection"]{position:absolute;top:21px;right:17px;width:auto;z-index:2;}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="selection"]::before{content:none;}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table.ae-card-table .ae-record-card.ae-record-card>[data-ae-cell="actions"]{grid-column:1/-1;padding-top:8px!important;}
@@ -128,13 +128,13 @@ html.aether-reduced-motion #toolMenu .site-page-list>li>a{transform:none!importa
 }
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card[data-ae-state-label]::after{content:none}
 .ae-assignment-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;grid-column:1/-1}
-.ae-status-badge{display:inline-flex;max-width:100%;align-items:baseline;gap:3px;padding:4px 8px;border:1px solid currentColor;border-radius:4px;background:#ffffff07;color:#94a3b8;font:600 11px/1.45 "Segoe UI",Arial,sans-serif;letter-spacing:0;overflow-wrap:anywhere}
+.ae-status-badge{display:inline-flex;max-width:100%;align-items:baseline;gap:3px;padding:4px 8px;border:1px solid currentColor;border-radius:4px;background:#ffffff07;color:#94a3b8;font:600 11px/1.45 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);letter-spacing:0;overflow-wrap:anywhere}
 .ae-assignment-status{color:var(--ae-status,#94a3b8)}
 .ae-status-badge[data-status-kind="draft"]{color:#c4b5fd}
 .ae-status-badge:is([data-status-kind="late"],[data-status-kind="late-allowed"]){color:#fbbf24}
 .ae-status-badge[data-status-kind="graded"]{color:#6ee7b7}
 .ae-status-badge[data-status-kind="feedback"]{color:#38bdf8}
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card :is(button,input,select,textarea){font-family:"Aether Lato",Arial,sans-serif;}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card :is(button,input,select,textarea){font-family:var(--ae-ui,"Aether Space","Segoe UI",sans-serif);}
 
 /* Native Assignment controls need sufficient contrast on the dark tool surface. */
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-container :is(button.btn,a.btn,input[type="submit"],input[type="button"]),

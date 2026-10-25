@@ -167,6 +167,17 @@
       if(!node&&ctx.resources)node=[...ctx.main.children].find(el=>el!==workspace&&el.classList.contains("Mrphs-container"));
       node?.scrollIntoView({behavior:motion?"smooth":"auto",block:"start"});
     });cta.insertAdjacentHTML("beforeend",TEXT.arrow);actions.append(cta);
+    if(ctx.home){
+      const deadlines=btn("ae-hero-cta ae-deadlines-cta","VIEW DEADLINES",()=>{
+        const section=document.querySelector('#aether-mission-control');if(!section)return;
+        // Move keyboard navigation into the dashboard without focusing its
+        // animated title, which would hold the shared dissolve fully revealed.
+        if(!section.hasAttribute('tabindex')){section.tabIndex=-1;section.addEventListener('blur',()=>section.removeAttribute('tabindex'),{once:true});}
+        section.focus({preventScroll:true});
+        section.scrollIntoView({behavior:motion?"smooth":"auto",block:"start"});
+      });
+      deadlines.setAttribute('aria-controls','aether-mission-control');actions.append(deadlines);
+    }
     const pause=btn("ae-motion-btn","",()=>setMotion(!motionRequested));actions.append(pause);copy.append(actions);
     if(ctx.home)copy.append(make("div","ae-hero-micro","BUILT FOR THE WORK THAT MATTERS."));
     hero.append(copy);

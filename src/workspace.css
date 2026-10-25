@@ -1,12 +1,12 @@
 /* Early layout uses the existing hero geometry; tool names get a quieter UI face. */
 html.aether-enabled #toolMenu .site-page-list a,
 html.aether-enabled main#content .Mrphs-toolTitleNav__text,
-#aether-workspace .ae-tools{font-family:"Segoe UI Variable Text","Segoe UI",Arial,sans-serif;}
-#aether-workspace .ae-tools .ae-overline{font:400 12px/1.4 "Segoe UI",Arial,sans-serif;letter-spacing:0;color:#94b6a7;margin-bottom:5px;}
-#aether-workspace .ae-tools .ae-section-title{font:600 24px/1.25 "Segoe UI",Arial,sans-serif!important;letter-spacing:-.02em;}
-#aether-workspace .ae-tools :is(.ae-section-meta,.ae-customize){font:500 12px/1.4 "Segoe UI",Arial,sans-serif;letter-spacing:0;}
+#aether-workspace .ae-tools{font-family:var(--ae-ui,"Aether Space","Segoe UI",sans-serif);}
+#aether-workspace .ae-tools .ae-overline{font:400 12px/1.4 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);letter-spacing:0;color:#94b6a7;margin-bottom:5px;}
+#aether-workspace .ae-tools .ae-section-title{font:500 24px/1.25 var(--ae-display,"Aether Oswald","Arial Narrow",sans-serif)!important;letter-spacing:-.02em;}
+#aether-workspace .ae-tools :is(.ae-section-meta,.ae-customize){font:500 12px/1.4 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);letter-spacing:0;}
 #aether-workspace .ae-tool-row{gap:9px;}
-#aether-workspace .ae-tool-link{font:500 14px/1.4 "Segoe UI Variable Text","Segoe UI",Arial,sans-serif;letter-spacing:0;justify-content:flex-start;gap:10px;border-radius:9px;padding:11px 16px;min-height:44px;}
+#aether-workspace .ae-tool-link{font:500 14px/1.4 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);letter-spacing:0;justify-content:flex-start;gap:10px;border-radius:9px;padding:11px 16px;min-height:44px;}
 #aether-workspace .ae-tool-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 19px;width:19px;height:19px;color:#a8d6c2;}
 #aether-workspace .ae-tool-icon :is(svg,img){display:block;width:19px!important;height:19px!important;max-width:19px;}
 #aether-workspace .ae-tool-icon :is(i,span){font-size:18px;line-height:1;}

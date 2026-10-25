@@ -75,15 +75,18 @@ module.exports=async({page,test,go,reportDir,assert})=>{
  const headingPosition=async(where)=>{
   await page.evaluate(where=>{
    const main=document.querySelector('main#content'),r=document.querySelector('#mc-title').getBoundingClientRect(),view=main.getBoundingClientRect();
-   main.scrollTop+=r.top-(where==='enter'?view.bottom-10:where==='edge'?view.top+40-r.height:view.top+150);
+   main.scrollTop+=r.top-(where==='enter'?view.bottom-80:where==='edge'?view.top+40-r.height:view.top+210);
   },where);
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
  };
  await test('Home polish: section order, scoped single chevrons and native filter state',async()=>{
   await prepare();
   assert.deepEqual(await page.locator('#aether-workspace').evaluate(n=>[...n.children].slice(0,3).map(e=>e.matches('.ae-hero')?'hero':e.matches('.ae-courses')?'courses':e.id)),['hero','courses','aether-mission-control']);
-  const nativeStyle=await page.addStyleTag({content:`html.aether-enabled main#content select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='m1 1 3 3 3-3' stroke='red'/%3E%3C/svg%3E")!important;background-repeat:repeat!important;background-size:auto!important;background-position:0 0!important}`});
+  const nativeStyle=await page.addStyleTag({content:`html.aether-enabled main#content select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='m1 1 3 3 3-3' stroke='red'/%3E%3C/svg%3E")!important;background-repeat:repeat!important;background-size:auto!important;background-position:0 0!important;font-family:Georgia,serif}html.aether-enabled main#content :is(h2,h3,h4,p){font-family:Georgia,serif}`});
   await page.evaluate(()=>{const s=document.createElement('select');s.id='native-polish-select';s.innerHTML='<option>Native Sakai</option>';document.querySelector('main#content').append(s);window.polishMission=document.querySelector('#aether-mission-control');});
+  await page.locator('.mc-item h4').first().waitFor({state:'attached'});await page.evaluate(()=>document.fonts.ready);
+  const fonts=await page.evaluate(()=>{const family=selector=>getComputedStyle(document.querySelector(selector)).fontFamily;return {course:family('.ae-section-title'),title:family('#mc-title'),panel:family('.mc-panel h3'),item:family('.mc-item h4'),body:family('.mc-intro'),control:family('.mc-controls select'),button:family('.mc-actions button'),counter:family('.mc-stat strong'),loaded:['Aether Oswald','Aether Space','Aether Doto'].every(name=>document.fonts.check(`500 16px "${name}"`))};});
+  assert(fonts.loaded,'Canonical bundled fonts must finish loading');assert.equal(fonts.title,fonts.course);for(const role of ['title','panel','item'])assert(fonts[role].includes('Aether Oswald'),`${role} must match course display typography`);for(const role of ['body','control','button'])assert(fonts[role].includes('Aether Space'),`${role} must use shared interface typography`);assert(fonts.counter.includes('Aether Doto'));
   for(const width of [1440,390]){
    await page.setViewportSize({width,height:900});
    const values=await page.locator('.mc-controls select').evaluateAll(es=>es.map(e=>{const s=getComputedStyle(e);return {appearance:s.appearance,image:s.backgroundImage,repeat:s.backgroundRepeat,size:s.backgroundSize,position:s.backgroundPosition,padding:parseFloat(s.paddingRight),width:e.getBoundingClientRect().width};}));
@@ -93,20 +96,23 @@ module.exports=async({page,test,go,reportDir,assert})=>{
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
    await page.keyboard.press('Escape');await page.locator('.mc-controls').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(reportDir,`home-polish-${width}.png`)});
   }
-  assert.equal(await page.locator('#native-polish-select').evaluate(e=>getComputedStyle(e).backgroundRepeat),'repeat');
+  assert.equal(await page.locator('#native-polish-select').evaluate(e=>getComputedStyle(e).backgroundRepeat),'repeat');assert((await page.locator('#native-polish-select').evaluate(e=>getComputedStyle(e).fontFamily)).includes('Georgia'));
   await page.evaluate(()=>{window.polishWorkspace=document.querySelector('#aether-workspace');document.querySelector('.announcement-item a').textContent='Polish native update';});
   await page.waitForFunction(()=>document.querySelector('#aether-workspace')!==window.polishWorkspace&&document.querySelector('#aether-mission-control')===window.polishMission);
   assert.equal(await page.getByLabel('Type',{exact:true}).inputValue(),'assignment');
   assert.equal(await page.locator('#mc-title > .ae-course-title-ink').count(),1);
   await nativeStyle.evaluate(n=>n.remove());await page.locator('#native-polish-select').evaluate(n=>n.remove());
  });
- await test('Home polish: heading dissolves at the upper nested edge and reforms reversibly',async()=>{
-  await prepare();const title=page.locator('#mc-title');await headingPosition('enter');assert.equal(await title.locator('.ae-course-title-ink').evaluate(e=>getComputedStyle(e).opacity),'1');assert.equal(await title.getAttribute('data-ae-dissolve'),null);
-  await headingPosition('edge');await page.waitForFunction(()=>Number(document.querySelector('#mc-title').dataset.aeDissolve)>.2);const first=Number(await title.getAttribute('data-ae-dissolve'));
+ await test('Home polish: heading assembles from entry dust and dissolves reversibly at both edges',async()=>{
+  await prepare();const title=page.locator('#mc-title');
+  const reveal=async()=>{await headingPosition('reveal');await page.waitForFunction(()=>!document.querySelector('#mc-title').hasAttribute('data-ae-dissolve'));assert.equal(await title.locator('.ae-course-title-ink').evaluate(e=>getComputedStyle(e).opacity),'1');};
+  await headingPosition('enter');await page.waitForFunction(()=>{const value=Number(document.querySelector('#mc-title').dataset.aeDissolve);return value>.2&&value<.8;});const entry=Number(await title.getAttribute('data-ae-dissolve'));assert(Number(await title.locator('.ae-course-title-ink').evaluate(e=>getComputedStyle(e).opacity))<1);
   const canvas=title.locator('canvas');assert.equal(await canvas.count(),1);assert.equal(await canvas.getAttribute('aria-hidden'),'true');assert.equal(await canvas.evaluate(c=>getComputedStyle(c).pointerEvents),'none');assert(await canvas.evaluate(c=>c.getContext('2d').getImageData(0,0,c.width,c.height).data.some((v,i)=>i%4===3&&v>0)));assert.equal(await title.textContent(),'Mission Control');
+  await page.screenshot({path:path.join(reportDir,'mission-heading-enter.png')});await reveal();
+  await headingPosition('edge');await page.waitForFunction(()=>Number(document.querySelector('#mc-title').dataset.aeDissolve)>.2);const first=Number(await title.getAttribute('data-ae-dissolve'));
   assert.equal(await page.locator('.mc-header > .mc-actions').evaluate(e=>getComputedStyle(e).opacity),'1');assert.equal(await page.locator('#aether-mission-control').getAttribute('data-ae-dissolve'),null);
-  await headingPosition('reveal');await page.waitForFunction(()=>!document.querySelector('#mc-title').hasAttribute('data-ae-dissolve'));assert.equal(await title.locator('.ae-course-title-ink').evaluate(e=>getComputedStyle(e).opacity),'1');
-  await headingPosition('edge');await page.waitForFunction(()=>Number(document.querySelector('#mc-title').dataset.aeDissolve)>.2);assert(Math.abs(Number(await title.getAttribute('data-ae-dissolve'))-first)<.03);assert.equal(await canvas.count(),1);
+  await reveal();await headingPosition('enter');await page.waitForFunction(()=>Number(document.querySelector('#mc-title').dataset.aeDissolve)>.2);assert(Math.abs(Number(await title.getAttribute('data-ae-dissolve'))-entry)<.03);
+  await reveal();await headingPosition('edge');await page.waitForFunction(()=>Number(document.querySelector('#mc-title').dataset.aeDissolve)>.2);assert(Math.abs(Number(await title.getAttribute('data-ae-dissolve'))-first)<.03);assert.equal(await canvas.count(),1);
   await page.screenshot({path:path.join(reportDir,'mission-heading-dissolve.png')});
  });
  await test('Home polish: heading document scroll, narrow layout, motion fallbacks and OFF cleanup',async()=>{

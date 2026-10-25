@@ -2,6 +2,9 @@
 
 ## 1.5.0 — Mission Control — 25 October 2026
 
+- Refine Home ordering to hero, pinned courses, then Mission Control, with a **View deadlines** shortcut. Unify portal typography with the course panel, give native filters one chevron, and let the Mission Control heading assemble and dissolve at both scroll edges with motion preferences respected.
+- Lead Next Up with approaching work and keep past-due assignments in a separate counted group. Scope the explicitly labelled seven-day summary to the selected course; retain neutral unknown submission states.
+- Add an active-filter summary and **Reset filters**, move **Clear session data** into **Sources & coverage**, and preserve existing results, reading position and keyboard focus during refreshes.
 - Replace Home's decorative activity panel with observed academic summary counts, Next Up, a navigable 7/14/30-day timeline, recent announcements and course item counts. Retain the original hero, procedural scene, course cards and preferences.
 - Add composable course/type/status/range filters, chronological/course sort, manual refresh, original Sakai navigation, keyboard focus, responsive cards, loading and partial/unavailable states, with reduced-motion support.
 - Add modular memory-only academic contracts, conservative deduplication, bounded authenticated GET adapters and native student assignment/summary fallbacks. Reuse assignment-state semantics and the authoritative account helper. Never equate a successful API response with complete course coverage.

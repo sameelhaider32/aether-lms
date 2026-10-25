@@ -50,7 +50,7 @@
   border-color:#446052!important;
   border-bottom:1px solid #476353!important;
   padding:14px 12px!important;
-  font:650 12px/1.3 "Helvetica Neue",Arial,sans-serif!important;
+  font:650 12px/1.3 var(--ae-ui,"Aether Space","Segoe UI",sans-serif)!important;
   letter-spacing:.04em!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)

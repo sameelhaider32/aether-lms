@@ -5,8 +5,8 @@ html:not(.aether-enabled):not(.ae-resource-surface) [data-ae-download-entry]{dis
 #aether-download-manager{box-sizing:border-box;color:#f7fafb;background:#0e0f14;border:1px solid #40525a;border-top:2px solid #02d2e3;border-radius:3px;box-shadow:0 24px 100px #000a;padding:0;width:min(1250px,calc(100vw - 40px));max-width:none;height:min(900px,calc(100dvh - 40px));max-height:calc(100dvh - 40px);margin:auto;font:400 13px/1.55 var(--ae-ui,"Aether Space",sans-serif);overflow:auto;z-index:2147483646;animation:ae-dl-arrive 280ms cubic-bezier(.2,.9,.2,1.1)}
 #aether-download-manager::backdrop{background:#05080ad9;backdrop-filter:blur(5px)}
 #aether-download-manager *{box-sizing:border-box}#aether-download-manager [hidden]{display:none!important}
-#aether-download-manager h2{font:500 clamp(26px,3vw,39px)/1.15 var(--ae-ui,"Aether Space",sans-serif)!important;letter-spacing:-.04em;color:#f7fafb;margin:8px 0!important}
-#aether-download-manager h3{font:500 17px/1.4 var(--ae-ui,"Aether Space",sans-serif);margin:0 0 10px;color:#f7fafb}
+#aether-download-manager h2{font:500 clamp(26px,3vw,39px)/1.15 var(--ae-display,"Aether Oswald","Arial Narrow",sans-serif)!important;letter-spacing:-.04em;color:#f7fafb;margin:8px 0!important}
+#aether-download-manager h3{font:500 17px/1.4 var(--ae-display,"Aether Oswald","Arial Narrow",sans-serif);margin:0 0 10px;color:#f7fafb}
 #aether-download-manager p{margin:6px 0}#aether-download-manager button,#aether-download-manager select,#aether-download-manager input:not([type=checkbox]){font:500 12px/1.4 var(--ae-ui,"Aether Space",sans-serif);border:1px solid #34414a;border-radius:2px;color:#f7fafb;background:#181d24;min-height:38px;padding:8px 11px;max-width:100%}
 #aether-download-manager button{cursor:pointer;transition:transform 160ms ease,border-color 160ms ease,background 160ms ease}#aether-download-manager button:hover:not(:disabled){border-color:#02d2e3;background:#202d33;transform:translateY(-1px)}
 #aether-download-manager :is(button,input,select,a,summary):focus-visible{outline:2px solid #02d2e3!important;outline-offset:3px}#aether-download-manager button:disabled{opacity:.45;cursor:default}

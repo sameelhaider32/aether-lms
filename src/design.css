@@ -30,6 +30,10 @@ html.aether-enabled #aether-workspace .ae-hero-home{min-height:468px}
 #aether-workspace .ae-hero-cta,#aether-workspace .ae-motion-btn{font:500 10px/1 var(--ae-ui);min-height:44px;letter-spacing:.06em;border-radius:1px}
 #aether-workspace .ae-hero-cta{background:var(--ae-cyan);border-color:var(--ae-cyan);color:#090a0b;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,0 100%)}
 #aether-workspace .ae-hero-cta:hover{background:var(--ae-mint)}
+#aether-workspace .ae-hero-home .ae-deadlines-cta{background:transparent;border-color:#637c77;color:var(--ae-mint);clip-path:none}
+#aether-workspace .ae-hero-home .ae-deadlines-cta:hover{background:#9df8d610;border-color:var(--ae-mint)}
+#aether-workspace .ae-hero-home .ae-hero-actions{align-items:stretch}
+#aether-workspace .ae-hero-home .ae-hero-actions>button{max-width:100%;white-space:normal}
 #aether-workspace .ae-motion-btn{color:var(--ae-soft);border-color:#3b414b;background:transparent;padding:0 12px}
 #aether-workspace .ae-hero-micro{font:700 10px/1.5 var(--ae-digital);color:#a0b5be;letter-spacing:.04em;margin-top:28px}
 #aether-workspace .ae-instrument{position:absolute;z-index:3;right:28px;top:28px;display:grid;grid-template-columns:auto auto;align-items:center;gap:4px 12px;border-top:1px solid #67798170;border-bottom:1px solid #67798170;padding:10px 0;pointer-events:none;font:700 10px/1.4 var(--ae-digital);color:var(--ae-soft)}
@@ -119,3 +123,11 @@ html.aether-enabled :is(#aether-workspace,.ae-resource-preview) button{touch-act
 html.aether-reduced-motion #aether-workspace *,html.ae-list-reduced-motion .ae-record-card{animation:none!important;transition:none!important}
 html.aether-reduced-motion #aether-workspace :is(.ae-course-card,.ae-tool-item),html.ae-list-reduced-motion .ae-record-card{transform:none!important}
 @media(pointer:coarse){html.aether-enabled #aether-workspace :is(.ae-course-card,.ae-tool-item),:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card{transform:none!important}.ae-preview-trigger{min-height:44px}}
+
+/* One typography system across the portal shell and enhanced native tools.
+   Icon descendants and authored rich text retain their own font declarations. */
+html.ae-resource-surface body{font-family:var(--ae-ui)}
+html.aether-enabled :is(.portal-header,#toolMenu) :is(a,button):not([class*="icon"],.bi,.fa,.si,[class*="fa-"]){font-family:var(--ae-ui)}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-list>.ae-record-card :is(h2,h3,h4){font-family:var(--ae-display)}
+
+@media(max-width:640px){#aether-workspace .ae-hero-home .ae-hero-actions .ae-hero-cta{flex:1 1 140px}}

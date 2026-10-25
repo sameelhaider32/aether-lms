@@ -64,7 +64,7 @@ html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable
   background:linear-gradient(120deg,#9df8d610,#02d2e308);border-bottom:1px solid #9df8d627;color:#edfff4;
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) :is(.gb-modal-title,.w_captionText){
-  font:600 20px/1.35 var(--ae-ui,"Segoe UI",sans-serif);letter-spacing:-.025em;overflow-wrap:anywhere;
+  font:500 20px/1.35 var(--ae-display,"Aether Oswald","Arial Narrow",sans-serif);letter-spacing:-.025em;overflow-wrap:anywhere;
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) :is(.gb-modal-close,.w_close){
   flex:none;color:#9df8d6;padding:6px 10px;border:1px solid #568573;border-radius:8px;text-decoration:none;
