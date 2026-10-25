@@ -55,7 +55,7 @@ async function test(name,fn){await fn();results.push(name);console.log('PASS '+n
   return r.fulfill({status:404,body:'Fixture does not implement this path'});
  });
  page=await context.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
- await page.goto(origin+'/portal/site/home');await page.locator('#aether-mission-control[data-loading="false"]').waitFor();
+ await page.goto(origin+'/portal/site/home',{waitUntil:'domcontentloaded'});await page.locator('#aether-mission-control[data-loading="false"]').waitFor();
  // Initial rendering precedes the deferred fetch, so wait for the actual completed check.
  await page.getByText('Full enrollment coverage unverified',{exact:false}).waitFor();await page.locator('#aether-mission-control[data-loading="false"]').waitFor();
  await test('Cross-course native assignments, API events and announcements; hidden records excluded',async()=>{
