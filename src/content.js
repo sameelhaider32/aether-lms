@@ -259,8 +259,8 @@
     doc.classList.toggle('ae-page-resources',enabled&&ctx.resources);
     if(!enabled)disposeAmbient();
     const {hero,canvas}=oldHero?{hero:oldHero,canvas:oldHero.querySelector('canvas[data-ae-scene-target]')}:makeHero(ctx);workspace.append(hero);
-    const mission=globalThis.AetherMissionControl?.mount(ctx);if(mission)workspace.append(mission);
     const courses=makeCourses(ctx);if(courses)workspace.append(courses);
+    const mission=globalThis.AetherMissionControl?.mount(ctx);if(mission)workspace.append(mission);
     const tools=makeTools(ctx);if(tools)workspace.append(tools);
     const status=make('div','ae-screen-reader-only');status.id='aether-reorder-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');workspace.append(status);
     ctx.main.prepend(workspace);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
