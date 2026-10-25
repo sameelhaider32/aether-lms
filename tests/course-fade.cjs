@@ -117,6 +117,6 @@ module.exports=async({page,test,go,reportDir,assert})=>{
   await page.locator('.ae-motion-btn').evaluate(b=>b.click());await edge();await page.emulateMedia({reducedMotion:'reduce'});await page.locator('html.aether-reduced-motion').waitFor();assert.equal(await page.locator('#mc-title .ae-course-title-ink').evaluate(e=>getComputedStyle(e).opacity),'1');
   await page.emulateMedia({reducedMotion:'no-preference'});await edge();await page.locator('#aether-native-toggle').evaluate(b=>b.click());await page.waitForFunction(()=>!document.querySelector('#mc-title canvas'));assert.equal(await page.locator('#aether-workspace').isVisible(),false);
   await page.locator('#aether-native-toggle').evaluate(b=>b.click());await edge();assert.equal(await page.locator('#mc-title canvas').count(),1);assert.equal(await page.locator('#mc-title > .ae-course-title-ink').count(),1);
-  await go('Resources');assert.equal(await page.locator('#mc-title,.mc-header canvas').count(),0);await page.emulateMedia({reducedMotion:'reduce'});
+  await go('Resources');assert.equal(await page.locator('#mc-title,.mc-header canvas').count(),0);await page.setViewportSize({width:1440,height:1000});await page.emulateMedia({reducedMotion:'reduce'});
  });
 };
