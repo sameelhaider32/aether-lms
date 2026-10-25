@@ -24,3 +24,28 @@ html.aether-enabled #aether-workspace #aether-mission-control :is(p,button,selec
 html.aether-enabled #aether-workspace #aether-mission-control :is(.mc-kicker,.mc-control>span,.mc-day h4){font-family:var(--ae-digital);font-weight:700;letter-spacing:.02em}
 html.aether-enabled #aether-workspace #aether-mission-control :is(.mc-stat strong,.mc-count,.mc-tick){font-family:var(--ae-digital);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:0}
 @media(max-width:640px){html.aether-enabled #aether-workspace #aether-mission-control #mc-title{font-size:28px!important}}
+
+/* Planning controls keep the current scope visible and recovery within reach. */
+html.aether-enabled #aether-mission-control{scroll-margin-top:clamp(100px,22vh,180px)}
+.ae-mission-control [hidden]{display:none!important}
+.ae-mission-control .mc-summary-scope{color:var(--mc-muted);font-size:11px;line-height:1.7;margin:18px 0 10px;max-width:95ch}
+.ae-mission-control .mc-summary{margin-top:12px}
+.ae-mission-control .mc-controls{margin-bottom:12px}
+.ae-mission-control .mc-filter-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:24px;min-width:0}
+.ae-mission-control .mc-filter-summary{font-size:11px;line-height:1.6;color:var(--mc-muted);overflow-wrap:anywhere}
+.ae-mission-control .mc-filter-bar button{flex:none;min-height:36px}
+.ae-mission-control button:disabled{cursor:default}
+.ae-mission-control [data-refresh]:disabled{cursor:wait}
+.ae-mission-control .mc-past-due{margin-top:22px;border-top:1px solid #dfb78144;padding-top:10px}
+.ae-mission-control .mc-past-due>summary{color:#e6c69b;font-size:13px;min-height:44px;padding:12px 0}
+.ae-mission-control .mc-past-due>.mc-note{margin:2px 0 14px}
+.ae-mission-control .mc-past-list{display:grid;gap:10px;max-height:520px;overflow:auto;padding:3px;scrollbar-color:#465c50 transparent}
+.ae-mission-control .mc-past-list .mc-item{padding:18px;background:#6f302a0c}
+.ae-mission-control .mc-next .mc-past-list .mc-item h4{font-size:20px}
+.ae-mission-control .mc-past-due>button{margin-top:12px}
+.ae-mission-control .mc-source-details>.mc-note{margin:16px 0 10px;max-width:70ch}
+.ae-mission-control .mc-source-details>.mc-button{margin-bottom:10px}
+@media(max-width:600px){.ae-mission-control .mc-filter-bar{align-items:flex-start}.ae-mission-control .mc-filter-bar button{padding:9px;min-height:44px}.ae-mission-control .mc-past-list{max-height:460px}}
+
+.ae-mission-control [data-refresh][aria-disabled="true"]{opacity:.55;cursor:wait}
+.ae-mission-control .mc-list-divider{font-size:11px;color:var(--mc-muted);border-top:1px solid var(--mc-line);padding-top:16px;margin-top:6px}
