@@ -14,3 +14,13 @@ html.aether-enabled #aether-workspace #aether-mission-control select{
 }
 /* Only the heading owns dissolve variables and its decorative canvas. */
 .ae-mission-control #mc-title{position:relative;width:fit-content;max-width:100%}
+
+/* Match Your Courses: Oswald titles, Space interface, Doto instrument labels.
+   Explicit roles prevent native Sakai element fonts from bypassing inheritance. */
+html.aether-enabled #aether-workspace #aether-mission-control{font-family:var(--ae-ui);line-height:1.55}
+html.aether-enabled #aether-workspace #aether-mission-control #mc-title{font:500 clamp(28px,3vw,40px)/1.2 var(--ae-display)!important;letter-spacing:-.02em;text-transform:uppercase}
+html.aether-enabled #aether-workspace #aether-mission-control :is(h3,.mc-item h4){font-family:var(--ae-display)!important;font-weight:500;letter-spacing:0;line-height:1.25}
+html.aether-enabled #aether-workspace #aether-mission-control :is(p,button,select,option,.mc-item-meta,.mc-item-foot,.mc-course-row,.mc-day-item,.mc-source-details){font-family:var(--ae-ui)}
+html.aether-enabled #aether-workspace #aether-mission-control :is(.mc-kicker,.mc-control>span,.mc-day h4){font-family:var(--ae-digital);font-weight:700;letter-spacing:.02em}
+html.aether-enabled #aether-workspace #aether-mission-control :is(.mc-stat strong,.mc-count,.mc-tick){font-family:var(--ae-digital);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:0}
+@media(max-width:640px){html.aether-enabled #aether-workspace #aether-mission-control #mc-title{font-size:28px!important}}

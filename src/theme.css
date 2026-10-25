@@ -9,7 +9,7 @@ html.aether-enabled{
 }
 html.aether-enabled body,html.aether-enabled #pageBody.portal-container{
   background:var(--ae-bg)!important;color:var(--ae-ink)!important;
-  font-family:"Helvetica Neue",Arial,"Segoe UI",sans-serif;
+  font-family:var(--ae-ui,"Aether Space","Segoe UI",sans-serif);
 }
 html.aether-enabled .portal-header{background:#080d0e!important;border-bottom:1px solid #27342f!important;box-shadow:none!important;min-height:64px;}
 html.aether-enabled .portal-header .portal-header-breadcrumb,
@@ -18,7 +18,7 @@ html.aether-enabled .portal-header .header-tool-title{color:#f1f4ee!important;fo
 html.aether-enabled .portal-header .icon-button:hover,
 html.aether-enabled .portal-header .btn:hover{background:rgba(99,229,186,.11)!important;}
 #aether-native-toggle{display:inline-flex;align-items:center;gap:8px;flex:none;margin:0 13px 0 6px;padding:8px 10px;
-  font:700 10px/1 Arial,sans-serif!important;letter-spacing:.14em!important;cursor:pointer;position:relative;z-index:15;
+  font:700 10px/1 var(--ae-ui,"Aether Space","Segoe UI",sans-serif)!important;letter-spacing:.14em!important;cursor:pointer;position:relative;z-index:15;
   color:#c5ffe9;background:#14211f;border:1px solid #385b4d;border-radius:3px;transition:background .22s ease,border-color .22s ease;}
 #aether-native-toggle:hover{background:#203b32;border-color:#88caaa;}
 #aether-native-toggle:focus-visible{outline:2px solid #9df8d6;outline-offset:3px;}

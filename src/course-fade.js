@@ -40,8 +40,9 @@
       line.text+=char;
     }
     for(const line of lines){
-      const metrics=ctx.measureText(line.text),ascent=metrics.fontBoundingBoxAscent||parseFloat(style.fontSize)*.85,descent=metrics.fontBoundingBoxDescent||parseFloat(style.fontSize)*.2;
-      ctx.fillText(line.text,line.left-box.left+pad,line.top-box.top+pad+(line.height-ascent-descent)/2+ascent);
+      const rendered=style.textTransform==='uppercase'?line.text.toLocaleUpperCase():style.textTransform==='lowercase'?line.text.toLocaleLowerCase():line.text;
+      const metrics=ctx.measureText(rendered),ascent=metrics.fontBoundingBoxAscent||parseFloat(style.fontSize)*.85,descent=metrics.fontBoundingBoxDescent||parseFloat(style.fontSize)*.2;
+      ctx.fillText(rendered,line.left-box.left+pad,line.top-box.top+pad+(line.height-ascent-descent)/2+ascent);
     }
     const pixels=ctx.getImageData(0,0,w,h).data,points=[];
     // At most 1,600 points per title, regardless of viewport or title length.
@@ -90,10 +91,10 @@
       if(!item.card.isConnected){remove(item);continue;}
       if(!engine.moving()||item.card.closest('[data-edit="true"]')||item.card.contains(document.activeElement)){reset(item);continue;}
       const rect=item.card.getBoundingClientRect(),view=bounds(item.card);
-      const band=item.heading?Math.min(96,Math.max(64,rect.height*1.6),(view.bottom-view.top)*.25):Math.min(340,rect.height*1.6,(view.bottom-view.top)*.55);
+      const band=item.heading?Math.min(240,Math.max(160,rect.height*3.2),(view.bottom-view.top)*.4):Math.min(340,rect.height*1.6,(view.bottom-view.top)*.55);
       if(band<=0){reset(item);continue;}
-      // The command heading enters fully legible and dissolves only at the top.
-      const entering=item.heading?1:smooth((view.bottom-rect.top)/band),leaving=smooth((rect.bottom-view.top)/band);
+      // Both boundaries use the same reversible dust-to-text transition.
+      const entering=smooth((view.bottom-rect.top)/band),leaving=smooth((rect.bottom-view.top)/band);
       const dissolve=1-Math.min(entering,leaving);item.direction=entering<leaving?1:-1;
       // Fully revealed cards require no canvas work. Fail open on font/Canvas errors.
       if(dissolve<.005){reset(item);continue;}

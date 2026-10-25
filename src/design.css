@@ -119,3 +119,9 @@ html.aether-enabled :is(#aether-workspace,.ae-resource-preview) button{touch-act
 html.aether-reduced-motion #aether-workspace *,html.ae-list-reduced-motion .ae-record-card{animation:none!important;transition:none!important}
 html.aether-reduced-motion #aether-workspace :is(.ae-course-card,.ae-tool-item),html.ae-list-reduced-motion .ae-record-card{transform:none!important}
 @media(pointer:coarse){html.aether-enabled #aether-workspace :is(.ae-course-card,.ae-tool-item),:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card.ae-record-card{transform:none!important}.ae-preview-trigger{min-height:44px}}
+
+/* One typography system across the portal shell and enhanced native tools.
+   Icon descendants and authored rich text retain their own font declarations. */
+html.ae-resource-surface body{font-family:var(--ae-ui)}
+html.aether-enabled :is(.portal-header,#toolMenu) :is(a,button):not([class*="icon"],.bi,.fa,.si,[class*="fa-"]){font-family:var(--ae-ui)}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-list>.ae-record-card :is(h2,h3,h4){font-family:var(--ae-display)}
