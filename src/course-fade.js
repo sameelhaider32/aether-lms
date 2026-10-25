@@ -1,4 +1,4 @@
-/* Scroll-linked course dissolve, inspired by the supplied Forma recording.
+/* Shared scroll-linked course and Mission Control title dissolve.
    Local, bounded Canvas decoration; original link text remains in the DOM. */
 (() => {
   'use strict';
@@ -12,7 +12,8 @@
     for(const key of ['--ae-course-opacity','--ae-title-opacity','--ae-particle-opacity'])item.card.style.removeProperty(key);
     item.card.removeAttribute('data-ae-dissolve');
   }
-  function remove(item){reset(item);sizes?.unobserve(item.title);item.canvas?.remove();items.delete(item.card);}
+  function clearCanvas(item){item.canvas?.remove();item.canvas=null;item.ctx=null;item.width=0;item.points=null;}
+  function remove(item){reset(item);sizes?.unobserve(item.title);clearCanvas(item);items.delete(item.card);}
   function queue(){if(!frame&&!disposed&&!document.hidden)frame=engine.request(update);}
   function invalidate(){for(const item of items.values())item.width=0;queue();}
   // Sample the actual rendered font and wrapping, rather than storing an image
@@ -28,6 +29,7 @@
     const ctx=mask.getContext('2d',{willReadFrequently:true});
     if(!ctx)return false;
     ctx.font=`${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;ctx.fillStyle=style.color;
+    if('letterSpacing' in ctx)ctx.letterSpacing=style.letterSpacing;
     const text=item.ink.firstChild;
     if(!text||text.nodeType!==Node.TEXT_NODE)return false;
     const range=document.createRange(),lines=[];let offset=0;
@@ -88,9 +90,10 @@
       if(!item.card.isConnected){remove(item);continue;}
       if(!engine.moving()||item.card.closest('[data-edit="true"]')||item.card.contains(document.activeElement)){reset(item);continue;}
       const rect=item.card.getBoundingClientRect(),view=bounds(item.card);
-      const band=Math.min(340,rect.height*1.6,(view.bottom-view.top)*.55);
+      const band=item.heading?Math.min(96,Math.max(64,rect.height*1.6),(view.bottom-view.top)*.25):Math.min(340,rect.height*1.6,(view.bottom-view.top)*.55);
       if(band<=0){reset(item);continue;}
-      const entering=smooth((view.bottom-rect.top)/band),leaving=smooth((rect.bottom-view.top)/band);
+      // The command heading enters fully legible and dissolves only at the top.
+      const entering=item.heading?1:smooth((view.bottom-rect.top)/band),leaving=smooth((rect.bottom-view.top)/band);
       const dissolve=1-Math.min(entering,leaving);item.direction=entering<leaving?1:-1;
       // Fully revealed cards require no canvas work. Fail open on font/Canvas errors.
       if(dissolve<.005){reset(item);continue;}
@@ -98,7 +101,7 @@
       try{
         if(!sample(item)){reset(item);continue;}
         draw(item,dissolve);
-        item.card.style.setProperty('--ae-course-opacity',(1-dissolve*.78).toFixed(3));
+        if(!item.heading)item.card.style.setProperty('--ae-course-opacity',(1-dissolve*.78).toFixed(3));
         item.card.style.setProperty('--ae-title-opacity',(1-smooth(dissolve/.38)).toFixed(3));
         item.card.style.setProperty('--ae-particle-opacity',(smooth(dissolve/.24)*(1-smooth((dissolve-.72)/.28))).toFixed(3));
         item.card.dataset.aeDissolve=dissolve.toFixed(3);
@@ -108,13 +111,14 @@
   const sizes=typeof ResizeObserver==='function'?new ResizeObserver(entries=>{for(const entry of entries){const item=[...items.values()].find(i=>i.title===entry.target);if(item)item.width=0;}queue();}):null;
   function enhance(workspace){
     for(const item of items.values())if(!item.card.isConnected)remove(item);
-    workspace.querySelectorAll('.ae-course-card').forEach((card,index)=>{
-      if(items.has(card))return;const title=card.querySelector('.ae-card-name');if(!title)return;
-      const ink=document.createElement('span');ink.className='ae-course-title-ink';ink.append(...title.childNodes);title.append(ink);
-      const item={card,title,ink,index,width:0,height:0,canvas:null};items.set(card,item);sizes?.observe(title);
+    workspace.querySelectorAll('.ae-course-card,#aether-mission-control #mc-title').forEach((card,index)=>{
+      if(items.has(card))return;const heading=card.id==='mc-title',title=heading?card:card.querySelector('.ae-card-name');if(!title)return;
+      let ink=[...title.children].find(n=>n.classList.contains('ae-course-title-ink'));
+      if(!ink){ink=document.createElement('span');ink.className='ae-course-title-ink';ink.append(...title.childNodes);title.append(ink);}
+      const item={card,title,ink,index,heading,width:0,height:0,canvas:null};items.set(card,item);sizes?.observe(title);
     });queue();
   }
-  const state=new MutationObserver(()=>{if(!engine.moving())for(const item of items.values())reset(item);queue();});
+  const state=new MutationObserver(()=>{if(!engine.moving())for(const item of items.values()){reset(item);if(item.heading&&!host.classList.contains('aether-enabled'))clearCanvas(item);}queue();});
   state.observe(host,{attributes:true,attributeFilter:['class']});
   document.addEventListener('scroll',queue,{capture:true,passive:true});
   document.addEventListener('focusin',queue);document.addEventListener('focusout',queue);

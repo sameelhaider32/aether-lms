@@ -35,7 +35,7 @@ const test=async(name,fn)=>{
   return r.fulfill({contentType:'text/plain',body:'<script>window.previewExecuted=true</script>\nSafe text / code / CSV fixture'});
  });
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
- const go=async(tool,home=false)=>{await page.goto(home?origin+'/portal/site/home':route(tool));await page.locator('#aether-workspace').waitFor();};
+ const go=async(tool,home=false)=>{await page.goto(home?origin+'/portal/site/home':route(tool),{waitUntil:'domcontentloaded'});await page.locator('#aether-workspace').waitFor();};
  const card=title=>page.locator('.ae-record-card').filter({has:page.getByRole('link',{name:title,exact:true})});
  const preview=async title=>{await card(title).locator('[data-ae-preview-open]').click();await page.locator('#aether-resource-preview').waitFor();};
  await test('Home: document_start styling, native content and course links',async()=>{await go('Overview',true);assert(await page.locator('html.aether-enabled.aether-paint-ready').count());assert(await page.evaluate(()=>window.aetherFirstParserSnapshot.enabled));assert(await page.evaluate(()=>!!window.aetherFirstParserSnapshot.criticalColor));assert.equal(await page.locator('.ae-course-card').count(),3);assert(await page.getByText('Original Sakai content remains available.').isVisible());assert.equal(await page.locator('.ae-course-link').first().getAttribute('href'),origin+'/portal/site/cs200');await page.screenshot({path:path.join(reportDir,'home-desktop.png'),fullPage:true});});
