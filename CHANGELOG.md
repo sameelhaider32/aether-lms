@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0 — Selectable monochrome theme — 27 October 2026
+
+- Add Aether Original / Monochrome selection beside the existing AETHER toggle. Persist the validated selection in `chrome.storage.local`, with a page-local prepaint cache and live updates across tabs and supported same-origin tool frames.
+- Keep default colors as CSS fallbacks and use a shared neutral palette for the sidebar, workspace, Mission Control, cards, academic views, statistics, resources, previews and download manager. Retain original typography, geometry, 3D depth, grayscale lighting and reduced-motion/OFF behavior.
+- Switch native Gradebook Chart.js statistics colors without replacing charts, callbacks, data or geometry; restore original native colors on OFF. Theme bundled PDF/Office reader controls while retaining authored content colors.
+- Add focused fixture smoke coverage for switching, persistence, frame and reader updates, core views, native controls and form preservation, and both Gradebook statistics modal variants. No live academic operations were performed. Red remains deferred.
+
 ## 1.5.0 — Mission Control — 25 October 2026
 
 - Refine Home ordering to hero, pinned courses, then Mission Control, with a **View deadlines** shortcut. Unify portal typography with the course panel, give native filters one chevron, and let the Mission Control heading assemble and dissolve at both scroll edges with motion preferences respected.

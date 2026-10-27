@@ -2,7 +2,7 @@
 
 A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Chrome extension that adds course cards, document previews, and a glowing starfield to your existing LMS.
 
-**Current version: 1.5.0 · Mission Control · Public beta · MIT licensed**
+**Current version: 1.6.0 · Selectable themes · Public beta · MIT licensed**
 
 [![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
 [![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
@@ -31,7 +31,7 @@ To update, back up your current folder, replace its contents with the new versio
 |---|---|
 | Home | Hero, pinned courses, then Mission Control: observed academic counts, Next Up, a planning timeline, announcements and course outlook. **View deadlines** jumps straight to the dashboard; saved course order remains available. |
 | Navigation | Reorder course and tool shortcuts with drag-and-drop or keyboard buttons; your order is saved locally. |
-| Appearance | Dark panels, mint and cyan accents, bundled fonts, page-wide stars, glowing sparkles, pointer glow, and contour lines. |
+| Appearance | Choose **Aether Original** (the existing mint/cyan design) or **Monochrome** beside the AETHER toggle. Selection saves on this device and switches instantly, including supported tool frames and reader controls. Both retain bundled fonts, 3D cards, stars, glow and motion preferences. |
 | Folded field | A procedural 3D particle sculpture with progressive startup and a Canvas fallback when WebGL is unavailable. |
 | Course dissolve | Pinned course titles and the Mission Control heading assemble from local particles as they enter and dissolve at the opposite scroll edge. Course links stay native; keyboard focus, reordering, Motion Off, and the system reduced-motion preference retain readable text. |
 | Resources | Cards for student, TA, and instructor browsing views, including supported management lists and embedded Sakai tools. |
@@ -49,6 +49,8 @@ To update, back up your current folder, replace its contents with the new versio
 | Your choice | **AETHER ON/OFF** restores the original Sakai layout. **MOTION ON/OFF** controls animation separately and saves your preference. |
 
 Native authentication, access permissions, forms, and actions remain in Sakai. Aether does not grant access to hidden grades or restricted files. Mission Control reports observed records and explicitly labels partial or unavailable coverage; it cannot guarantee a complete semester inventory.
+
+Monochrome uses black panels, silver lighting and neutral borders inspired by the Vexon preview, within Aether's existing layout. Assignment and resource states retain their text labels in grayscale. **AETHER OFF** returns to native Sakai; switching back on restores your chosen theme. Authored document pages, images, and cross-origin tools retain their own content styling. Red is reserved for a later update. See [theme implementation and validation](docs/THEMES.md).
 
 ## Mission Control (1.5)
 
