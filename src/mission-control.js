@@ -49,7 +49,7 @@
   const workload=el('section','mc-panel mc-workload');workload.append(el('h3','','Course outlook'),el('p','mc-note','Observed assignments + events in your selected period.'),el('div','mc-workload-list'));
   const announcements=el('section','mc-panel mc-announcements');announcements.append(el('h3','','Announcements'),el('p','mc-note','Recent posts · “Newly observed” compares successful checks in this tab.'),el('div','mc-announcement-list'));aside.append(workload,announcements);section.append(grid);
   const timeline=el('section','mc-panel mc-timeline'),th=el('div','mc-timeline-head'),nav=el('div','mc-actions');nav.append(button('←',()=>{filters.offset=Math.max(-30,filters.offset-filters.days);render(true);},'Previous period'),button('Today',()=>{filters.offset=0;render(true);}),button('→',()=>{filters.offset=Math.min(60,filters.offset+filters.days);render(true);},'Next period'));th.append(el('h3','','Academic timeline'),nav);timeline.append(th,el('p','mc-period'),el('div','mc-density'),el('div','mc-days'));section.append(timeline);
-  const details=el('details','mc-source-details');details.append(el('summary','','Sources & coverage'),el('ul','mc-source-list'),el('p','mc-note','Clear the data held in this tab and its announcement baseline. Refresh to check your sources again.'),button('Clear session data',()=>{clear();render();},'Clear Mission Control data and announcement baseline'));section.append(details,el('p','mc-footer','Read-only · Academic actions stay in Sakai · Dates use your browser time zone unless the source specifies one.'));
+  const details=el('details','mc-source-details');details.append(el('summary','','Sources & coverage'),el('ul','mc-source-list'),el('p','mc-note','Clear the data held in this tab and its announcement baseline. Refresh to check your sources again.'),button('Clear session data',()=>{clear();globalThis.AetherAcademicStore?.clear();render();},'Clear Mission Control data and announcement baseline'));section.append(details,el('p','mc-footer','Read-only · Academic actions stay in Sakai · Dates use your browser time zone unless the source specifies one.'));
   return section;
  }
  function clear(){generation++;controller?.abort();controller=null;job=null;clearInterval(identityTimer);clearTimeout(clock);identityTimer=clock=0;account=null;baseline=null;baselineReady=false;newIds.clear();filters.course='';showPastAll=false;refreshError='';data={records:[],courses:[],sources:[],checkedAt:0};}
@@ -63,11 +63,11 @@
    const retain=previousAccount===who&&previous.checkedAt>0;
    if(account&&account!==who){baseline=null;baselineReady=false;newIds.clear();}account=who;
    if(!retain)data={records:[],courses:[],sources:[],checkedAt:0};render();
-   identityTimer=setInterval(async()=>{const current=await verify();if(epoch===generation&&current!==who){clear();render();}},30000);
+   // The shared academic store verifies the same session during discovery.
    let pending=null;
-   await globalThis.AetherAcademicSources.load(ctx,signal,snapshot=>{
+   await globalThis.AetherAcademicStore.load(ctx,signal,snapshot=>{
     if(!signal.aborted&&epoch===generation&&enabled()){pending=snapshot;if(!retain){data=snapshot;render();}}
-   });
+   },{force,allowBlocked:true});
    const after=await verify();if(signal.aborted||epoch!==generation)return;if(after!==who){clear();render();return;}
    // A refresh replaces the old snapshot only after this same account has been
    // verified again. Initial loads still publish each bounded source as it arrives.

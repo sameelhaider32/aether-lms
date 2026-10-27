@@ -50,13 +50,16 @@
  }
  function collection(data,name){const items=Array.isArray(data)?data:data?.[name+'_collection'];if(!Array.isArray(items)||items.length>1500)throw Error('Unsupported response model');return items;}
  async function pool(items,fn){let index=0;await Promise.all([0,1].map(async()=>{while(index<items.length){const item=items[index++];await fn(item);}}));}
+ function navigation(doc,course,base=location.href){
+  return [...doc.querySelectorAll('#toolMenu .is-current-site .site-page-list a[href]')].slice(0,40).map(a=>({title:D.clean(a.textContent),url:nativeURL(a.getAttribute('href'),base),siteId:course.id,course:course.title})).filter(t=>t.title&&t.url&&(!D.siteId(t.url)||D.siteId(t.url)===course.id));
+ }
  async function load(ctx,signal,publish){
-  const reader=new Reader(signal),courses=new Map(),records=[],sources=[];
+  const reader=new Reader(signal),courses=new Map(),records=[],tools=new Map(),sources=[];
   const put=(id,title,href)=>{if(typeof id==='string'&&id&&id!=='home'&&!id.startsWith('~'))courses.set(id,{id,title:D.clean(title)||id,url:href||location.origin+'/portal/site/'+encodeURIComponent(id)});};
   for(const s of ctx.sites){if(!s.home)put(D.siteId(s.href),s.title,s.href);}
-  const emit=()=>{if(!signal.aborted)publish({courses:[...courses.values()],records:D.unique(records).map(r=>({...r,course:courses.get(r.siteId)?.title||r.course})),sources:[...sources],checkedAt:Date.now()});};
+  const emit=()=>{if(!signal.aborted)publish({courses:[...courses.values()],records:D.unique(records).map(r=>({...r,course:courses.get(r.siteId)?.title||r.course})),tools:[...tools.values()],sources:[...sources],checkedAt:Date.now()});};
   const source=(type,state,note)=>{sources.push({type,state,note});emit();};
-  records.push(...native(ctx.main,{id:'',title:'Home summary'}).map(r=>({...r,pageLocal:true})));emit();
+  records.push(...native(ctx.main,ctx.active&&!ctx.active.home?{id:D.siteId(ctx.active.href),title:ctx.active.title}:{id:'',title:'Home summary'}).map(r=>({...r,pageLocal:true})));emit();
   try{const sites=collection(await reader.read('/direct/site.json?select=access&_limit=50&_start=0'),'site');for(const s of sites.slice(0,50))if(['course','project'].includes(s.type))put(s.id||s.entityId,s.title);source('Courses','partial',`Navigation + up to 50 accessible sites; enrollment completeness unverified`);}catch(e){source('Courses',e.state||'failed','Using original course navigation');}
   const start=new Date();start.setDate(start.getDate()-30);const end=new Date();end.setDate(end.getDate()+90);const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   await Promise.all([
@@ -81,7 +84,7 @@
   // not guarantee student release/group visibility. Read discovered student views.
   await pool([...courses.values()].slice(0,LIMIT),async c=>{
    if(signal.aborted)return;try{
-    const page=await reader.read(c.url,false);records.push(...native(page,c,c.url));emit();
+    const page=await reader.read(c.url,false);records.push(...native(page,c,c.url));for(const tool of navigation(page,c,c.url))tools.set(tool.siteId+tool.url,tool);emit();
     const active=[...page.querySelectorAll('#toolMenu .is-current-site .site-page-list a[href]')];
     for(const [type,pattern]of [['announcement',/^announcements?$/i],['event',/^(?:calendar|schedule)$/i]]){const a=active.find(a=>pattern.test(D.clean(a.textContent))),href=nativeURL(a?.getAttribute('href'),c.url);if(href&&D.siteId(href)===c.id)for(const r of records)if(r.siteId===c.id&&r.type===type&&r.source.startsWith('Sakai '))r.url=href;}
     const assignment=active.find(a=>/^assignments?$/i.test(D.clean(a.textContent)));
@@ -96,5 +99,5 @@
   source('Coverage','partial',`Bounded to ${LIMIT} course scans per check; summaries and returned records only. This is not a complete semester inventory.`);
   return {reader};
  }
- globalThis.AetherAcademicSources={load,native,Reader,collection};
+ globalThis.AetherAcademicSources={load,native,navigation,nativeURL,Reader,collection};
 })();

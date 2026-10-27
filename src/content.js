@@ -157,7 +157,7 @@
     },{passive:true});
     hero.addEventListener("pointerleave",()=>sparks.forEach(s=>{s.style.removeProperty("--lit");s.style.removeProperty("--zoom");}));
     const copy=make("div","ae-hero-copy");
-    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 1.6'));
+    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 1.7'));
     const eyebrow=make("div","ae-hero-eyebrow");eyebrow.append(make("span","ae-status-dot"),document.createTextNode(course?`LUMS / ${ctx.courseCode||"COURSE"} / ${(ctx.toolTitle||"OVERVIEW").toUpperCase()}`:`LUMS / ACADEMIC WORKSPACE / ${new Date().getFullYear()}`));copy.append(eyebrow);
     const h1=make("h1","ae-hero-heading");
     if(ctx.home){h1.append(document.createTextNode("A little space "),make("em","","for big ideas."));}
@@ -268,8 +268,8 @@
       }catch(error){console.debug('Aether scene unavailable',error);}
     });});
   }
-  function render(force=false){mountToolbar();const ctx=context();if(!ctx){globalThis.AetherMissionControl?.mount(null);if(enabled)mountAmbient();return;}
-    if(!force&&ctx.signature===renderedSignature&&workspace?.isConnected)return;
+  function render(force=false){mountToolbar();const ctx=context();if(!ctx){globalThis.AetherSpotlight?.mount(null);globalThis.AetherMissionControl?.mount(null);if(enabled)mountAmbient();return;}
+    if(!force&&ctx.signature===renderedSignature&&workspace?.isConnected){globalThis.AetherSpotlight?.mount(ctx);return;}
     const key=[ctx.home,ctx.courseTitle,ctx.toolTitle,ctx.resources,ctx.assignment].join('|');
     const count=workspace?.querySelector('.ae-instrument-number');if(count)count.textContent=String(pinnedCourses(ctx).length).padStart(2,'0');
     const oldHero=key===heroSignature?workspace?.querySelector('.ae-hero'):null;
@@ -283,16 +283,17 @@
     const mission=globalThis.AetherMissionControl?.mount(ctx);if(mission)workspace.append(mission);
     const tools=makeTools(ctx);if(tools)workspace.append(tools);
     const status=make('div','ae-screen-reader-only');status.id='aether-reorder-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');workspace.append(status);
-    ctx.main.prepend(workspace);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
+    ctx.main.prepend(workspace);globalThis.AetherSpotlight?.mount(ctx);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
   }
   function requestRefresh(force=false){refreshForced ||= force;if(refreshPending)return;refreshPending=true;
     queueMicrotask(()=>{refreshPending=false;const forced=refreshForced;refreshForced=false;render(forced);});
   }
+  globalThis.AetherActions={toggleMotion:()=>setMotion(!motionRequested)};
   readSettings();
   const observer=new MutationObserver(records=>{
     for(const r of records){
       const target=r.target.nodeType===1?r.target:r.target.parentElement;
-      if(target?.closest('#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
+      if(target?.closest('#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
       if(target===document.body&&document.body.classList.contains('is-logged-out')){globalThis.AetherMissionControl?.mount(null);requestRefresh();return;}
       if(target?.closest('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item')){requestRefresh();return;}
       if([...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&n.matches('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item'))){requestRefresh();return;}

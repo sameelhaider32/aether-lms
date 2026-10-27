@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.0 — Spotlight — 28 October 2026
+
+- Add an additive, keyboard-driven search and command palette to the retained v1.6 interface. Search known courses/tools, authorized observed assignments/events/announcements and discovered resource metadata using local ranking, course-code/acronym support, limited typo tolerance, categories and highlighted matches.
+- Reuse the existing academic adapters through a shared account-scoped memory cache/single-flight check. Share native tool destinations discovered during those same reads; do not enable generic assignment endpoints or a separate crawler.
+- Reuse the Download Manager tree and lazy metadata reader. Explicitly search at most 12 folders, eight roots and two expansion levels; typing never fetches, and no file contents enter the search index. Reuse the normal preview/copyright pipeline for visible and validated metadata-only resources.
+- Add header and guarded Ctrl/Cmd+K / Alt+Shift+K entry, one top-level overlay from supported frames, focus restoration, Escape/click-away and safe existing UI commands. Preserve forms, assessment/browser shortcuts, native workflows, both themes, graphics and page layouts. No new permissions or dependencies; no spatial-home redesign or Red theme.
+- Bound the index and keep it ephemeral. OFF/logout/observed account changes cancel discovery and clear private search records; changed sessions require a refreshed LMS document. Add only focused fictional fixture smoke coverage.
+
 ## 1.6.0 — Selectable monochrome theme — 27 October 2026
 
 - Add Aether Original / Monochrome selection beside the existing AETHER toggle. Persist the validated selection in `chrome.storage.local`, with a page-local prepaint cache and live updates across tabs and supported same-origin tool frames.

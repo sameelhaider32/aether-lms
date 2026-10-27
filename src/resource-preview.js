@@ -34,11 +34,11 @@
   if(cache.has(key)){cacheBytes-=cache.get(key).size;cache.delete(key);}cache.set(key,{value,size});cacheBytes+=size;
   while(cache.size>6||cacheBytes>24*1024*1024){const key=cache.keys().next().value;cacheBytes-=cache.get(key).size;cache.delete(key);}
  }
- function active(state){return current===state&&state.panel.isConnected&&enabled()&&state.info.card.isConnected&&state.info.card.matches(targetSelector)&&!!state.info.card.getClientRects().length;}
+ function active(state){return current===state&&state.panel.isConnected&&enabled()&&state.info.card.isConnected&&(state.fromMetadata||state.info.card.matches(targetSelector))&&!!state.info.card.getClientRects().length;}
  function triggerFor(card){return attachmentControls.get(card)?.querySelector('[data-ae-preview-open]')||card.querySelector('[data-ae-preview-open]');}
  function cancelHover(){clearTimeout(pending);pending=0;hoverCard=null;}
  function close(restoreFocus=false){cancelHover();
-  const state=current;current=null;if(!state)return;state.abort.abort();clearTimeout(state.timeout);clearTimeout(state.requestTimeout);state.bytes=null;state.frame=null;state.objectURL&&URL.revokeObjectURL(state.objectURL);state.objectURL=null;state.panel.remove();if(restoreFocus===true)triggerFor(state.info.card)?.focus({preventScroll:true});
+  const state=current;current=null;if(!state)return;state.abort.abort();clearTimeout(state.timeout);clearTimeout(state.requestTimeout);state.bytes=null;state.frame=null;state.objectURL&&URL.revokeObjectURL(state.objectURL);state.objectURL=null;state.panel.remove();if(restoreFocus===true)(state.fromMetadata?state.info.card:triggerFor(state.info.card))?.focus({preventScroll:true});
  }
  const contains=(parent,node)=>!!node?.nodeType&&parent.contains(node);
  function leavePreview(target){if(current&&!current.pinned&&!contains(current.info.card,target)&&!contains(current.panel,target))close();}
@@ -47,7 +47,7 @@
  function status(state,message){if(!active(state))return;state.body.replaceChildren(el('p','ae-preview-message',message));}
  function failure(state,message){
   if(!active(state)||state.failed)return;state.failed=true;clearTimeout(state.timeout);state.frame?.remove();state.frame=null;state.bytes=null;state.objectURL&&URL.revokeObjectURL(state.objectURL);state.objectURL=null;status(state,message);
-  const retry=el('button','ae-preview-open','Retry preview');retry.type='button';retry.onclick=()=>{if(!active(state))return;const key=state.info.u?.href+'|'+(globalThis.AetherFileState?.version(state.info)||'unversioned'),entry=cache.get(key);if(entry){cacheBytes-=entry.size;cache.delete(key);}const card=state.info.card;close();open(card,true);};state.body.append(retry);
+  const retry=el('button','ae-preview-open','Retry preview');retry.type='button';retry.onclick=()=>{if(!active(state))return;const key=state.info.u?.href+'|'+(globalThis.AetherFileState?.version(state.info)||'unversioned'),entry=cache.get(key);if(entry){cacheBytes-=entry.size;cache.delete(key);}const card=state.info.card,data=state.fromMetadata?state.info:null;close();open(card,true,data);};state.body.append(retry);
  }
  function position(state){
   let r=state.info.card.getBoundingClientRect(),win=window,left=r.left,topPos=r.top;
@@ -153,15 +153,15 @@
   catch(error){if(active(state)){if(error.notice)copyright(state,error.notice);else{problem(state,/permission|forbidden|access denied/i.test(error.message)?'restricted':'unavailable');failure(state,error.name==='AbortError'?'Preview timed out. Open the original resource.':error.name==='SyntaxError'&&state.info.kind==='folder'?'Folder listing unavailable. Open the folder in Sakai.':/^(This |Preview |Folder |Open |Image |Copyright )/.test(error.message)?error.message:'Preview could not be downloaded. Check your connection or open the original resource.');}}}
   finally{clearTimeout(state.requestTimeout);}
  }
- async function open(card,keyboard=false){
+ async function open(card,keyboard=false,descriptor=null){
   cancelHover();if(!enabled()||!card.isConnected)return;if(current?.info.card===card){if(keyboard){current.pinned=true;if(current.rendered)success(current);position(current);current.panel.querySelector('button')?.focus();}return;}
-  close();host.dispatchEvent(new Event('aether-preview-close-all'));const data=info(card);if(!data)return;host.querySelector('#aether-resource-preview')?.remove();
+  close();host.dispatchEvent(new Event('aether-preview-close-all'));const data=descriptor||info(card);if(!data)return;host.querySelector('#aether-resource-preview')?.remove();
   const panel=el('aside','ae-resource-preview');panel.id='aether-resource-preview';panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','false');panel.setAttribute('aria-label','Resource preview: '+data.title);
   const head=el('div','ae-preview-head'),title=el('div','');title.append(el('span','ae-preview-kind',data.kind==='pdf'?'PDF preview':data.kind==='folder'?'Folder contents':'Resource preview'),el('h3','',data.title));const dismiss=el('button','ae-preview-close','×');dismiss.type='button';dismiss.setAttribute('aria-label','Close resource preview');dismiss.onclick=()=>close(true);
   const actions=el('div','ae-preview-window-actions'),expand=el('button','ae-preview-expand','Expand');expand.type='button';expand.setAttribute('aria-label','Expand preview');actions.append(expand,dismiss);head.append(title,actions);
   const body=el('div','ae-preview-body'),footer=el('div','ae-preview-footer'),original=el('button','ae-preview-open',data.kind==='folder'?'Open folder':'Open original');original.type='button';original.onclick=()=>{close();originalIntent=data.a;try{data.a.click();}finally{originalIntent=null;}};footer.append(original,el('span','','Preview only'));panel.append(head,body,footer);
   if(globalThis.AetherFileState){const clear=el('button','ae-preview-clear-history','Clear file history');clear.type='button';clear.title='Forget opened-file history on this device';clear.onclick=async()=>{clear.disabled=true;try{await globalThis.AetherFileState.clear();clear.textContent='History cleared';}catch{clear.textContent='Could not clear history · Retry';}finally{clear.disabled=false;}};footer.insertBefore(clear,footer.lastChild);}
-  const state={panel,body,info:data,pinned:keyboard,expand,abort:new AbortController()};current=state;host.body.append(panel);resizeControls(state);position(state);
+  const state={panel,body,info:data,fromMetadata:!!descriptor,pinned:keyboard,expand,abort:new AbortController()};current=state;host.body.append(panel);resizeControls(state);position(state);
   expand.onclick=()=>{state.pinned=true;state.expanded=!state.expanded;position(state);};
   panel.addEventListener('pointerleave',e=>{if(current===state)leavePreview(e.relatedTarget);});
   // Explicit clicks and keyboard interaction keep the reader stable. Ordinary
@@ -232,5 +232,14 @@
  document.addEventListener('aether-session-change',()=>host.dispatchEvent(new Event('aether-preview-session-change')));
  host.addEventListener('securitypolicyviolation',policy);
  host.addEventListener('aether-preview-close-all',close);
+ if(window===top)globalThis.AetherResourcePreview={async openMetadata(meta,reference){
+  if(!enabled()||!reference?.isConnected)return false;
+  const scope=await globalThis.AetherFileState?.session();
+  if(!scope||scope!==meta.scope||!enabled()||!reference.isConnected)return false;
+  const href=globalThis.AetherDownloadSelection?.contentURL(meta.url,meta.id),u=href&&url(href);
+  if(!contentURL(u)||meta.id.endsWith('/'))return false;
+  const title=clean(meta.title).slice(0,512),extension=(title.match(/\.([a-z0-9]{1,7})$/i)?.[1]||'').toLowerCase(),a=el('a','',title);a.href=href;
+  return open(reference,true,{card:reference,a,u,id:meta.id,title,extension,kind:globalThis.AetherResourceInfo.kind(extension,meta.mime||''),type:extension.toUpperCase(),description:'Discovered resource · original Sakai access checks apply',historyScope:scope});
+ }};
  schedule();
 })();
