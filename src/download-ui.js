@@ -157,7 +157,7 @@
   }
   if(cards.length&&!document.querySelector('[data-ae-download-entry="toolbar"]')){const area=cards[0].closest('table,ul,ol'),toolbar=document.querySelector('.resource-toolbar,.navIntraTool,.tool-toolbar');const b=entry('Download resources','toolbar','ae-dl-entry');if(toolbar)toolbar.append(b);else area?.before(b);}
   if(!cards.length)document.querySelectorAll('[data-ae-download-entry="toolbar"]').forEach(n=>n.remove());
-  if(window===top){const workspace=document.querySelector('#aether-workspace .ae-hero-copy');if(workspace&&!workspace.querySelector(own))workspace.append(entry('Download resources','global','ae-dl-global'));}
+  if(window===top){const workspace=(document.querySelector('#aether-workspace .ae-home-controls')||document.querySelector('#aether-workspace .ae-hero-copy'));if(workspace&&!workspace.querySelector(own))workspace.append(entry('Download resources','global','ae-dl-global'));}
  }
  function scheduleControls(){if(!queued){queued=true;queueMicrotask(controls);}}
  document.addEventListener('aether-records-change',scheduleControls);window.addEventListener('aether-settings-change',scheduleControls);document.addEventListener('DOMContentLoaded',scheduleControls,{once:true});window.addEventListener('pageshow',scheduleControls);

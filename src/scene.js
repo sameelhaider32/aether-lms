@@ -13,7 +13,7 @@
     uniform vec2 uPointer;
     uniform float uTime;
     uniform float uHover;
-    uniform float uStill;
+    uniform float uSpatial;
     varying float vLight;
     varying float vStar;
     varying float vHover;
@@ -32,6 +32,7 @@
       float rz = .25 + t*.10;
       mat2 r = mat2(cos(rz),-sin(rz),sin(rz),cos(rz));
       p.xy = r*p.xy;
+      if(uSpatial>.5){p.x*=1.42;p.y*=.84;p.z*=.75;}
       float rx = .84 + .08*sin(t*.31) - (uPointer.y-.5)*.25;
       p.yz = mat2(cos(rx),-sin(rx),sin(rx),cos(rx))*p.yz;
       float ry = .33 + (uPointer.x-.5)*.55;
@@ -39,7 +40,7 @@
       float perspective = 3.65 / (3.65 + p.z);
       p.xy *= perspective;
       float aspect = uViewport.x / max(1.,uViewport.y);
-      vec2 ndc = vec2(.46 + p.x * .60 / aspect, p.y * .60);
+      vec2 ndc = mix(vec2(.46 + p.x * .60 / aspect, p.y * .60),vec2(p.x * .66 / aspect,p.y * .54 - .10),uSpatial);
       float dist = length(vec2((ndc.x-uPointer.x*2.+1.)*aspect, ndc.y-(1.-uPointer.y*2.)));
       float hit = uHover * exp(-pow(dist*4.1,2.0));
       ndc += normalize(ndc-vec2(uPointer.x*2.-1.,1.-uPointer.y*2.)+vec2(.0001)) * hit * .017;
@@ -85,6 +86,7 @@
     return shader;
   }
   function create2DFallback(canvas, opts = {}) {
+    const spatial=opts.composition==='home'||canvas.dataset.aeComposition==='home';
     const ctx=canvas.getContext("2d",{alpha:true});
     if(!ctx)return {setMotion(){},dispose(){}};
     const parent=canvas.closest(".ae-hero, .ae-global-ambient");
@@ -104,7 +106,7 @@
       if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
       const aspect=w/h;
       ctx.clearRect(0,0,w,h);ctx.globalCompositeOperation="lighter";
-      const cx=w*.73,cy=h*.5,scale=h*.32;
+      const cx=w*(spatial ? .5 : .73),cy=h*(spatial ? .55 : .5),scale=h*(spatial ? .31 : .32);
       const rz=.25+time*.10,rx=.86+(pointer.y-.5)*-.23,ry=.33+(pointer.x-.5)*.60;
       const crz=Math.cos(rz),srz=Math.sin(rz),crx=Math.cos(rx),srx=Math.sin(rx),cry=Math.cos(ry),sry=Math.sin(ry);
       const projected=[];
@@ -116,6 +118,7 @@
         let y=(ring+tube*Math.cos(fold))*Math.sin(a);
         let z=tube*Math.sin(fold)+.22*Math.sin(a*3-time*.23);
         [x,y]=[crz*x-srz*y,srz*x+crz*y];
+        if(spatial){x*=1.42;y*=.84;z*=.75;}
         [y,z]=[crx*y-srx*z,srx*y+crx*z];
         [x,z]=[cry*x+sry*z,-sry*x+cry*z];
         const depth=3.65/(3.65+z),sx=cx+x*scale*depth,sy=cy+y*scale*depth;
@@ -152,6 +155,8 @@
   }
 
   function create(canvas, opts = {}) {
+    const spatial=opts.composition==='home'||canvas.dataset.aeComposition==='home';
+    opts={...opts,composition:spatial?'home':'course'};
     let disposed = false, active = false, visible = true, motion = opts.motion !== false;
     let raf = 0, last = 0, elapsed = 0, lastElapsed = 0;
     let hover = 0, hoverTarget = 0;
@@ -178,7 +183,7 @@
       const attr=gl.getAttribLocation(program,"aParticle");
       gl.enableVertexAttribArray(attr);gl.vertexAttribPointer(attr,3,gl.FLOAT,false,0,0);
       gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
-      const uniforms={viewport:gl.getUniformLocation(program,"uViewport"),pointer:gl.getUniformLocation(program,"uPointer"),time:gl.getUniformLocation(program,"uTime"),hover:gl.getUniformLocation(program,"uHover")};
+      const uniforms={viewport:gl.getUniformLocation(program,"uViewport"),pointer:gl.getUniformLocation(program,"uPointer"),time:gl.getUniformLocation(program,"uTime"),spatial:gl.getUniformLocation(program,"uSpatial"),hover:gl.getUniformLocation(program,"uHover")};
       function resize() {
         if(disposed)return;
         const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;
@@ -195,21 +200,21 @@
         elapsed+=last?Math.min((now-last)/1000,.08):0;last=now;
         hover+=(hoverTarget-hover)*.17;
         resize();gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);
+        gl.uniform1f(uniforms.spatial,spatial?1:0);gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);
         gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);
         gl.uniform1f(uniforms.time,elapsed);
         gl.uniform1f(uniforms.hover,hover);
         gl.drawArrays(gl.POINTS,0,Math.min(count,tier().count));
         raf=requestAnimationFrame(render);
       }
-      function drawStill(){if(disposed||gl.isContextLost())return;resize();gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);gl.uniform1f(uniforms.time,elapsed);gl.uniform1f(uniforms.hover,0);gl.drawArrays(gl.POINTS,0,Math.min(count,tier().count));if(!canvas.dataset.aeRendered)canvas.dataset.aeRendered='webgl';}
+      function drawStill(){if(disposed||gl.isContextLost())return;resize();gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform1f(uniforms.spatial,spatial?1:0);gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);gl.uniform1f(uniforms.time,elapsed);gl.uniform1f(uniforms.hover,0);gl.drawArrays(gl.POINTS,0,Math.min(count,tier().count));if(!canvas.dataset.aeRendered)canvas.dataset.aeRendered='webgl';}
       function schedule(){const next=motion&&visible&&!document.hidden&&!disposed&&!gl.isContextLost();if(next&&!active){active=true;last=0;raf=requestAnimationFrame(render);} else if(!next&&active){active=false;cancelAnimationFrame(raf);raf=0;drawStill();}}
       const hero=canvas.closest(".ae-hero, .ae-global-ambient");
       function onPointer(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=canvas.getBoundingClientRect();pointer={x:Math.min(1,Math.max(0,(e.clientX-r.left)/Math.max(1,r.width))),y:Math.min(1,Math.max(0,(e.clientY-r.top)/Math.max(1,r.height)))};hoverTarget=1;if(!active)drawStill();}
       function leave(){hoverTarget=0;}
       const onVisible=()=>schedule();
       let portable=null;
-      const onContextLost=e=>{e.preventDefault();active=false;cancelAnimationFrame(raf);if(portable)return;const replacement=document.createElement('canvas');replacement.className=canvas.className;replacement.setAttribute('aria-hidden','true');canvas.after(replacement);canvas.style.visibility='hidden';const alt=create2DFallback(replacement,{motion});portable={setMotion:v=>alt.setMotion(v),dispose(){alt.dispose();replacement.remove();canvas.style.removeProperty('visibility');}};};
+      const onContextLost=e=>{e.preventDefault();active=false;cancelAnimationFrame(raf);if(portable)return;const replacement=document.createElement('canvas');replacement.className=canvas.className;replacement.setAttribute('aria-hidden','true');canvas.after(replacement);canvas.style.visibility='hidden';const alt=create2DFallback(replacement,{...opts,motion});portable={setMotion:v=>alt.setMotion(v),dispose(){alt.dispose();replacement.remove();canvas.style.removeProperty('visibility');}};};
       canvas.addEventListener("webglcontextlost",onContextLost);
       hero?.addEventListener("pointermove",onPointer,{passive:true});hero?.addEventListener("pointerleave",leave,{passive:true});
       document.addEventListener("visibilitychange",onVisible);
@@ -239,7 +244,7 @@
   }
   function prime(canvas){
     const preview=document.createElement('canvas');preview.className=canvas.className+' ae-scene-first-frame';preview.setAttribute('aria-hidden','true');canvas.before(preview);
-    const still=create2DFallback(preview,{motion:false,preview:true});
+    const still=create2DFallback(preview,{motion:false,preview:true,composition:canvas.dataset.aeComposition});
     return {dispose(){still.dispose();preview.remove();}};
   }
   globalThis.AetherLivingScene={create,prime};

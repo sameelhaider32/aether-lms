@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.0 — Spatial Home — 27 October 2026
+
+- Recompose Home Overview as a full-viewport environment with centered Aether typography, an adapted folded particle field, original orbital lattice and floating actions, without the rectangular hero frame or permanent sidebar gutter.
+- Adapt the actual Sakai sidebar into an accessible Home-only drawer with original nodes/handlers, click-away/Escape, focus containment/return, native scrolling and reversible OFF/route cleanup. Retain native header controls and practical navigation on course and individual Home tool pages.
+- Present real pinned courses in a horizontal dock, retain their native targets, saved reordering and existing animation behavior, and organize Mission Control/native Home widgets beneath the scene.
+- Share layout across Original and Monochrome using existing theme tokens/fonts. Keep the current graphics engine, particle budget/visibility controls and Canvas fallback; add no secondary WebGL context, dependencies or permissions. Red remains deferred.
+- Focused fixture checks cover five widths, both themes, native navigation identity/controls, course/deadline actions, motion/OFF, course pages, DOM/history transitions, delayed content, many pinned courses and WebGL-disabled rendering. No live academic operations.
+
 ## 1.6.0 — Selectable monochrome theme — 27 October 2026
 
 - Add Aether Original / Monochrome selection beside the existing AETHER toggle. Persist the validated selection in `chrome.storage.local`, with a page-local prepaint cache and live updates across tabs and supported same-origin tool frames.
