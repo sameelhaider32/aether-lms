@@ -1,32 +1,32 @@
 /* Gradebook / Roster: native records and operations, shared Aether materials. */
-html.ae-academic-surface:not(.aether-enabled) body{background:#0e0f14!important;color:#f7fafb!important;font-family:var(--ae-ui,"Segoe UI",sans-serif);color-scheme:dark}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body){font-family:var(--ae-ui,"Segoe UI",sans-serif);color:#e7eef2;background:#0e0f14!important;min-width:0}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(h1,h2,h3,legend){color:#f7fafb;letter-spacing:-.02em}
+html.ae-academic-surface:not(.aether-enabled) body{background:rgb(var(--ae-tone-016,14,15,20))!important;color:rgb(var(--ae-tone-248,247,250,251))!important;font-family:var(--ae-ui,"Segoe UI",sans-serif);color-scheme:dark}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body){font-family:var(--ae-ui,"Segoe UI",sans-serif);color:rgb(var(--ae-tone-236,231,238,242));background:rgb(var(--ae-tone-016,14,15,20))!important;min-width:0}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(h1,h2,h3,legend){color:rgb(var(--ae-tone-248,247,250,251));letter-spacing:-.02em}
 :is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(h1,h2){font-family:var(--ae-display,"Arial Narrow",sans-serif)}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(a,.btn-link){color:#9df8d6!important;text-shadow:none}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(button,.btn,input[type="button"],input[type="submit"],select){background:#1b252d!important;color:#f7fafb!important;border:1px solid #465963!important;border-radius:3px!important;min-height:36px;font-family:var(--ae-ui,"Segoe UI",sans-serif);transform:none!important}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(button,.btn):hover{background:#263c44!important;border-color:#68e3ec!important;transform:none!important}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),textarea,[contenteditable="true"]){background:#111820!important;color:#f7fafb!important;border-color:#526671!important;border-radius:3px;max-width:100%;transform:none!important}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(input[type="checkbox"],input[type="radio"]){accent-color:#02d2e3}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid #02d2e3!important;outline-offset:3px}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.nav-tabs,.navIntraTool,.tool-toolbar,.roster-toolbar,.gb-toolbar){border-color:#344650!important;gap:8px}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(a,.btn-link){color:rgb(var(--ae-tone-228,157,248,214))!important;text-shadow:none}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(button,.btn,input[type="button"],input[type="submit"],select){background:rgb(var(--ae-tone-036,27,37,45))!important;color:rgb(var(--ae-tone-248,247,250,251))!important;border:1px solid rgb(var(--ae-tone-084,70,89,99))!important;border-radius:3px!important;min-height:36px;font-family:var(--ae-ui,"Segoe UI",sans-serif);transform:none!important}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(button,.btn):hover{background:rgb(var(--ae-tone-056,38,60,68))!important;border-color:rgb(var(--ae-tone-200,104,227,236))!important;transform:none!important}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),textarea,[contenteditable="true"]){background:rgb(var(--ae-tone-024,17,24,32))!important;color:rgb(var(--ae-tone-248,247,250,251))!important;border-color:rgb(var(--ae-tone-100,82,102,113))!important;border-radius:3px;max-width:100%;transform:none!important}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(input[type="checkbox"],input[type="radio"]){accent-color:rgb(var(--ae-tone-168,2,210,227))}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid rgb(var(--ae-tone-168,2,210,227))!important;outline-offset:3px}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.nav-tabs,.navIntraTool,.tool-toolbar,.roster-toolbar,.gb-toolbar){border-color:rgb(var(--ae-tone-068,52,70,80))!important;gap:8px}
 :is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.roster-toolbar,.gb-toolbar){display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin:14px 0}
 :is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .roster-toolbar label{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0}
 :is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) input[type="search"]{min-height:36px}
 :is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .table-responsive{max-width:100%;overflow-x:auto}
 /* Colors only on editing/comparison matrices: retain native sizing, overflow,
    sticky headers, cell focus and every grading widget's positioning logic. */
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .ae-native-table{background:#101720!important;border-color:#344650!important;color:#e8f0f4}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .ae-native-table :is(th,thead td){background:#1b2932!important;color:#d5f8f4!important;border-color:#3b505d!important}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .ae-native-table tbody td{background:#111b24!important;color:#e8f0f4!important;border-color:#2c404c!important}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .ae-native-table tbody tr:nth-child(even)>td{background:#15232d!important}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.gb-summary-course-grade .card,.gb-summary-course-grade .card-body,.gb-summary-grade-panel,.panel,.panel-body){background:#111a22!important;color:#f7fafb!important;border-color:#344650!important;border-radius:3px}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .gb-summary-course-grade-value{color:#9df8d6;font:600 34px/1.2 var(--ae-digital,monospace)}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .gb-summary-course-grade .card-body{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;padding:16px;border:1px solid #344650}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.gb-summary-course-grade-label,.roster-card-label,.roster-cell-label,.roster-card-label-row){font:700 10px/1.5 var(--ae-ui,"Segoe UI",sans-serif);letter-spacing:.04em;color:#acc0cb;margin-top:10px}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .ae-native-table{background:rgb(var(--ae-tone-024,16,23,32))!important;border-color:rgb(var(--ae-tone-068,52,70,80))!important;color:rgb(var(--ae-tone-240,232,240,244))}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .ae-native-table :is(th,thead td){background:rgb(var(--ae-tone-040,27,41,50))!important;color:rgb(var(--ae-tone-240,213,248,244))!important;border-color:rgb(var(--ae-tone-076,59,80,93))!important}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .ae-native-table tbody td{background:rgb(var(--ae-tone-024,17,27,36))!important;color:rgb(var(--ae-tone-240,232,240,244))!important;border-color:rgb(var(--ae-tone-060,44,64,76))!important}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .ae-native-table tbody tr:nth-child(even)>td{background:rgb(var(--ae-tone-032,21,35,45))!important}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.gb-summary-course-grade .card,.gb-summary-course-grade .card-body,.gb-summary-grade-panel,.panel,.panel-body){background:rgb(var(--ae-tone-024,17,26,34))!important;color:rgb(var(--ae-tone-248,247,250,251))!important;border-color:rgb(var(--ae-tone-068,52,70,80))!important;border-radius:3px}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .gb-summary-course-grade-value{color:rgb(var(--ae-tone-228,157,248,214));font:600 34px/1.2 var(--ae-digital,monospace)}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) .gb-summary-course-grade .card-body{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;padding:16px;border:1px solid rgb(var(--ae-tone-068,52,70,80))}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.gb-summary-course-grade-label,.roster-card-label,.roster-cell-label,.roster-card-label-row){font:700 10px/1.5 var(--ae-ui,"Segoe UI",sans-serif);letter-spacing:.04em;color:rgb(var(--ae-tone-188,172,192,203));margin-top:10px}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card[data-ae-kind="grade"]{--ae-document:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2368e3ec' stroke-width='1.25'%3E%3Cpath d='M4 21V3h16v18zM8 8h8M8 12h4M8 16h6'/%3E%3C/svg%3E")}
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card[data-ae-kind="grade"] :is(.gb-summary-grade-score,[data-ae-label="Grade"],[data-ae-label="Score"]){color:#9df8d6!important;font-weight:700;font-size:20px!important}
-:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table .gb-summary-category-row.ae-card-context-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;border-radius:3px;background:#1b2932;border-color:#3b505d}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-record-card[data-ae-kind="grade"] :is(.gb-summary-grade-score,[data-ae-label="Grade"],[data-ae-label="Score"]){color:rgb(var(--ae-tone-228,157,248,214))!important;font-weight:700;font-size:20px!important}
+:is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table .gb-summary-category-row.ae-card-context-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;border-radius:3px;background:rgb(var(--ae-tone-040,27,41,50));border-color:rgb(var(--ae-tone-076,59,80,93))}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .ae-card-table tbody[hidden]{display:none!important}
 :is(html.aether-enabled main#content,html.ae-resource-surface) #roster-members.roster-members-grid.ae-card-list{width:100%;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:18px}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .roster-member-card.ae-record-card{display:grid!important;grid-template-columns:64px minmax(0,1fr);gap:12px 16px;width:auto;float:none;min-width:0}
@@ -34,40 +34,40 @@ html.ae-academic-surface:not(.aether-enabled) body{background:#0e0f14!important;
 :is(html.aether-enabled main#content,html.ae-resource-surface) .roster-picture-card{grid-column:1;align-self:start;width:64px;min-width:0}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .roster-info-card{grid-column:2;min-width:0;overflow-wrap:anywhere}
 :is(html.aether-enabled main#content,html.ae-resource-surface) :is(.roster-picture-card,[data-ae-cell="portrait"]) :is(img,sakai-user-photo){display:block;width:64px;height:64px;max-width:100%;object-fit:cover;border-radius:3px}
-:is(html.aether-enabled main#content,html.ae-resource-surface) :is(.roster-card-value,.roster-card-value-row){font:400 13px/1.5 var(--ae-ui,"Segoe UI",sans-serif);color:#e7eef2;overflow-wrap:anywhere}
+:is(html.aether-enabled main#content,html.ae-resource-surface) :is(.roster-card-value,.roster-card-value-row){font:400 13px/1.5 var(--ae-ui,"Segoe UI",sans-serif);color:rgb(var(--ae-tone-236,231,238,242));overflow-wrap:anywhere}
 :is(html.aether-enabled main#content,html.ae-resource-surface) .roster-info-card>.roster-card-value:first-of-type{font-size:17px;font-weight:600}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.modal-content,.modal-body,.wicket-modal){background:#131d26;color:#f7fafb;border-color:#465963}
-:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) [aria-invalid="true"]{border-color:#ed8e8e!important}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.modal-content,.modal-body,.wicket-modal){background:rgb(var(--ae-tone-028,19,29,38));color:rgb(var(--ae-tone-248,247,250,251));border-color:rgb(var(--ae-tone-084,70,89,99))}
+:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) [aria-invalid="true"]{border-color:rgb(var(--ae-tone-164,237,142,142))!important}
 @media(max-width:640px){:is(html.aether-enabled main#content,html.ae-resource-surface) #roster-members.roster-members-grid.ae-card-list{grid-template-columns:1fr}:is(html.aether-enabled main#content .ae-academic-tool,html.ae-academic-surface:not(.aether-enabled) body) :is(.roster-toolbar,.gb-toolbar){display:flex;flex-wrap:wrap}}
 
 /* Gradebook statistics only: native canvas/coordinates stay stationary. The
    shared motion driver moves the light, never the dialog or chart. */
 html.ae-academic-surface .gb-modal-overlay:has(> .gb-modal-dialog > .gb-modal-content > canvas){
   z-index:2147483100;
-  background:rgba(5,12,12,.72);
+  background:rgba(var(--ae-tone-012,5,12,12),.72);
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)){
   --ae-stats-light-x:50%;--ae-stats-light-y:0%;
   box-sizing:border-box;max-width:calc(100vw - 32px);max-height:calc(100vh - 32px);overflow:auto;
-  color:#e7f4ee;border:1px solid #568573;border-radius:14px;
-  background:radial-gradient(460px circle at var(--ae-stats-light-x) var(--ae-stats-light-y),#82f5c525,transparent 76%),linear-gradient(145deg,#1b302a,#101b1b 78%);
-  box-shadow:0 8px 14px #0004,0 28px 64px #0009,0 0 32px #72ffbb10,inset 0 1px #e5fff438;
+  color:rgb(var(--ae-tone-240,231,244,238));border:1px solid rgb(var(--ae-tone-120,86,133,115));border-radius:14px;
+  background:radial-gradient(460px circle at var(--ae-stats-light-x) var(--ae-stats-light-y),rgba(var(--ae-tone-216,130,245,197),0.14509804),transparent 76%),linear-gradient(145deg,rgb(var(--ae-tone-044,27,48,42)),rgb(var(--ae-tone-024,16,27,27)) 78%);
+  box-shadow:0 8px 14px #0004,0 28px 64px #0009,0 0 32px rgba(var(--ae-tone-220,114,255,187),0.0627451),inset 0 1px rgba(var(--ae-tone-248,229,255,244),0.21960784);
   font-family:var(--ae-ui,"Segoe UI",sans-serif);
   transition:border-color .2s ease,box-shadow .2s ease;
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)):is(:hover,:focus-within){
   --ae-stats-light-x:var(--ae-hover-x,50%);--ae-stats-light-y:var(--ae-hover-y,0%);
-  border-color:#9df8d6;box-shadow:0 10px 18px #0004,0 32px 72px #000a,0 0 36px #72ffbb20,inset 0 1px #e5fff44a;
+  border-color:rgb(var(--ae-tone-228,157,248,214));box-shadow:0 10px 18px #0004,0 32px 72px #000a,0 0 36px rgba(var(--ae-tone-220,114,255,187),0.1254902),inset 0 1px rgba(var(--ae-tone-248,229,255,244),0.29019608);
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) > :is(.gb-modal-titlebar,.w_caption){
   display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;
-  background:linear-gradient(120deg,#9df8d610,#02d2e308);border-bottom:1px solid #9df8d627;color:#edfff4;
+  background:linear-gradient(120deg,rgba(var(--ae-tone-228,157,248,214),0.0627451),rgba(var(--ae-tone-168,2,210,227),0.03137255));border-bottom:1px solid rgba(var(--ae-tone-228,157,248,214),0.15294118);color:rgb(var(--ae-tone-252,237,255,244));
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) :is(.gb-modal-title,.w_captionText){
   font:500 20px/1.35 var(--ae-display,"Aether Oswald","Arial Narrow",sans-serif);letter-spacing:-.025em;overflow-wrap:anywhere;
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) :is(.gb-modal-close,.w_close){
-  flex:none;color:#9df8d6;padding:6px 10px;border:1px solid #568573;border-radius:8px;text-decoration:none;
+  flex:none;color:rgb(var(--ae-tone-228,157,248,214));padding:6px 10px;border:1px solid rgb(var(--ae-tone-120,86,133,115));border-radius:8px;text-decoration:none;
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) > .gb-modal-content{padding:20px 22px;background:transparent;color:inherit}
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) .gb-modal-content > div:last-child{margin-top:18px}
@@ -75,17 +75,17 @@ html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) canvas{background:transparent;border-radius:8px}
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) dl{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;margin:18px 0 0;
-  border:1px solid #56857380;border-radius:10px;overflow:hidden;background:#07171366;
+  border:1px solid rgba(var(--ae-tone-120,86,133,115),0.50196078);border-radius:10px;overflow:hidden;background:rgba(var(--ae-tone-020,7,23,19),0.4);
 }
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) :is(dt,dd){
-  float:none;width:auto;min-width:0;margin:0;padding:10px 14px;border-bottom:1px solid #9df8d61a;overflow-wrap:anywhere;
+  float:none;width:auto;min-width:0;margin:0;padding:10px 14px;border-bottom:1px solid rgba(var(--ae-tone-228,157,248,214),0.10196078);overflow-wrap:anywhere;
 }
-html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) dt{color:#b2c9bf;font-weight:500}
-html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) dd{color:#9df8d6;font-weight:700;text-align:end}
+html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) dt{color:rgb(var(--ae-tone-196,178,201,191));font-weight:500}
+html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) dd{color:rgb(var(--ae-tone-228,157,248,214));font-weight:700;text-align:end}
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) :is(button,input[type="button"]){
-  color:#edfff4!important;background:#203a30!important;border:1px solid #5b8d77!important;border-radius:8px!important;padding:8px 16px;
+  color:rgb(var(--ae-tone-252,237,255,244))!important;background:rgb(var(--ae-tone-052,32,58,48))!important;border:1px solid rgb(var(--ae-tone-128,91,141,119))!important;border-radius:8px!important;padding:8px 16px;
 }
-html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) :is(a,button,input):focus-visible{outline:2px solid #02d2e3!important;outline-offset:3px}
+html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)) :is(a,button,input):focus-visible{outline:2px solid rgb(var(--ae-tone-168,2,210,227))!important;outline-offset:3px}
 html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable).ae-list-reduced-motion :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)){--ae-stats-light-x:50%;--ae-stats-light-y:0%;transition:none}
 @media(prefers-reduced-motion:reduce){html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas)){--ae-stats-light-x:50%;--ae-stats-light-y:0%;transition:none}}
 

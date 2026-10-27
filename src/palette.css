@@ -1,0 +1,87 @@
+/* Shared monochrome palette. Original colors remain literal fallbacks in each stylesheet.
+   Vexon: black field, silver light, restrained outlines. Typography/geometry stay Aether. */
+html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface),html[data-aether-theme="monochrome"].ae-preview-theme{
+  --ae-tone-008:8,8,8;
+  --ae-tone-012:12,12,12;
+  --ae-tone-016:16,16,16;
+  --ae-tone-020:20,20,20;
+  --ae-tone-024:24,24,24;
+  --ae-tone-028:28,28,28;
+  --ae-tone-032:32,32,32;
+  --ae-tone-036:36,36,36;
+  --ae-tone-040:40,40,40;
+  --ae-tone-044:44,44,44;
+  --ae-tone-048:48,48,48;
+  --ae-tone-052:52,52,52;
+  --ae-tone-056:56,56,56;
+  --ae-tone-060:60,60,60;
+  --ae-tone-064:64,64,64;
+  --ae-tone-068:68,68,68;
+  --ae-tone-072:72,72,72;
+  --ae-tone-076:76,76,76;
+  --ae-tone-080:80,80,80;
+  --ae-tone-084:84,84,84;
+  --ae-tone-088:88,88,88;
+  --ae-tone-092:92,92,92;
+  --ae-tone-096:96,96,96;
+  --ae-tone-100:100,100,100;
+  --ae-tone-104:104,104,104;
+  --ae-tone-108:108,108,108;
+  --ae-tone-112:112,112,112;
+  --ae-tone-116:116,116,116;
+  --ae-tone-120:120,120,120;
+  --ae-tone-124:124,124,124;
+  --ae-tone-128:128,128,128;
+  --ae-tone-132:132,132,132;
+  --ae-tone-136:136,136,136;
+  --ae-tone-144:144,144,144;
+  --ae-tone-148:148,148,148;
+  --ae-tone-152:152,152,152;
+  --ae-tone-156:156,156,156;
+  --ae-tone-160:160,160,160;
+  --ae-tone-164:164,164,164;
+  --ae-tone-168:168,168,168;
+  --ae-tone-172:172,172,172;
+  --ae-tone-176:176,176,176;
+  --ae-tone-180:180,180,180;
+  --ae-tone-184:184,184,184;
+  --ae-tone-188:188,188,188;
+  --ae-tone-192:192,192,192;
+  --ae-tone-196:196,196,196;
+  --ae-tone-200:200,200,200;
+  --ae-tone-204:204,204,204;
+  --ae-tone-208:208,208,208;
+  --ae-tone-212:212,212,212;
+  --ae-tone-216:216,216,216;
+  --ae-tone-220:220,220,220;
+  --ae-tone-224:224,224,224;
+  --ae-tone-228:228,228,228;
+  --ae-tone-232:232,232,232;
+  --ae-tone-236:236,236,236;
+  --ae-tone-240:240,240,240;
+  --ae-tone-244:244,244,244;
+  --ae-tone-248:248,248,248;
+  --ae-tone-252:252,252,252;
+  --ae-select-arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23dddddd' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --ae-bg:#050505;--ae-panel:#111;--ae-raised:#1c1c1c;--ae-line:#333;
+  --ae-ink:#f7f7f7;--ae-soft:#c2c2c2;--ae-dim:#a0a0a0;
+  --ae-cyan:#eee;--ae-mint:#e5e5e5;--ae-moss:#c8c8c8;--ae-gold:#d0d0d0;
+  --ae-paper:#f7f7f7;--ae-resource-ink:#eee;--ae-resource-accent:#ddd;
+}
+/* Only decorative canvases are desaturated. A root filter would break fixed
+   overlays and would also alter authored PDFs, images and course content. */
+html.aether-enabled[data-aether-theme="monochrome"] :is(.ae-living-canvas,[data-ae-scene-target],.ae-global-canvas,.ae-course-particles){filter:grayscale(1)!important}
+html.aether-enabled[data-aether-theme="monochrome"] #aether-workspace .ae-living-canvas{filter:grayscale(1) drop-shadow(0 0 20px #ffffff22)!important}
+html.aether-enabled[data-aether-theme="monochrome"] #aether-workspace .ae-hero-heading em{color:#dedede}
+html.aether-enabled[data-aether-theme="monochrome"] #aether-workspace .ae-hero-cta{background:#eee;border-color:#eee;color:#101010}
+html.aether-enabled[data-aether-theme="monochrome"] #aether-workspace .ae-hero-cta:hover{background:#fff}
+/* Embedded SVG record glyphs and native tool icons have their own authored ink. */
+html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface) .ae-tool-icon{filter:grayscale(1)}
+#aether-theme-control{display:inline-flex;align-items:center;gap:6px;flex:none;margin-inline:3px 10px;font:500 10px/1.3 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);color:var(--ae-soft,#c0cac3)}
+#aether-theme-select{font:inherit;max-width:142px;min-height:32px;padding:5px 7px;border:1px solid var(--ae-line,#385b4d);border-radius:3px;background:var(--ae-panel,#14211f);color:var(--ae-ink,#f1f4ee);cursor:pointer}
+#aether-theme-select:focus-visible{outline:2px solid var(--ae-cyan,#9df8d6);outline-offset:3px}
+html:not(.aether-enabled) #aether-theme-control{display:none}
+@media(max-width:690px){#aether-theme-control>span{display:none}#aether-theme-control{margin-inline:2px}#aether-theme-select{max-width:104px;font-size:9px}}
+
+html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface) .ae-record-card::before,
+html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface) .ae-record-card>[data-ae-cell="primary"]::before{filter:grayscale(1)}

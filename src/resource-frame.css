@@ -1,27 +1,27 @@
 /* Scoped to an actual Sakai Resources iframe, activated by resource-frame.js.
    No scripts, click handlers or semantic markup in native controls are altered. */
-html.ae-resource-surface{--ae-resource-ink:#e5f5e9;--ae-resource-accent:#9df1c8;color-scheme:dark}
-html.ae-resource-surface body{background:#101817!important;color:var(--ae-resource-ink)!important}
+html.ae-resource-surface{--ae-resource-ink:rgb(var(--ae-tone-240,229,245,233));--ae-resource-accent:rgb(var(--ae-tone-220,157,241,200));color-scheme:dark}
+html.ae-resource-surface body{background:rgb(var(--ae-tone-024,16,24,23))!important;color:var(--ae-resource-ink)!important}
 html.ae-resource-surface :is(button.btn,a.btn,input[type="button"],input[type="submit"],.dropdown-toggle){
-  background:#223a30!important;color:#dbf5e7!important;border:1px solid #426f59!important;border-radius:4px!important;
+  background:rgb(var(--ae-tone-052,34,58,48))!important;color:rgb(var(--ae-tone-240,219,245,231))!important;border:1px solid rgb(var(--ae-tone-100,66,111,89))!important;border-radius:4px!important;
   transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease
 }
 html.ae-resource-surface :is(button.btn,a.btn,input[type="button"],input[type="submit"],.dropdown-toggle):hover{
-  background:#305b46!important;border-color:#9cf0bc!important;box-shadow:0 0 0 1px #9df6c122,0 0 19px #54d59b22;transform:translateY(-1px)
+  background:rgb(var(--ae-tone-080,48,91,70))!important;border-color:rgb(var(--ae-tone-220,156,240,188))!important;box-shadow:0 0 0 1px rgba(var(--ae-tone-224,157,246,193),0.13333333),0 0 19px rgba(var(--ae-tone-180,84,213,155),0.13333333);transform:translateY(-1px)
 }
 html.ae-resource-surface :is(button.btn,a.btn,input[type="button"],input[type="submit"],.dropdown-toggle):focus-visible,
-html.ae-resource-surface a:focus-visible{outline:2px solid #adf4d0;outline-offset:2px}
-html.ae-resource-surface :is(table,.table){border-collapse:separate;border-spacing:0;border:1px solid #37574a;border-radius:4px;overflow:hidden}
-html.ae-resource-surface :is(table,.table) :is(th,thead td){background:#20352e!important;color:#e2f7e8!important;border-color:#3d584b!important}
-html.ae-resource-surface :is(table,.table) tbody td{background:#101817!important;color:#d4e6da!important;border-color:#2a4137!important;transition:background .19s ease,box-shadow .19s ease}
-html.ae-resource-surface :is(table,.table) tbody tr:nth-child(even) td{background:#15211c!important}
+html.ae-resource-surface a:focus-visible{outline:2px solid rgb(var(--ae-tone-228,173,244,208));outline-offset:2px}
+html.ae-resource-surface :is(table,.table){border-collapse:separate;border-spacing:0;border:1px solid rgb(var(--ae-tone-080,55,87,74));border-radius:4px;overflow:hidden}
+html.ae-resource-surface :is(table,.table) :is(th,thead td){background:rgb(var(--ae-tone-048,32,53,46))!important;color:rgb(var(--ae-tone-240,226,247,232))!important;border-color:rgb(var(--ae-tone-080,61,88,75))!important}
+html.ae-resource-surface :is(table,.table) tbody td{background:rgb(var(--ae-tone-024,16,24,23))!important;color:rgb(var(--ae-tone-224,212,230,218))!important;border-color:rgb(var(--ae-tone-060,42,65,55))!important;transition:background .19s ease,box-shadow .19s ease}
+html.ae-resource-surface :is(table,.table) tbody tr:nth-child(even) td{background:rgb(var(--ae-tone-032,21,33,28))!important}
 html.ae-resource-surface :is(table,.table) tbody tr:hover td,
-html.ae-resource-surface :is(table,.table) tbody tr:focus-within td{background:#244035!important;box-shadow:inset 0 1px #b5fbd422}
-html.ae-resource-surface :is(table,.table) tbody tr:hover td:first-child{box-shadow:inset 3px 0 #92eabb}
-html.ae-resource-surface :is(table,.table) tbody tr:hover a{text-shadow:0 0 13px #aaffd735}
-html.ae-resource-surface :is(input:not([type="checkbox"]),select,textarea){background:#16251f;color:#e6f4ea;border:1px solid #4b6a58}
-html.ae-resource-surface input[type="checkbox"]{accent-color:#7ee2b2}
+html.ae-resource-surface :is(table,.table) tbody tr:focus-within td{background:rgb(var(--ae-tone-056,36,64,53))!important;box-shadow:inset 0 1px rgba(var(--ae-tone-232,181,251,212),0.13333333)}
+html.ae-resource-surface :is(table,.table) tbody tr:hover td:first-child{box-shadow:inset 3px 0 rgb(var(--ae-tone-212,146,234,187))}
+html.ae-resource-surface :is(table,.table) tbody tr:hover a{text-shadow:0 0 13px rgba(var(--ae-tone-236,170,255,215),0.20784314)}
+html.ae-resource-surface :is(input:not([type="checkbox"]),select,textarea){background:rgb(var(--ae-tone-032,22,37,31));color:rgb(var(--ae-tone-240,230,244,234));border:1px solid rgb(var(--ae-tone-100,75,106,88))}
+html.ae-resource-surface input[type="checkbox"]{accent-color:rgb(var(--ae-tone-200,126,226,178))}
 @media(prefers-reduced-motion:reduce){html.ae-resource-surface *{transition:none!important}}
 
-html.ae-resource-surface :is(button.btn,a.btn,.dropdown-toggle):hover{background-image:radial-gradient(140px circle at var(--ae-hover-x,50%) var(--ae-hover-y,50%),#c5fbd52b,transparent 85%)!important}
-html.ae-resource-surface tbody tr:hover td:hover{background-image:radial-gradient(170px circle at var(--ae-hover-x,50%) var(--ae-hover-y,50%),#b4ffd61c,transparent 85%)!important}
+html.ae-resource-surface :is(button.btn,a.btn,.dropdown-toggle):hover{background-image:radial-gradient(140px circle at var(--ae-hover-x,50%) var(--ae-hover-y,50%),rgba(var(--ae-tone-236,197,251,213),0.16862745),transparent 85%)!important}
+html.ae-resource-surface tbody tr:hover td:hover{background-image:radial-gradient(170px circle at var(--ae-hover-x,50%) var(--ae-hover-y,50%),rgba(var(--ae-tone-236,180,255,214),0.10980392),transparent 85%)!important}

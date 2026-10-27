@@ -15,6 +15,8 @@ The extension does not collect credentials or upload academic files to another s
 
 The sole declared extension permission is `storage`. Aether remembers interface preferences, motion settings, and shortcut order using extension-local/browser storage. It does not use Chrome storage sync.
 
+The selected theme (`aether` or `monochrome`) is saved in `chrome.storage.local` as `aether:v16:theme`, with the same value cached in same-origin localStorage for first paint. This stores only the appearance choice; it adds no academic data or remote requests.
+
 Opened-file history is stored in `chrome.storage.local` on this device, with a limit of 1,000 file entries across accounts. Each entry contains a SHA-256 key incorporating a hash of the authoritative account ID and the LMS resource origin/path, an opened timestamp, and a hash of reliable version/modification metadata when available. Raw account identifiers, URLs, filenames, document contents, grades, and assignment statuses are not stored in this history. Hashes are pseudonymous local identifiers, not encryption. File-open history is not sent to Sakai or any external service.
 
 Version 1.3.1 discards old unscoped opened-file entries because they cannot safely be associated with an account. It preserves appearance, motion and ordering preferences. Tabs and tool frames serialize history mutations with Web Locks; Clear waits for earlier writes and reports a storage failure instead of claiming success. If coordination is unavailable, history is disabled. Identity is checked for badge batches and deliberate opens, and on focus/restoration. Account changes close previews and clear their memory caches. A preview begun in one account cannot mark another account's history.
