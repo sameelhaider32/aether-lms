@@ -70,3 +70,12 @@ Unsupported, encrypted, invalid, inaccessible, or oversized content retains **Op
 Automated tests use fictional local fixtures and isolated browser profiles. They intercept LMS requests before reaching the university. Screenshots in the README also use fictional content.
 
 When filing a public issue, remove real names, grades, student identifiers, private course materials, session cookies, and authentication tokens. See [SECURITY.md](SECURITY.md) for private security reporting.
+
+
+## Spotlight (1.7)
+
+Spotlight combines current native navigation, the existing authorized academic adapter snapshots and the Download Manager's discovered metadata in a bounded, memory-only index (up to 5,000 search entries; rendered results limited to 30). It stores no course names, materials, assignments, dates, grades, query text or result history in durable storage and adds no analytics, external service, permission or persistent search preference. Existing theme/motion commands use their existing settings. Explicit resource previews retain the existing hashed file-open-history behavior; file contents never become search text.
+
+Typing does not perform discovery. Opening revalidates the existing session and collects already-visible metadata. Explicit academic checking shares the existing adapter job/cache; explicit broader resource search reuses the current tree/reader, capped at one available-site page when needed, eight root courses, 12 folder reads and two levels of expansion. File bodies are read only for the user's normal preview/open action. Native access and separate copyright acknowledgment continue to apply.
+
+The private index and cache clear on OFF, navigation/logout and observed identity changes, and in-flight discovery is cancelled. If the account changes, Spotlight requires refreshing the LMS tab so old DOM cannot be indexed under the new account. A changed or failed identity can be detected only when Sakai exposes it to the existing session helper; active discovery and an open palette revalidate during use. No new academic endpoint is enabled, including generic assignment lists whose release/group visibility is not established.

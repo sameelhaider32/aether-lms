@@ -54,6 +54,9 @@ jobs:
       - name: Mission Control fixture checks
         if: '!cancelled()'
         run: npm run test:mission
+      - name: Spotlight fixture smoke
+        if: '!cancelled()'
+        run: npm run test:spotlight
       - name: Theme fixture checks
         if: '!cancelled()'
         run: npm run test:theme
