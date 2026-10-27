@@ -54,9 +54,6 @@ jobs:
       - name: Mission Control fixture checks
         if: '!cancelled()'
         run: npm run test:mission
-      - name: Spatial Home fixture checks
-        if: '!cancelled()'
-        run: npm run test:home
       - name: Theme fixture checks
         if: '!cancelled()'
         run: npm run test:theme

@@ -33,7 +33,7 @@ const neutral=value=>[...value.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].ever
   await choose('monochrome');assert.deepEqual(await appearance(),original);
   await gray('.portal-header');await gray('.ae-course-card');await gray('.ae-hero-cta');
   await gray('.mc-tick');
-  const remaining=await page.locator('body *').evaluateAll(nodes=>nodes.filter(e=>e.getClientRects().length&&!e.closest('[inert]')&&getComputedStyle(e).visibility!=='hidden').flatMap(e=>{const s=getComputedStyle(e);return ['color','backgroundColor','borderTopColor'].filter(k=>/rgba?\(/.test(s[k])&&[...s[k].matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].some(m=>m[1]!==m[2]||m[2]!==m[3])).map(k=>({tag:e.tagName,id:e.id,class:e.className,property:k,value:s[k]}));}));
+  const remaining=await page.locator('body *').evaluateAll(nodes=>nodes.filter(e=>e.getClientRects().length).flatMap(e=>{const s=getComputedStyle(e);return ['color','backgroundColor','borderTopColor'].filter(k=>/rgba?\(/.test(s[k])&&[...s[k].matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].some(m=>m[1]!==m[2]||m[2]!==m[3])).map(k=>({tag:e.tagName,id:e.id,class:e.className,property:k,value:s[k]}));}));
   assert.deepEqual(remaining,[],'Home contains unexpected chromatic UI colors');
   assert.match(await page.locator('#aether-mission-control select').first().evaluate(e=>getComputedStyle(e).backgroundImage),/%23dddddd/);
   assert(await page.locator('html.aether-reduced-motion').count());
