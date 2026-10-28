@@ -47,6 +47,6 @@
  document.addEventListener('aether-session-change',()=>clear(true));
  document.addEventListener('aether-preview-session-change',()=>clear(true));
  window.addEventListener('aether-settings-change',()=>{if(!enabled())clear();});
- window.addEventListener('pagehide',()=>clear());
+ window.addEventListener('pagehide',()=>{document.dispatchEvent(new Event('aether-document-departure'));clear();});
  globalThis.AetherAcademicStore={load,verify,snapshot,clear,subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn);}};
 })();

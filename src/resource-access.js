@@ -42,7 +42,7 @@
    if(u.origin!==origin)throw Error('Open the original resource to view this external file.');
    return responseBytes(await fetch(u.href,{method:'GET',credentials:'same-origin',signal,redirect:'error',cache}),signal,limit,onbytes);
  }
- async function resource(info,signal,limit=MAX){
+ async function resource(info,signal,limit=MAX,{onbytes}={}){
    const u=info.u;if(!content(u))throw Error('Open the original resource to see its contents.');
    // Manual redirects keep a file's redirect from fetching an external URL.
    // Sakai's copyright redirect has a documented same-origin require endpoint.
@@ -50,8 +50,8 @@
    let result;
    if(response.type==='opaqueredirect'||response.status>=300&&response.status<400){
      const requireURL=new URL('/access/require',origin);requireURL.searchParams.set('ref',decodeURIComponent(u.pathname.slice('/access'.length)));requireURL.searchParams.set('url',u.pathname.slice('/access'.length)+u.search);
-     result=await read(requireURL,signal,256*1024);
-   }else result=await responseBytes(response,signal,limit);
+     result=await read(requireURL,signal,Math.min(limit,256*1024),{onbytes});
+   }else result=await responseBytes(response,signal,limit,onbytes);
    const copyright=notice(result,u);
    if(copyright){const error=Error('Copyright acknowledgement required.');error.notice=copyright;throw error;}
    return result;
@@ -111,7 +111,7 @@
      },
      async cancel(){controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}
     },{highWaterMark:1});
-    return {readable,mime,length:expected,cancel:async()=>{controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}};
+    return {readable,mime,disposition:response.headers.get('content-disposition')||'',detectedExtension:prefix.startsWith('%PDF-')?'pdf':'',length:expected,cancel:async()=>{controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}};
    }catch(error){controller.abort();cleanup();if(reader){await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}throw error;}
  }
  globalThis.AetherResourceAccess={read,resource,accept,stream};

@@ -70,7 +70,7 @@
      try{
       source=await this.source(node,task);
       if(!source){this.progress.failed.push({node,reason:'Copyright acknowledgement skipped'});continue;}
-      await task.archive.add(mapping.get(node.id),source.readable);this.progress.completed++;
+      await task.archive.add(mapping.file?.(node,source)||mapping.get(node.id),source.readable);this.progress.completed++;
      }catch(error){
       if(task.abort.signal.aborted||error.session||task.archive.destinationFailed)throw error;
       this.progress.failed.push({node,reason:error.message||'File unavailable'});

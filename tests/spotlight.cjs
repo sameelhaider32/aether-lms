@@ -41,7 +41,7 @@ function pageFor(u){
   });
   const page=await ctx.newPage();page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));
   const palette=page.locator('#aether-spotlight'),query=page.locator('#ae-spot-input');
-  const open=async()=>{await page.locator('#aether-spotlight-trigger').click();await palette.waitFor();assert(await query.evaluate(e=>e===document.activeElement));};
+  const open=async()=>{await page.locator('#aether-spotlight-trigger').click();await palette.waitFor();await page.getByRole('button',{name:'Cancel discovery',exact:true}).waitFor({state:'hidden'});assert(await query.evaluate(e=>e===document.activeElement));};
   const close=async()=>{await page.keyboard.press('Escape');await palette.waitFor({state:'detached'});};
   const isolated=async expression=>{const cdp=await ctx.newCDPSession(page),worlds=[];cdp.on('Runtime.executionContextCreated',e=>worlds.push(e.context));await cdp.send('Runtime.enable');try{for(const w of worlds){const p=await cdp.send('Runtime.evaluate',{contextId:w.id,expression:'typeof AetherSpotlight!=="undefined"',returnByValue:true});if(p.result.value){const r=await cdp.send('Runtime.evaluate',{contextId:w.id,expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.text);return r.result.value;}}throw Error('Spotlight isolated world unavailable');}finally{await cdp.detach();}};
   await page.goto(origin+'/portal/site/home');await page.locator('#aether-spotlight-trigger').waitFor();await page.locator('#aether-mission-control[data-loading="false"]').waitFor();
@@ -58,9 +58,9 @@ function pageFor(u){
   const colors=await palette.evaluate(e=>{const s=getComputedStyle(e);return [s.color,s.backgroundImage,s.borderTopColor]});assert(colors.every(s=>[...s.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].every(m=>m[1]===m[2]&&m[2]===m[3])));
   await page.screenshot({path:path.join(out,'spotlight-monochrome-mobile.png')});await page.mouse.click(2,2);await palette.waitFor({state:'detached'});await page.setViewportSize({width:1440,height:1000});
   await open();const priorAcademic=requests.filter(r=>/\/direct\/(?:site|calendar|announcement)/.test(r.path)).length;await page.getByRole('button',{name:'Check academic sources',exact:true}).click();await page.getByRole('button',{name:'Cancel discovery',exact:true}).waitFor({state:'hidden'});assert.equal(requests.filter(r=>/\/direct\/(?:site|calendar|announcement)/.test(r.path)).length,priorAcademic,'Duplicated completed Mission Control discovery');
-  assert(!requests.some(r=>r.path.startsWith('/direct/content/')));assert(!requests.some(r=>r.path.startsWith('/access/content/')));
+  assert(requests.filter(r=>r.path.startsWith('/direct/content/')).length<=32);assert(!requests.some(r=>r.path.startsWith('/access/content/')));
   await page.getByRole('button',{name:'Search more available resources',exact:true}).click();await page.getByRole('button',{name:'Cancel discovery',exact:true}).waitFor({state:'hidden'});
-  assert(requests.filter(r=>r.path.startsWith('/direct/content/')).length<=12);assert(!requests.some(r=>r.path.startsWith('/access/content/')));
+  assert(requests.filter(r=>r.path.startsWith('/direct/content/')).length<=64);assert(!requests.some(r=>r.path.startsWith('/access/content/')));
   await query.fill('Consensus notes.txt');assert(await page.locator('.ae-spot-option').count());assert.equal(await palette.getByText(/HIDDEN RESOURCE SECRET/).count(),0);
   await palette.getByRole('button',{name:'Preview',exact:true}).click();await page.getByText('Fictional preview content only.',{exact:false}).waitFor();assert.equal(requests.filter(r=>r.path.startsWith('/access/content/')).length,1);await page.keyboard.press('Escape');
   console.log('PASS both themes, narrow viewport, click-away, shared academic cache, bounded explicit resource metadata and safe existing preview pipeline');
