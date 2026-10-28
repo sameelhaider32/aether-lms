@@ -4,6 +4,8 @@
  let host;try{if(top.location.origin!=='https://lms.lums.edu.pk'||!/^\/+(?:portal(?:\/|$)|$)/.test(top.location.pathname))return;host=top.document;}catch{return;}
  const editing=target=>document.designMode==='on'||target?.closest?.('input,textarea,select,[contenteditable]:not([contenteditable="false"]),[role="textbox"],.cke,.tox,.CodeMirror,.monaco-editor');
  function key(event){
+  // Sakai/legacy scripts can dispatch keydown events without KeyboardEvent.key.
+  if(typeof event.key!=='string')return;
   const chord=event.key.toLowerCase()==='k'&&((event.ctrlKey||event.metaKey)&&!event.altKey&&!event.shiftKey||event.altKey&&event.shiftKey&&!event.ctrlKey&&!event.metaKey);
   if(!chord||event.defaultPrevented||event.repeat||editing(event.target)||!host.documentElement.classList.contains('aether-enabled'))return;
   if(document.querySelector('.Mrphs-sakai-samigo,form[name="takeAssessmentForm"]')||/test|quiz|assessment/i.test(host.querySelector('.header-tool-title')?.textContent||''))return;
