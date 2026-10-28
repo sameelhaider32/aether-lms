@@ -4,7 +4,7 @@
  const clean=v=>String(v??'').replace(/\s+/g,' ').trim().slice(0,400);
  const day=86400000;
  function url(value,base=location.href){try{if(!value||/^\s*(?:javascript:|data:)/i.test(value))return null;const u=new URL(value,base);return u.origin===location.origin&&u.protocol==='https:'?u.href:null;}catch{return null;}}
- function siteId(value){try{const u=new URL(value,location.href),m=u.pathname.match(/^\/portal\/site\/([^/]+)/);return u.origin===location.origin&&m?decodeURIComponent(m[1]):null;}catch{return null;}}
+ function siteId(value){try{const u=new URL(value,location.href),m=u.pathname.match(/^\/+portal\/site\/([^/]+)/);return u.origin===location.origin&&m?decodeURIComponent(m[1]):null;}catch{return null;}}
  function date(value){if(value&&typeof value==='object')value=value.time??value.epochMillis??value.display;return globalThis.AetherAssignmentState?.dueDate(value)??NaN;}
  const exact=value=>/^\d{10}(?:\d{3})?$/.test(String(value))||/\d{1,2}:\d{2}|\d\s*(?:am|pm)\b/i.test(String(value));
  function record(v){

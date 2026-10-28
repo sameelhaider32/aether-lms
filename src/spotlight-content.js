@@ -14,7 +14,7 @@
   const m=row.metadata||row;try{
    const url=globalThis.AetherDownloadSelection?.contentURL(m.url||m.u?.href,m.id),u=url&&new URL(url);
    if(!u||m.scope&&scope&&m.scope!==scope||String(m.id).endsWith('/'))return null;
-   const title=String(m.title||row.title||'Document').slice(0,300),extension=(m.extension||title.match(/\.([a-z0-9]{1,10})$/i)?.[1]||decodeURIComponent(u.pathname).match(/\.([a-z0-9]{1,10})$/i)?.[1]||(/application\/pdf/i.test(m.mime||'')?'pdf':'')).toLowerCase();
+   const title=String(m.title||row.title||'Document').slice(0,300),extension=(m.extension||title.match(/\.([a-z0-9]{1,10})$/i)?.[1]||decodeURIComponent(u.pathname).match(/\.([a-z0-9]{1,10})$/i)?.[1]||({'application/pdf':'pdf','application/vnd.openxmlformats-officedocument.wordprocessingml.document':'docx','application/vnd.openxmlformats-officedocument.presentationml.presentation':'pptx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'xlsx'}[String(m.mime||'').split(';')[0].trim().toLowerCase()]||'')).toLowerCase();
    return {id:m.id,url:u.href,u,title,extension,scope:m.scope||scope,version:String(m.version||''),course:String(row.course||m.course||'Course document').slice(0,300),siteId:row.siteId||m.siteId||String(m.id).split('/')[2],mime:m.mime||''};
   }catch{return null;}
  }

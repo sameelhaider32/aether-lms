@@ -15,7 +15,7 @@
     const segments=info.id.slice(root.id.length).split('/').filter(Boolean);
     for(let i=0;i<segments.length;i++){
      const last=i===segments.length-1,id=parent.id+segments[i]+(!last||info.kind==='folder'?'/':'');
-     const raw={resourceId:id,title:last?info.title:segments[i],url:last?info.u?.href:undefined};
+     const raw={resourceId:id,title:last?info.title:segments[i],mimeType:last?({pdf:'application/pdf',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation',xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}[info.extension]||''):'',url:last?info.u?.href:undefined};
      const node=S.normalize(raw,parent);if(!node)break;node.source='visible';parent=this.tree.put(node);
     }
    }

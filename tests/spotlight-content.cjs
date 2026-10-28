@@ -55,7 +55,7 @@ async function fixtures(){
   const palette=page.locator('#aether-spotlight'),query=page.locator('#ae-spot-input');
   await page.goto(origin+'/portal/site/home');await page.locator('#aether-spotlight-trigger').waitFor();
   assert.equal(requests.filter(r=>r.url.includes('/access/content/')).length,0);
-  await page.locator('#aether-spotlight-trigger').click();await page.getByRole('button',{name:'Search more available resources',exact:true}).click();await page.getByRole('button',{name:'Cancel discovery',exact:true}).waitFor({state:'hidden'});
+  await page.locator('#aether-spotlight-trigger').click();await page.getByRole('button',{name:'Cancel discovery',exact:true}).waitFor({state:'hidden'});await page.getByRole('button',{name:'Search more available resources',exact:true}).click();await page.getByRole('button',{name:'Cancel discovery',exact:true}).waitFor({state:'hidden'});
   assert.equal(requests.filter(r=>r.url.includes('/access/content/')).length,0,'Metadata discovery downloaded documents');
   await page.getByRole('button',{name:'Index document contents',exact:true}).click();await page.getByRole('button',{name:'Select up to 100 supported files',exact:true}).click();assert(await page.getByRole('checkbox',{name:'Index picture.png',exact:true}).isDisabled());
   await page.getByRole('checkbox',{name:'Index slow.txt',exact:true}).uncheck();await page.getByRole('button',{name:'Start indexing',exact:true}).click();await done();

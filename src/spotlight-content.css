@@ -11,6 +11,6 @@
 #aether-spotlight .ae-content-statuses{padding-left:18px;margin:8px 0;max-height:130px;overflow:auto;overflow-wrap:anywhere;line-height:1.8}
 #aether-spotlight .ae-spot-snippet{display:block;margin-top:5px;font-size:12px;line-height:1.6;color:var(--ae-soft);white-space:normal;overflow-wrap:anywhere}
 #aether-spotlight .ae-content-panel{scrollbar-width:thin}
-#aether-spotlight[data-content-panel] :is(.ae-spot-results,.ae-spot-filters,.ae-spot-input,.ae-spot-status,.ae-spot-footer){display:none!important}
+#aether-spotlight[data-content-panel] :is(.ae-spot-results,.ae-spot-filters,.ae-spot-input,.ae-spot-status,.ae-spot-footer,.ae-spot-scope-label){display:none!important}
 #aether-spotlight[data-content-panel] .ae-content-panel{max-height:60svh;margin-top:8px}
 #aether-spotlight[data-content-panel] .ae-spot-head{padding-bottom:12px}

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.1 — Search coverage and ZIP filenames — 28 October 2026
+
+- Discover resource filename metadata on opening Spotlight, add course targeting, continue beyond cached folders, and check more roots/deeper folders within explicit request/deadline bounds. Inside-document text retains its separate explicit session indexing.
+- Add published read-only student Gradebook item search through discovered native tools/frames, with a Gradebook category and existing privacy/account protections.
+- Preserve or restore ZIP entry extensions from native resource paths, MIME metadata and response filenames/types/PDF signatures; retain collision handling and identical file bytes. Support double-slash portal URLs.
+- Retain the missing KeyboardEvent.key guard and focused regression coverage. No live academic data/actions, new permissions or dependencies.
+
 ## 1.8.0 — Spotlight document contents — 28 October 2026
 
 - Add explicit course/folder/file selection and session opt-in for deliberately opened documents; never index on hover or crawl file bodies at startup. Reuse the existing Download Manager metadata and validated resource/preview consent path.

@@ -111,7 +111,7 @@
      },
      async cancel(){controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}
     },{highWaterMark:1});
-    return {readable,mime,length:expected,cancel:async()=>{controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}};
+    return {readable,mime,disposition:response.headers.get('content-disposition')||'',detectedExtension:prefix.startsWith('%PDF-')?'pdf':'',length:expected,cancel:async()=>{controller.abort();cleanup();await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}};
    }catch(error){controller.abort();cleanup();if(reader){await reader.cancel().catch(()=>{});try{reader.releaseLock();}catch{}}throw error;}
  }
  globalThis.AetherResourceAccess={read,resource,accept,stream};
