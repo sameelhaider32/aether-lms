@@ -1,6 +1,6 @@
 {
   "name": "aether-lms",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "private": true,
   "license": "MIT",
   "description": "MV3 presentation enhancement for the original LUMS Sakai workspace",
@@ -16,7 +16,8 @@
     "test:theme": "node tests/theme.cjs",
     "test:spotlight": "node tests/spotlight-bridge.cjs && node tests/spotlight.cjs",
     "test:contents": "node tests/spotlight-content.cjs",
-    "test:search-fixes": "node tests/search-resource-fixes.cjs"
+    "test:search-fixes": "node tests/search-resource-fixes.cjs",
+    "test:session-cache": "node tests/session-cache-worker.cjs && node tests/session-cache.cjs"
   },
   "overrides": {
     "pptxgenjs": {

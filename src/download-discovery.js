@@ -32,7 +32,7 @@
    const job=this._load(node,signal).finally(()=>this.jobs.delete(node.id));this.jobs.set(node.id,job);return job;
   }
   async _load(node,signal){
-   node.state='loading';node.error=null;node.complete=false;
+   node.state='loading';node.error=null;node.complete=false;node.listedIds=null;
    try{
     const path='/direct/content/resources'+S.encodeId(node.id.replace(/\/$/,''))+'.json?depth=1';
     const data=await this.json(path,signal);if(signal?.aborted)throw signal.reason;
@@ -51,7 +51,7 @@
     // An API omitting visible records is not silently declared complete.
     const stale=node.children.some(id=>!seen.has(id));
     node.complete=!(invalid||stale||data.complete===false||raw.complete===false||raw.hasMore||data.hasMore||raw.next||data.next||Number(raw.total)>children.length||Number(data.total)>children.length);
-    node.state=node.complete?'loaded':'incomplete';node.loadedAt=Date.now();
+    node.state=node.complete?'loaded':'incomplete';node.loadedAt=Date.now();node.listedIds=seen;
     node.error=node.complete?null:'Some folder metadata is missing or unverified. Retry, or review a partial export.';
     this.tree.revision++;return node;
    }catch(error){node.state=signal?.aborted?'unloaded':'failed';node.error=signal?.aborted?'Discovery cancelled.':error.message;throw error;}

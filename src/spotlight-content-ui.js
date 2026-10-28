@@ -6,7 +6,7 @@
  function mount(dialog,preview){
   const panel=el('section');panel.className='ae-content-panel';panel.hidden=true;panel.setAttribute('aria-label','Index document contents');
   const heading=el('div');heading.className='ae-content-heading';heading.append(el('strong','Index document contents'),button('Back to search',()=>show(false)));
-  const note=el('p','Local, session-only text. Refresh, sign out or Aether OFF clears it. Only discovered files are listed; coverage is incomplete. Use “Search more available resources” to discover metadata first.');
+  const note=el('p','Local, session-only text. Survives LMS refreshes and closed tabs until Chrome restarts. Sign out or Aether OFF clears it. Only discovered files are listed; coverage is incomplete. Use “Search more available resources” to discover metadata first.');
   const optLabel=el('label'),opt=el('input');opt.type='checkbox';optLabel.append(opt,document.createTextNode(' Include documents I deliberately open or preview for this session (never hover)'));opt.onchange=()=>{if(opt.checked)service.optIn();else service.stopOpened();};
   const filterLabel=el('label','Choose course or folder '),filter=el('select');filter.setAttribute('aria-label','Indexing scope');filterLabel.append(filter);
   const summary=el('p'),files=el('div');files.className='ae-content-files';const selected=new Map();let known=[];
@@ -16,7 +16,7 @@
   const start=button('Start indexing',()=>service.start([...selected.values()]));start.dataset.contentStart='';
   const cancel=button('Cancel indexing',()=>service.cancel());cancel.dataset.contentCancel='';
   const clear=button('Clear indexed contents',()=>service.clear());
-  actions.append(select,none,start,cancel,clear,button('Refresh discovered list',build));
+  const refresh=button('Refresh selected contents',()=>service.start([...selected.values()],{force:true}));actions.append(select,none,start,refresh,cancel,clear,button('Refresh discovered list',build));
   const progress=el('p');progress.setAttribute('role','status');progress.setAttribute('aria-live','polite');
   const statuses=el('ul');statuses.className='ae-content-statuses';
   panel.append(heading,note,optLabel,filterLabel,summary,files,actions,progress,statuses);dialog.insertBefore(panel,dialog.querySelector('.ae-spot-footer'));
@@ -42,8 +42,8 @@
   filter.onchange=drawFiles;
   function update(){
    const s=service.snapshot(),b=s.batch;opt.checked=s.opted;
-   start.disabled=s.busy||!selected.size;select.disabled=none.disabled=s.busy;cancel.hidden=!s.busy;
-   progress.textContent=(b?`${b.completed} of ${b.total} processed${b.cancelled?' · cancelled':''} · `:'')+`${s.documents} documents indexed. Some documents have not been indexed.`;
+   start.disabled=refresh.disabled=s.busy||s.restoring||!selected.size;select.disabled=none.disabled=s.busy;cancel.hidden=!s.busy;
+   progress.textContent=(b?`${b.completed} of ${b.total} processed${b.cancelled?' · cancelled':''} · `:'')+`${s.documents} documents indexed. Some documents have not been indexed.`+(s.cacheStatus?' · '+s.cacheStatus:'');
    statuses.replaceChildren();for(const row of s.report){const li=el('li',row.meta.title+' · '+row.status);if(row.status==='Copyright acknowledgment required')li.append(document.createTextNode(' '),button('Handle notice in preview',()=>preview(row.meta)));statuses.append(li);}
   }
   function show(value=!panel.hidden){panel.hidden=!value;if(value){dialog.dataset.contentPanel='true';build();panel.scrollTop=0;filter.focus({preventScroll:true});}else{delete dialog.dataset.contentPanel;dialog.querySelector('.ae-spot-input')?.focus();}}

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.2 — Browser-session document cache — 29 October 2026
+
+- Checkpoint completed searchable chunks/locations in trusted-only Chrome session memory so LMS reloads and closed/reopened tabs reuse authorized unchanged documents. Preserve the opened-document opt-in for the browser session; cancel unfinished work on departure.
+- Restore only after authoritative account and shared resource metadata checks. Exclude changed/hidden/removed files, reuse unchanged text on Start indexing, and add explicit Refresh selected contents. Clear across tabs on OFF/logout/account change/manual clear, with generation-token guards against late writes. Browser restart/extension reload clears session storage.
+- Bound cache memory/quotas with safe fallback; retain original extraction, theme, workflow and privacy controls. No persistent document storage or new permissions. Add focused fictional cache/worker/browser restart regressions.
+
 ## 1.8.1 — Search coverage and ZIP filenames — 28 October 2026
 
 - Discover resource filename metadata on opening Spotlight, add course targeting, continue beyond cached folders, and check more roots/deeper folders within explicit request/deadline bounds. Inside-document text retains its separate explicit session indexing.

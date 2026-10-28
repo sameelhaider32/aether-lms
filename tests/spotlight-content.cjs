@@ -76,7 +76,7 @@ async function fixtures(){
   await page.keyboard.press('Escape');
   console.log('PASS safe snippets, one result/document, keyboard, both themes, no query traffic and explicit existing preview consent');
   // Hover after opt-in must not index. A deliberate preview reuses the same fetched bytes.
-  await page.goto(route('Resources'));await page.locator('.ae-record-card').first().waitFor();await isolated('AetherSpotlightContent.optIn()');
+  await isolated('AetherSpotlightContent.clear()');await page.goto(route('Resources'));await page.locator('.ae-record-card').first().waitFor();await isolated('AetherSpotlightContent.optIn()');
   const notes=page.locator('.ae-record-card').filter({has:page.locator('a', {hasText:/^notes.txt$/})});await notes.locator('[data-ae-primary="true"] a').first().hover();await page.getByText('Vector clocks explain the causal order.',{exact:false}).waitFor();assert.equal((await snap()).documents,0);
   const reads=requests.filter(r=>r.url===url('notes.txt')).length;await notes.locator('[data-ae-preview-open]').click();for(let i=0;i<50&&(await snap()).documents===0;i++)await page.waitForTimeout(60);assert.equal((await snap()).documents,1);assert.equal(requests.filter(r=>r.url===url('notes.txt')).length,reads);
   await page.keyboard.press('Escape');

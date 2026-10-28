@@ -63,6 +63,9 @@ jobs:
       - name: Search resource and ZIP regression smoke
         if: '!cancelled()'
         run: npm run test:search-fixes
+      - name: Browser-session content cache smoke
+        if: '!cancelled()'
+        run: npm run test:session-cache
       - name: Theme fixture checks
         if: '!cancelled()'
         run: npm run test:theme

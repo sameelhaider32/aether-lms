@@ -89,7 +89,7 @@
   const who=await store.verify();if(!who||!enabled()){rebuild();return;}
   if(!controller){controller=globalThis.AetherDownloads?.get();if(controller){resourceListener=()=>{clearTimeout(timer);timer=setTimeout(rebuild,50);};controller.listeners.add(resourceListener);}}
   if(controller)try{await controller.identity();}catch{}
-  if(!enabled()||store.snapshot().scope!==who)return;capture();
+  if(!enabled()||store.snapshot().scope!==who)return;capture();globalThis.AetherSpotlightContent?.restore();
  }
  function cancel(){job?.abort();job=null;jobKind='';if(dialog)render();}
  async function discover(kind,automatic=false){
@@ -154,7 +154,7 @@
    const copy=el('span','ae-spot-result-copy'),title=el('span','ae-spot-result-title');highlight(title,row.title);copy.append(title,el('span','ae-spot-result-meta',[row.course,row.meta].filter(Boolean).join(' · ')));if(row.snippet){const snippet=el('span','ae-spot-snippet');highlight(snippet,row.snippet);copy.append(snippet);}option.append(icon,copy,el('span','ae-spot-type',row.type));list.append(option);
   }
   if(!matches.length)list.append(el('li','ae-spot-empty',input.value?'No matches among indexed records and documents. Some documents have not been indexed. Search more documents below.':'No results in this category yet. Native navigation and available commands remain accessible.'));
-  const snapshot=store.snapshot();status.textContent=snapshot.blocked?'Session changed. Refresh your LMS tab to search this account.':(!snapshot.scope?'Verifying session · private metadata unavailable until confirmed.':`${index.filter(r=>r.type==='resource'&&(!courseScope||r.siteId===courseScope)).length} files searchable by name · ${index.filter(r=>r.type==='grade'&&(!courseScope||r.siteId===courseScope)).length} Gradebook items · ${contents?.snapshot().documents||0} documents indexed · ${matches.filter(r=>r.snippet).length} documents matched · incomplete coverage; file names need no content index; use Index document contents to search inside files`)+(message?' · '+message:'');
+  const snapshot=store.snapshot(),contentState=contents?.snapshot()||{};status.textContent=snapshot.blocked?'Session changed. Refresh your LMS tab to search this account.':(!snapshot.scope?'Verifying session · private metadata unavailable until confirmed.':`${index.filter(r=>r.type==='resource'&&(!courseScope||r.siteId===courseScope)).length} files searchable by name · ${index.filter(r=>r.type==='grade'&&(!courseScope||r.siteId===courseScope)).length} Gradebook items · ${contents?.snapshot().documents||0} documents indexed · ${matches.filter(r=>r.snippet).length} documents matched · incomplete coverage; file names need no content index; use Index document contents to search inside files`)+(contentState.restoring?' · Restoring Chrome session cache…':contentState.cacheStatus?' · '+contentState.cacheStatus:'')+(message?' · '+message:'');
   dialog.querySelector('[data-spot-cancel]').hidden=!job;
   for(const b of dialog.querySelectorAll('[data-spot-discover]'))b.disabled=!!job||snapshot.blocked;
   const contentButton=dialog.querySelector('[data-spot-content]');if(contentButton)contentButton.disabled=snapshot.blocked;updateSelection(false);

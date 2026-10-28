@@ -1,4 +1,4 @@
-# Aether Spotlight (1.8.1)
+# Aether Spotlight (1.8.2)
 
 Spotlight adds a search/command dialog to the retained v1.6 interface. It does not redesign Home, remove the sidebar, alter graphics/fonts or reuse the rejected spatial-home branch. The existing unpacked extension folder remains the installation.
 
@@ -25,7 +25,7 @@ Category filters, local highlights, arrow selection and Enter work without rebui
 
 The dependency-free ranker normalizes Unicode text, uses exact/title-prefix/word-boundary/substring matching followed by limited single-edit matching, and adds a small context boost without overruling stronger cross-course matches. Course codes and title initials support queries such as `DS resources`. At most 7,000 entries and 30 displayed results; no query/index persistence. Metadata updates are batched from existing context/record/controller events, not scanned per query. The frame set is bounded and detached frames are removed.
 
-The index/cache clear on OFF, logout, document lifecycle or an observed session change. An account change locks Spotlight private indexing until page refresh so stale native DOM cannot be silently attributed to another identity. Mission Control retains its existing ability to explicitly refresh the authenticated new account; its fresh snapshot remains excluded from the locked Spotlight index. Ongoing reads are cancelled and late results are guarded. Missing APIs produce partial/unavailable states; known navigation remains usable when advanced metadata endpoints fail. Missing authoritative identity disables private indexing while safe UI commands remain available.
+Page-local metadata and unfinished jobs clear on document departure. Completed document text now survives refresh/navigation/closed tabs in Chrome session memory, subject to fresh account/resource metadata checks. OFF, logout/unavailable identity, explicit clear or account changes purge shared content; browser restart/extension reload clears it as well. See [SESSION_CACHE.md](SESSION_CACHE.md). An account change locks Spotlight private indexing until page refresh so stale native DOM cannot be silently attributed to another identity. Mission Control retains its existing ability to explicitly refresh the authenticated new account; its fresh snapshot remains excluded from the locked Spotlight index. Ongoing reads are cancelled and late results are guarded. Missing APIs produce partial/unavailable states; known navigation remains usable when advanced metadata endpoints fail. Missing authoritative identity disables private indexing while safe UI commands remain available.
 
 ## Focused validation
 
