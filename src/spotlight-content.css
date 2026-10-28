@@ -1,0 +1,16 @@
+/* Existing Spotlight tokens carry both Original and Monochrome. No new motion. */
+#aether-spotlight .ae-content-panel{border-top:1px solid var(--ae-line);padding:12px 22px;overflow:auto;max-height:48svh;flex:0 1 auto;font-size:11px;color:var(--ae-soft)}
+#aether-spotlight .ae-content-panel p{font-size:11px;line-height:1.55;margin:7px 0;color:var(--ae-dim)}
+#aether-spotlight .ae-content-heading,#aether-spotlight .ae-content-actions{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+#aether-spotlight .ae-content-heading strong{flex:1;color:var(--ae-text)}
+#aether-spotlight .ae-content-panel :is(button,select){font:inherit;color:var(--ae-soft);background:var(--ae-bg);border:1px solid var(--ae-line);border-radius:4px;padding:6px 8px}
+#aether-spotlight .ae-content-panel select{max-width:100%;margin:7px 0}
+#aether-spotlight .ae-content-panel label{display:block;line-height:1.6}
+#aether-spotlight .ae-content-panel input[type=checkbox]{accent-color:var(--ae-mint);margin-right:7px;width:auto;height:auto;position:static;appearance:auto}
+#aether-spotlight .ae-content-files{max-height:140px;overflow:auto;margin:8px 0;padding:6px;border:1px solid var(--ae-line);overflow-wrap:anywhere}
+#aether-spotlight .ae-content-statuses{padding-left:18px;margin:8px 0;max-height:130px;overflow:auto;overflow-wrap:anywhere;line-height:1.8}
+#aether-spotlight .ae-spot-snippet{display:block;margin-top:5px;font-size:12px;line-height:1.6;color:var(--ae-soft);white-space:normal;overflow-wrap:anywhere}
+#aether-spotlight .ae-content-panel{scrollbar-width:thin}
+#aether-spotlight[data-content-panel] :is(.ae-spot-results,.ae-spot-filters,.ae-spot-input,.ae-spot-status,.ae-spot-footer){display:none!important}
+#aether-spotlight[data-content-panel] .ae-content-panel{max-height:60svh;margin-top:8px}
+#aether-spotlight[data-content-panel] .ae-spot-head{padding-bottom:12px}

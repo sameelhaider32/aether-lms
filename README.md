@@ -2,7 +2,7 @@
 
 A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Chrome extension that adds course cards, document previews, and a glowing starfield to your existing LMS.
 
-**Current version: 1.7.0 · Spotlight · Public beta · MIT licensed**
+**Current version: 1.8.0 · Spotlight document search · Public beta · MIT licensed**
 
 [![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
 [![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
@@ -53,11 +53,11 @@ Native authentication, access permissions, forms, and actions remain in Sakai. A
 
 Monochrome uses black panels, silver lighting and neutral borders inspired by the Vexon preview, within Aether's existing layout. Assignment and resource states retain their text labels in grayscale. **AETHER OFF** returns to native Sakai; switching back on restores your chosen theme. Authored document pages, images, and cross-origin tools retain their own content styling. Red is reserved for a later update. See [theme implementation and validation](docs/THEMES.md).
 
-## Spotlight (1.7)
+## Spotlight (1.8)
 
 Open **SPOTLIGHT** in the existing header, or press **Ctrl/Cmd+K** where Chrome permits it. **Alt+Shift+K** is the alternate shortcut. Shortcuts leave typing fields, editors, assessments and native dialogs alone. Type a title, course code, abbreviation such as `DS resources`, path or file type; use categories, arrow keys and Enter. Escape or click-away closes the palette and returns focus. Type `>` for context-aware safe commands: Home, Mission Control/deadlines when present, Download Manager, theme switching, motion and the existing appearance control.
 
-Search is local and uses known native navigation, Mission Control's observed records and the Download Manager's metadata. **Check academic sources** reuses a shared bounded check/cache, while **Search more available resources** explicitly discovers up to 12 folders across at most eight course roots, with a two-level expansion limit. Neither typing nor opening the palette crawls course files. Results indicate partial coverage; missing/unreleased/unsupported items are not invented. Files retain native opening and use the existing safe preview/copyright flow when previewed. No document contents are indexed.
+Search is local and uses known native navigation, Mission Control's observed records and the Download Manager's metadata. **Check academic sources** reuses a shared bounded check/cache, while **Search more available resources** explicitly discovers up to 12 folders across at most eight course roots, with a two-level expansion limit. Neither typing nor opening the palette crawls course files. Results indicate partial coverage; missing/unreleased/unsupported items are not invented. Files retain native opening and use the existing safe preview/copyright flow when previewed. Choose **Index document contents**, select discovered files by course/folder or across courses, then **Start indexing**. PDF, DOCX, PPTX, XLSX and text/source contents are searchable with safe excerpts and page/slide/cell/line references in **Contents**. The session opt-in also includes deliberately opened previews using already-downloaded bytes; hover never indexes. Copyright requires the existing explicit preview consent. Indexing is local and memory-only, with cancellation and per-file outcomes. See [supported formats, exact bounds and limitations](docs/FULL_TEXT_SEARCH.md).
 
 The index is memory-only and clears on OFF, navigation/logout or observed identity changes. Following a session change, refresh the LMS tab before indexing the new account; stale DOM is not attributed to a different user. Both themes and the retained homepage/sidebar remain intact. See [Spotlight architecture and limits](docs/SPOTLIGHT.md).
 

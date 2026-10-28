@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.0 — Spotlight document contents — 28 October 2026
+
+- Add explicit course/folder/file selection and session opt-in for deliberately opened documents; never index on hover or crawl file bodies at startup. Reuse the existing Download Manager metadata and validated resource/preview consent path.
+- Extract local PDF text, DOCX paragraphs/tables, visible PPTX text, visible XLSX stored cell values and inert text/source files with locations. Add a separate bounded inverted index, one contextual result per document, safe highlights and Contents category.
+- Keep text/index/opt-in memory-only and account/session scoped, with cancel/OFF/logout/identity/pagehide cleanup, strict helper messaging, byte/time/ZIP/text limits and honest partial/failure states. No new permissions, dependencies, typography/theme/homepage changes or automatic copyright acknowledgments.
+- Add focused fictional parser/browser checks and document actual bounds in `docs/FULL_TEXT_SEARCH.md`.
+
 ## 1.7.0 — Spotlight — 28 October 2026
 
 - Add an additive, keyboard-driven search and command palette to the retained v1.6 interface. Search known courses/tools, authorized observed assignments/events/announcements and discovered resource metadata using local ranking, course-code/acronym support, limited typo tolerance, categories and highlighted matches.

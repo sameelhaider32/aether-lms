@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Aether LMS \u2014 The Academic Interface",
   "description": "An editorial academic workspace with local procedural graphics, tactile records and protected native Sakai workflows.",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "minimum_chrome_version": "111",
   "icons": {
     "16": "icons/aether-16.png",
@@ -28,7 +28,8 @@
         "src/download.css",
         "src/mission-control.css",
         "src/palette.css",
-        "src/spotlight.css"
+        "src/spotlight.css",
+        "src/spotlight-content.css"
       ],
       "js": [
         "src/prepaint.js",
@@ -43,6 +44,8 @@
         "src/academic-store.js",
         "src/mission-control.js",
         "src/spotlight-search.js",
+        "src/spotlight-content.js",
+        "src/spotlight-content-ui.js",
         "src/spotlight.js",
         "src/content.js"
       ],
@@ -123,7 +126,9 @@
         "vendor/pdfjs/wasm/*",
         "vendor/zip/zip-core.min.js",
         "src/theme-settings.js",
-        "src/palette.css"
+        "src/palette.css",
+        "preview/content.html",
+        "preview/content-extract.js"
       ],
       "matches": [
         "https://lms.lums.edu.pk/*"

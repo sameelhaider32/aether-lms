@@ -1,4 +1,4 @@
-# Aether Spotlight (1.7)
+# Aether Spotlight (1.8)
 
 Spotlight adds a search/command dialog to the retained v1.6 interface. It does not redesign Home, remove the sidebar, alter graphics/fonts or reuse the rejected spatial-home branch. The existing unpacked extension folder remains the installation.
 
@@ -13,7 +13,7 @@ Category filters, local highlights, arrow selection and Enter work without rebui
 - Native courses and per-course tool anchors use actual destinations. Discovered tools are captured from the same course pages already read by the academic adapter; no additional tool crawler or guessed tool IDs.
 - `academic-store.js` wraps the existing `academic-sources.js` loader with one account-scoped job/cache, a five-minute freshness window and cancellable consumers. Mission Control and Spotlight share its progressive snapshot. The original student-list parsing, hidden/future release exclusions, course/request/byte/concurrency limits and rejected generic-assignment endpoint policy remain intact. Verified submission/draft/unknown semantics use the existing academic model. Known events and announcements remain partial observations.
 - Resources reuse the actual Download Manager controller/tree/discovery cache. Already-known entries come first. The explicit broader search is serial, reads metadata only, and is capped at eight roots, 12 folders, two expansion levels and one available-site page if shared course discovery is unavailable. Existing per-request byte and 10,000-node limits still apply. Download/export selection is not changed. Discovery cancellation aborts only Spotlight's operation; it does not cancel an existing export. Busy Download Manager operations are respected.
-- Native visible resources retain their original anchor and preview button. Metadata-only files use the same preview controller through a validated same-origin content-ID descriptor, with current-account validation, the same limits/readers and separate copyright acknowledgment. No synthetic native resource rows or bypass of access controls. Folder results open an actual native folder/Resources destination where available, otherwise the known course. File content is never fetched for indexing.
+- Native visible resources retain their original anchor and preview button. Metadata-only files use the same preview controller through a validated same-origin content-ID descriptor, with current-account validation, the same limits/readers and separate copyright acknowledgment. No synthetic native resource rows or bypass of access controls. Folder results open an actual native folder/Resources destination where available, otherwise the known course. Metadata discovery never fetches file content. Explicit v1.8 content indexing is documented in [FULL_TEXT_SEARCH.md](FULL_TEXT_SEARCH.md).
 
 ## Index and lifecycle
 

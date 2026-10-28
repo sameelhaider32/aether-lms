@@ -57,6 +57,9 @@ jobs:
       - name: Spotlight fixture smoke
         if: '!cancelled()'
         run: npm run test:spotlight
+      - name: Spotlight content fixture smoke
+        if: '!cancelled()'
+        run: npm run test:contents
       - name: Theme fixture checks
         if: '!cancelled()'
         run: npm run test:theme
