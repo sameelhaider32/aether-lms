@@ -39,7 +39,9 @@
   // Sakai statistics use only the pointer light; the native chart never tilts.
   const statsSelector='html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable) :is(.gb-modal-dialog:has(> .gb-modal-content > canvas),.wicket-modal:has(canvas) .w_content_1:has(canvas))';
   const cardSelector='.ae-course-card,.ae-tool-item,.ae-record-card,'+statsSelector;
-  function pointer(e){
+  let pointerFrame=0,pointerSample=null;
+  function pointer(event){if(!moving()||coarse.matches)return;pointerSample={target:event.target,clientX:event.clientX,clientY:event.clientY};if(!pointerFrame)pointerFrame=request(()=>{pointerFrame=0;const sample=pointerSample;pointerSample=null;if(sample)paintPointer(sample);});}
+  function paintPointer(e){
     if(!moving()||coarse.matches)return;
     const card=e.target.closest?.(cardSelector);
     if(card!==current)settle();
@@ -54,7 +56,7 @@
     if(stats)return;
     current=card;
     let s=animations.get(card);if(!s){s={springs:[spring(),spring(),spring()]};animations.set(card,s);}
-    s.springs[0].target=-5.5;s.springs[1].target=(.5-y)*3.2;s.springs[2].target=(x-.5)*4;
+    s.springs[0].target=-2;s.springs[1].target=(.5-y)*1.4;s.springs[2].target=(x-.5)*1.8;
     startCards();
     if(window!==top)top.postMessage({type:'aether-pointer-v051',x:e.clientX/innerWidth,y:e.clientY/innerHeight},location.origin);
   }
@@ -72,10 +74,10 @@
     }
     io?.observe(heading);
   }}
-  function settings(){if(!moving()){for(const card of animations.keys())clearCard(card);animations.clear();current=null;if(stopCards){stopCards();stopCards=null;}}for(const [el,stop]of reveals)if(!el.isConnected||!moving()){stop();reveals.delete(el);el.querySelectorAll('.ae-reveal-unit').forEach(n=>n.style.removeProperty('transform'));}}
+  function settings(){if(!moving()){cancel(pointerFrame);pointerFrame=0;pointerSample=null;for(const card of animations.keys())clearCard(card);animations.clear();current=null;if(stopCards){stopCards();stopCards=null;}}for(const [el,stop]of reveals)if(!el.isConnected||!moving()){stop();reveals.delete(el);el.querySelectorAll('.ae-reveal-unit').forEach(n=>n.style.removeProperty('transform'));}}
   function visibility(){if(document.hidden){window.cancelAnimationFrame(raf);raf=0;for(const item of subscribers.values())item.last=0;}else wake();}
   const stateObserver=new MutationObserver(settings);stateObserver.observe(host,{attributes:true,attributeFilter:['class']});
   document.addEventListener('pointermove',pointer,{passive:true});document.addEventListener('pointerleave',settle,{passive:true});document.addEventListener('visibilitychange',visibility);reduced.addEventListener('change',settings);
   window.addEventListener('pagehide',e=>{if(e.persisted)return;disposed=true;window.cancelAnimationFrame(raf);subscribers.clear();stateObserver.disconnect();io?.disconnect();settings();document.removeEventListener('pointermove',pointer);document.removeEventListener('pointerleave',settle);document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',settings);},{once:false});
-  globalThis.AetherMotion={subscribe,request,cancel,spring,moving,enhance};
+  globalThis.AetherMotion={subscribe,request,cancel,spring,moving,enhance,stats:()=>({subscribers:subscribers.size,framePending:!!raf,cards:animations.size,reveals:reveals.size,hidden:document.hidden})};
 })();

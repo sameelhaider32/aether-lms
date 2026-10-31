@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.0 — 2026-10-31
+
+- Shared local Geist typography, readable metadata, refined component geometry and selective glass across Original and Monochrome.
+- Remove repeated breadcrumb/frame geometry flushes; batch native record and preview enhancement; initialize shaders during idle time.
+- Bound graphics detail and preserve complete geometry as budgets change; release replaced WebGL contexts and portable preview canvases.
+- Render offscreen internals of large read-only resource collections on demand while retaining native DOM, find, focus, sorting and menus.
+- Defer Spotlight metadata/session restore until use; stop hidden-tab discovery/extraction and empty-index identity polling.
+- Queue PDF keyboard page navigation during redraw and provide a focusable document pane without intercepting native select keys.
+- Retain the working v1.8.2 features, settings, security boundaries and home composition. No Red theme or spatial-home branch.
+- Add reproducible fixture measurements, visual matrix and lifetime checks. See `docs/v2-performance.md` for actual results and remaining live-validation limits.
+
+
 ## 1.8.2 — Browser-session document cache — 29 October 2026
 
 - Checkpoint completed searchable chunks/locations in trusted-only Chrome session memory so LMS reloads and closed/reopened tabs reuse authorized unchanged documents. Preserve the opened-document opt-in for the browser session; cancel unfinished work on departure.

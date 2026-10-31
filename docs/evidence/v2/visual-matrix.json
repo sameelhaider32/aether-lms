@@ -1,0 +1,1447 @@
+{
+  "shots": [
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "home",
+      "file": "aether-390-home.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "mission",
+      "file": "aether-390-mission.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "course",
+      "file": "aether-390-course.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "assignments",
+      "file": "aether-390-assignments.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "gradebook",
+      "file": "aether-390-gradebook.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "statistics",
+      "file": "aether-390-statistics.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "resources",
+      "file": "aether-390-resources.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "native-menu",
+      "file": "aether-390-native-menu.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "text-preview",
+      "file": "aether-390-text-preview.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "pdf-preview",
+      "file": "aether-390-pdf-preview.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "spotlight",
+      "file": "aether-390-spotlight.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 390,
+      "view": "downloads",
+      "file": "aether-390-downloads.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "home",
+      "file": "monochrome-390-home.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "mission",
+      "file": "monochrome-390-mission.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "course",
+      "file": "monochrome-390-course.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "assignments",
+      "file": "monochrome-390-assignments.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "gradebook",
+      "file": "monochrome-390-gradebook.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "statistics",
+      "file": "monochrome-390-statistics.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "resources",
+      "file": "monochrome-390-resources.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "native-menu",
+      "file": "monochrome-390-native-menu.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "text-preview",
+      "file": "monochrome-390-text-preview.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "pdf-preview",
+      "file": "monochrome-390-pdf-preview.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "spotlight",
+      "file": "monochrome-390-spotlight.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 390,
+      "view": "downloads",
+      "file": "monochrome-390-downloads.png",
+      "scrollWidth": 390,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "home",
+      "file": "aether-775-home.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "mission",
+      "file": "aether-775-mission.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "course",
+      "file": "aether-775-course.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "assignments",
+      "file": "aether-775-assignments.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "gradebook",
+      "file": "aether-775-gradebook.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "statistics",
+      "file": "aether-775-statistics.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "resources",
+      "file": "aether-775-resources.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "native-menu",
+      "file": "aether-775-native-menu.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "text-preview",
+      "file": "aether-775-text-preview.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "pdf-preview",
+      "file": "aether-775-pdf-preview.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "spotlight",
+      "file": "aether-775-spotlight.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 775,
+      "view": "downloads",
+      "file": "aether-775-downloads.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "home",
+      "file": "monochrome-775-home.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "mission",
+      "file": "monochrome-775-mission.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "course",
+      "file": "monochrome-775-course.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "assignments",
+      "file": "monochrome-775-assignments.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "gradebook",
+      "file": "monochrome-775-gradebook.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "statistics",
+      "file": "monochrome-775-statistics.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "resources",
+      "file": "monochrome-775-resources.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "native-menu",
+      "file": "monochrome-775-native-menu.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "text-preview",
+      "file": "monochrome-775-text-preview.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "pdf-preview",
+      "file": "monochrome-775-pdf-preview.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "spotlight",
+      "file": "monochrome-775-spotlight.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 775,
+      "view": "downloads",
+      "file": "monochrome-775-downloads.png",
+      "scrollWidth": 775,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "home",
+      "file": "aether-1024-home.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "mission",
+      "file": "aether-1024-mission.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "course",
+      "file": "aether-1024-course.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "assignments",
+      "file": "aether-1024-assignments.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "gradebook",
+      "file": "aether-1024-gradebook.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "statistics",
+      "file": "aether-1024-statistics.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "resources",
+      "file": "aether-1024-resources.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "native-menu",
+      "file": "aether-1024-native-menu.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "text-preview",
+      "file": "aether-1024-text-preview.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "pdf-preview",
+      "file": "aether-1024-pdf-preview.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "spotlight",
+      "file": "aether-1024-spotlight.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1024,
+      "view": "downloads",
+      "file": "aether-1024-downloads.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "home",
+      "file": "monochrome-1024-home.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "mission",
+      "file": "monochrome-1024-mission.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "course",
+      "file": "monochrome-1024-course.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "assignments",
+      "file": "monochrome-1024-assignments.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "gradebook",
+      "file": "monochrome-1024-gradebook.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "statistics",
+      "file": "monochrome-1024-statistics.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "resources",
+      "file": "monochrome-1024-resources.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "native-menu",
+      "file": "monochrome-1024-native-menu.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "text-preview",
+      "file": "monochrome-1024-text-preview.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "pdf-preview",
+      "file": "monochrome-1024-pdf-preview.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "spotlight",
+      "file": "monochrome-1024-spotlight.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1024,
+      "view": "downloads",
+      "file": "monochrome-1024-downloads.png",
+      "scrollWidth": 1024,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "home",
+      "file": "aether-1440-home.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "mission",
+      "file": "aether-1440-mission.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "course",
+      "file": "aether-1440-course.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "assignments",
+      "file": "aether-1440-assignments.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "gradebook",
+      "file": "aether-1440-gradebook.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "statistics",
+      "file": "aether-1440-statistics.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "resources",
+      "file": "aether-1440-resources.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "native-menu",
+      "file": "aether-1440-native-menu.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "text-preview",
+      "file": "aether-1440-text-preview.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "pdf-preview",
+      "file": "aether-1440-pdf-preview.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "spotlight",
+      "file": "aether-1440-spotlight.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1440,
+      "view": "downloads",
+      "file": "aether-1440-downloads.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "home",
+      "file": "monochrome-1440-home.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "mission",
+      "file": "monochrome-1440-mission.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "course",
+      "file": "monochrome-1440-course.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "assignments",
+      "file": "monochrome-1440-assignments.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "gradebook",
+      "file": "monochrome-1440-gradebook.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "statistics",
+      "file": "monochrome-1440-statistics.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "resources",
+      "file": "monochrome-1440-resources.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "native-menu",
+      "file": "monochrome-1440-native-menu.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "text-preview",
+      "file": "monochrome-1440-text-preview.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "pdf-preview",
+      "file": "monochrome-1440-pdf-preview.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "spotlight",
+      "file": "monochrome-1440-spotlight.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1440,
+      "view": "downloads",
+      "file": "monochrome-1440-downloads.png",
+      "scrollWidth": 1440,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "home",
+      "file": "aether-1920-home.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "mission",
+      "file": "aether-1920-mission.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "course",
+      "file": "aether-1920-course.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "assignments",
+      "file": "aether-1920-assignments.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "gradebook",
+      "file": "aether-1920-gradebook.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "statistics",
+      "file": "aether-1920-statistics.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "resources",
+      "file": "aether-1920-resources.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "native-menu",
+      "file": "aether-1920-native-menu.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "text-preview",
+      "file": "aether-1920-text-preview.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "pdf-preview",
+      "file": "aether-1920-pdf-preview.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "spotlight",
+      "file": "aether-1920-spotlight.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "aether",
+      "width": 1920,
+      "view": "downloads",
+      "file": "aether-1920-downloads.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "home",
+      "file": "monochrome-1920-home.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "mission",
+      "file": "monochrome-1920-mission.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "course",
+      "file": "monochrome-1920-course.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "assignments",
+      "file": "monochrome-1920-assignments.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "gradebook",
+      "file": "monochrome-1920-gradebook.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "statistics",
+      "file": "monochrome-1920-statistics.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "resources",
+      "file": "monochrome-1920-resources.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "native-menu",
+      "file": "monochrome-1920-native-menu.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "text-preview",
+      "file": "monochrome-1920-text-preview.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "pdf-preview",
+      "file": "monochrome-1920-pdf-preview.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "spotlight",
+      "file": "monochrome-1920-spotlight.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    },
+    {
+      "theme": "monochrome",
+      "width": 1920,
+      "view": "downloads",
+      "file": "monochrome-1920-downloads.png",
+      "scrollWidth": 1920,
+      "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+      "fonts": [
+        "Geist Sans",
+        "Geist Mono"
+      ]
+    }
+  ],
+  "errors": [],
+  "fixtureOnly": true,
+  "requests": 600
+}

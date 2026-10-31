@@ -6,7 +6,7 @@ module.exports=async({page,context,go,assert})=>{
  for(const candidate of worlds){const r=await cdp.send('Runtime.evaluate',{contextId:candidate.id,expression:'typeof AetherAmbient!=="undefined"&&typeof AetherMotion!=="undefined"',returnByValue:true});if(r.result.value){world=candidate.id;break;}}assert(world,'extension content world');
  const evaluate=expression=>cdp.send('Runtime.evaluate',{contextId:world,expression,returnByValue:true});
  try{
-  await evaluate('globalThis.fixtureSubscribe=AetherMotion.subscribe;AetherMotion.subscribe=function(fn,interval){if(interval===40||interval===80){globalThis.fixtureAmbientTick=fn;return ()=>{globalThis.fixtureAmbientTick=null}}return fixtureSubscribe(fn,interval)}');
+  await evaluate('globalThis.fixtureSubscribe=AetherMotion.subscribe;AetherMotion.subscribe=function(fn,interval){if(interval>0){globalThis.fixtureAmbientTick=fn;return ()=>{globalThis.fixtureAmbientTick=null}}return fixtureSubscribe(fn,interval)}');
   await button.click();assert((await evaluate('typeof fixtureAmbientTick==="function"')).result.value,'ambient callback captured');
   const settle=()=>evaluate('for(let i=0;i<60;i++)fixtureAmbientTick(0,0)');
   await page.mouse.move(1438,998);await settle();

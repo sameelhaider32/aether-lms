@@ -13,7 +13,8 @@
  const el=(tag,cls,text)=>{const n=host.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  function url(value,base=baseURL){try{const u=new URL(value,base);return ['http:','https:'].includes(u.protocol)?u:null;}catch{return null;}}
  function contentURL(u){return u?.origin===origin&&/^\/access\/content\//.test(u.pathname);}
- const info=card=>globalThis.AetherResourceInfo.describe(card);
+ let syncInfo=null;
+ const info=card=>{if(syncInfo?.has(card))return syncInfo.get(card);const value=globalThis.AetherResourceInfo.describe(card);syncInfo?.set(card,value);return value;};
  const read=(...args)=>globalThis.AetherResourceAccess.read(...args);
  function success(state){if(!active(state)||state.failed)return;state.rendered=true;if(state.pinned&&!state.recorded){state.recorded=true;globalThis.AetherFileState?.opened(state.info,true).catch(()=>{});}contentOffer(state);}
  function contentOffer(state){
@@ -185,10 +186,10 @@
   if(a.closest('.ae-record-card[data-ae-kind="resource"],#aether-workspace,.ae-resource-preview,nav,[role="navigation"],.dropdown-menu,[contenteditable="true"],.cke,.tox'))return null;
   const data=info(a);return contentURL(data?.u)&&data.kind!=='folder'?data:null;
  }
- function sync(){queued=false;
+ function sync(){queued=false;syncInfo=new WeakMap();
   document.querySelectorAll('[data-ae-file-state]').forEach(card=>{if(!enabled()||!card.matches(targetSelector))card.removeAttribute('data-ae-file-state');});
   for(const [a,wrap]of attachmentControls)if(!enabled()||!a.isConnected||!wrap.isConnected||!attachmentInfo(a)){wrap.remove();a.removeAttribute('data-ae-attachment');attachmentControls.delete(a);}
-  if(!enabled()){close();cache.clear();cacheBytes=0;document.querySelectorAll(own).forEach(n=>n.remove());document.querySelectorAll('[data-ae-attachment]').forEach(n=>n.removeAttribute('data-ae-attachment'));return;}
+  if(!enabled()){close();cache.clear();cacheBytes=0;document.querySelectorAll(own).forEach(n=>n.remove());document.querySelectorAll('[data-ae-attachment]').forEach(n=>n.removeAttribute('data-ae-attachment'));syncInfo=null;return;}
   if(current&&!active(current))close();
   document.querySelectorAll(own).forEach(n=>{if(!n.closest('.ae-record-card[data-ae-kind="resource"]')&&!attachmentOwners.has(n))n.remove();});
   for(const card of document.querySelectorAll('.ae-record-card[data-ae-kind="resource"]')){
@@ -202,7 +203,7 @@
    const button=document.createElement('button');button.type='button';button.setAttribute('data-ae-preview-open','');button.className='ae-preview-trigger';button.textContent='Preview';button.setAttribute('aria-label','Preview '+data.title);wrap.append(button);attachmentControls.set(a,wrap);attachmentOwners.set(wrap,a);a.after(wrap);fileBadge(a,wrap);
   }
  }
- const schedule=()=>{if(!queued){queued=true;queueMicrotask(sync);}};
+ const schedule=()=>{if(!queued){queued=true;requestAnimationFrame(()=>{sync();syncInfo=null;});}};
  document.addEventListener('aether-file-state-change',schedule);
  const observer=new MutationObserver(records=>{
   const scope=document.querySelector('main#content,.Mrphs-toolBody,.portletBody,#addSubmissionForm'),attachmentRoots='.Mrphs-toolBody,.portletBody,.attachList,#addSubmissionForm';
@@ -219,7 +220,7 @@
   };
   if(!records.every(irrelevant))schedule();
  });observer.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','hidden','aria-hidden','href','onclick','datetime','data-sort-value','data-resource-version','data-last-modified']});
- const settings=new MutationObserver(schedule);settings.observe(host.documentElement,{attributes:true,attributeFilter:['class']});
+ const settings=new MutationObserver(()=>{if(!enabled())sync();else schedule();});settings.observe(host.documentElement,{attributes:true,attributeFilter:['class']});
  document.addEventListener('pointerover',hover,{passive:true});document.addEventListener('pointerout',leave,{passive:true});
  // Observe the portal as well as an embedded tool, including viewport exits.
  // Pointer movement is a fallback when a native DOM change suppresses a leave.

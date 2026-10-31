@@ -1,0 +1,56 @@
+{
+  "fixtureOnly": true,
+  "version": "2.0.0",
+  "coreBrowser": [
+    80,
+    80
+  ],
+  "academic": [
+    17,
+    17
+  ],
+  "missionControl": [
+    15,
+    15
+  ],
+  "downloadBrowser": [
+    24,
+    24
+  ],
+  "visualMatrix": [
+    120,
+    120
+  ],
+  "liveWebGLCompositions": [
+    10,
+    10
+  ],
+  "focusedChecksPassed": [
+    "unit/security",
+    "reader lifecycle",
+    "download models/discovery/archive",
+    "startup",
+    "portal startup",
+    "Spotlight bridge/ranking/browser",
+    "full-text indexing",
+    "resource/Gradebook search and ZIP suffixes",
+    "session-cache broker and restore/access revocation",
+    "Original/Monochrome persistence and frame propagation",
+    "Canvas fallback/cancellation"
+  ],
+  "limits": [
+    "Authenticated LUMS not exercised",
+    "Visibility signal emulated: native automation visibility unavailable",
+    "No GPU/process-memory or field-INP claims",
+    "Residual frame tails documented"
+  ],
+  "installation": "Chrome Default registered historical path is a Windows junction to Downloads/aether lms latest; ID and preferences unchanged",
+  "fullBrowser": [
+    126,
+    126
+  ],
+  "readerLifecycle": [
+    22,
+    22
+  ]
+}

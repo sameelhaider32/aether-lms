@@ -57,6 +57,12 @@ function reader(kind='pdf',options={}){
  for(const stage of ['importing','parse','page','render'])await test('PDF: close during '+stage+' has no late UI/message or orphan task',async()=>{
   const gate=deferred(),r=reader('pdf',{[stage]:gate});const loading=r.data();await tick();if(stage==='page'||stage==='render')await r.flush();await r.emit('pagehide',{});const before=r.messages.length;gate.resolve(stage==='parse'?{numPages:2,getPage:async()=>{throw Error('closed');}}:undefined);await r.flush();await loading;assert.equal(r.messages.length,before);if(stage==='importing')assert.equal(r.imports.includes('getDocument'),false);else assert.equal(r.destroys,1);if(stage==='page')assert.equal(r.renders,0);
  });
+ await test('PDF: keyboard navigation during rendering retains the requested page and respects controls',async()=>{
+  const gate=deferred(),r=reader('pdf',{render:gate}),loading=r.data();await r.flush();assert.equal(r.nodes.next.disabled,true);
+  let prevented=0;for(let i=0;i<2;i++)await r.emit('keydown',{key:'ArrowRight',target:r.nodes.paper,preventDefault(){prevented++;}});
+  gate.resolve();await loading;await r.flush();assert.equal(r.messages.filter(m=>m.state==='rendered').at(-1).page,2);assert.equal(r.renders,2);assert.equal(prevented,2);
+  await r.emit('keydown',{key:'ArrowLeft',target:{matches:()=>true},preventDefault(){throw Error('Native select key was intercepted');}});await r.flush();assert.equal(r.renders,2);
+ });
  await test('PDF: terminal parse error is reported once and duplicate data cannot revive it',async()=>{
   const parse=deferred(),r=reader('pdf',{parse});const loading=r.data();await tick();parse.reject(Error('broken'));await loading;await r.data();await r.emit('pagehide',{});await r.emit('pagehide',{});assert.equal(r.messages.filter(m=>m.state==='error').length,1);assert.equal(r.destroys,1);
  });

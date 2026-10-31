@@ -1,0 +1,304 @@
+{
+  "baseline": false,
+  "smoke": false,
+  "extension": "same existing unpacked installation",
+  "browser": "156.0.8078.4",
+  "platform": "win32",
+  "arch": "x64",
+  "fixtureOnly": true,
+  "results": [
+    {
+      "name": "Multiple PDFs open sequentially and keyboard navigation works",
+      "passed": true,
+      "ms": 5780
+    },
+    {
+      "name": "Nearby stars brighten with pointer proximity; motion OFF freezes the field",
+      "passed": true,
+      "ms": 1820
+    },
+    {
+      "name": "Motion springs settle, controls persist, reduced motion reacts live",
+      "passed": true,
+      "ms": 2142
+    }
+  ],
+  "requests": [
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Resources?tool=Resources",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/Lecture%2001.pdf",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/Lecture%2002.pdf",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/home",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/site.json?select=access&_limit=50&_start=0",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/calendar/my.json?firstDate=2026-10-01&lastDate=2027-01-29",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/announcement/site/cs200.json?n=20&d=30",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/announcement/site/math101.json?n=20&d=30",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/announcement/site/ss100.json?n=20&d=30",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/math101",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Assignments?tool=Assignments",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/ss100",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/home",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/site.json?select=access&_limit=50&_start=0",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/calendar/my.json?firstDate=2026-10-01&lastDate=2027-01-29",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/announcement/site/cs200.json?n=20&d=30",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/announcement/site/math101.json?n=20&d=30",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/announcement/site/ss100.json?n=20&d=30",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/math101",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Assignments?tool=Assignments",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/ss100",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/home",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/site.json?select=access&_limit=50&_start=0",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/calendar/my.json?firstDate=2026-10-01&lastDate=2027-01-29",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/announcement/site/cs200.json?n=20&d=30",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/announcement/site/math101.json?n=20&d=30",
+      "method": "GET",
+      "type": "fetch"
+    }
+  ],
+  "errors": []
+}
