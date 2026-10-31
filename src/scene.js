@@ -89,8 +89,8 @@
     if(!ctx)return {setMotion(){},dispose(){}};
     const parent=canvas.closest(".ae-hero, .ae-global-ambient");
     let active=false,disposed=false,raf=0,last=0,time=0,motion=opts.motion!==false;
-    let pointer={x:.78,y:.5},hover=false;
-    const N=opts.preview?720:tier().count>7200?2400:1000;
+    let pointer={x:.78,y:.5},hover=false,size={width:0,height:0};
+    const N=opts.preview?1600:tier().count>7200?2400:1000;
     const points=Array.from({length:N},(_,i)=>({
       a:(i+.13)/N*6.28318530718,
       b:((i*.61803398875)%1)*6.28318530718,
@@ -98,7 +98,7 @@
     }));
     function draw(now=0){
       if(disposed)return;
-      const box=canvas.getBoundingClientRect();if(!box.width||!box.height)return;
+      const box=size;if(!box.width||!box.height)return;
       const ratio=Math.min(devicePixelRatio||1,1.4);
       const w=Math.round(box.width*ratio),h=Math.round(box.height*ratio);
       if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
@@ -136,14 +136,14 @@
         }
       }
       ctx.globalCompositeOperation="source-over";
-      if(!canvas.dataset.aeRendered)canvas.dataset.aeRendered='2d';
+      if(!canvas.dataset.aeRendered){canvas.dataset.aeRendered='2d';opts.onReady?.();}
     }
     function tick(now){raf=0;if(!active||disposed)return;if(now-last>=40){time+=(last?Math.min((now-last)/1000,.08):0);last=now;draw(now);}raf=requestAnimationFrame(tick);}
     let visible=true;
     function update(){const run=motion&&visible&&!document.hidden&&!disposed;if(run&&!active){active=true;last=0;raf=requestAnimationFrame(tick);}else if(!run&&active){active=false;cancelAnimationFrame(raf);draw();}}
     function move(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=canvas.getBoundingClientRect();pointer={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height};hover=true;if(!active)draw();}
     function leave(){hover=false;if(!active)draw();}
-    const ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(()=>{if(!active)draw();}):null;ro?.observe(canvas);
+    const ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(entries=>{size=entries[0].contentRect;if(!active)draw();}):null;ro?.observe(canvas);
     const io=typeof IntersectionObserver!=='undefined'?new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??true;update();}):null;io?.observe(canvas);
     parent?.addEventListener("pointermove",move,{passive:true});parent?.addEventListener("pointerleave",leave,{passive:true});
     document.addEventListener("visibilitychange",update);
@@ -153,11 +153,11 @@
 
   function create(canvas, opts = {}) {
     let disposed = false, active = false, visible = true, motion = opts.motion !== false;
-    let raf = 0, last = 0, elapsed = 0, lastElapsed = 0;
+    let raf = 0, last = 0, elapsed = 0, lastElapsed = 0, quality=1, average=16, samples=0, drawStep=1;
     let hover = 0, hoverTarget = 0;
     let pointer = { x: .78, y: .54 };
     const fallback = { setMotion() {}, dispose() {} };
-    let gl, program, buffer, ro, io;
+    let gl, program, buffer, ro, io;let size={width:0,height:0},sizeDirty=true,lastDpr=0;
     try {
       gl = canvas.getContext("webgl", {alpha:true, antialias:false, preserveDrawingBuffer:false, powerPreference:"low-power"});
       if (!gl) return create2DFallback(canvas,opts);
@@ -181,28 +181,33 @@
       const uniforms={viewport:gl.getUniformLocation(program,"uViewport"),pointer:gl.getUniformLocation(program,"uPointer"),time:gl.getUniformLocation(program,"uTime"),hover:gl.getUniformLocation(program,"uHover")};
       function resize() {
         if(disposed)return;
-        const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;
-        const ratio=Math.min(devicePixelRatio||1,tier().dpr);
+        const r=size;if(!r.width||!r.height)return false;
+        if(!sizeDirty&&lastDpr===devicePixelRatio)return true;sizeDirty=false;lastDpr=devicePixelRatio;
+        const ratio=Math.min(devicePixelRatio||1,tier().dpr)*(quality===2?.85:1);
         const scale=Math.min(1,1180/(r.width*ratio));
         const w=Math.max(1,Math.round(r.width*ratio*scale));
         const h=Math.max(1,Math.round(r.height*ratio*scale));
         if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
-        gl.viewport(0,0,w,h);
+        gl.viewport(0,0,w,h);return true;
       }
+      // Stride across the same static buffer rather than drawing the first
+      // part of the shape when a viewport or adaptive budget gets smaller.
+      function drawPoints(){const step=quality*Math.max(1,Math.ceil(count/tier().count));if(step!==drawStep){drawStep=step;gl.vertexAttribPointer(attr,3,gl.FLOAT,false,12*step,0);}gl.drawArrays(gl.POINTS,0,Math.floor(count/step));}
       function render(now) {
         raf=0;if(disposed||!active||gl.isContextLost())return;
         if(now-last<tier().interval){raf=requestAnimationFrame(render);return;}
+        if(last){average=average*.94+Math.min(100,now-last)*.06;if(++samples>24&&quality===1&&average>38){quality=2;sizeDirty=true;canvas.dataset.aeQuality='balanced';}}
         elapsed+=last?Math.min((now-last)/1000,.08):0;last=now;
         hover+=(hoverTarget-hover)*.17;
-        resize();gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+        if(!resize())return void (raf=requestAnimationFrame(render));gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
         gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);
         gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);
         gl.uniform1f(uniforms.time,elapsed);
         gl.uniform1f(uniforms.hover,hover);
-        gl.drawArrays(gl.POINTS,0,Math.min(count,tier().count));
+        drawPoints();if(!canvas.dataset.aeRendered){canvas.dataset.aeRendered="webgl";opts.onReady?.();}
         raf=requestAnimationFrame(render);
       }
-      function drawStill(){if(disposed||gl.isContextLost())return;resize();gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);gl.uniform1f(uniforms.time,elapsed);gl.uniform1f(uniforms.hover,0);gl.drawArrays(gl.POINTS,0,Math.min(count,tier().count));if(!canvas.dataset.aeRendered)canvas.dataset.aeRendered='webgl';}
+      function drawStill(){if(disposed||gl.isContextLost()||!resize())return;gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);gl.uniform1f(uniforms.time,elapsed);gl.uniform1f(uniforms.hover,0);drawPoints();if(!canvas.dataset.aeRendered){canvas.dataset.aeRendered="webgl";opts.onReady?.();}}
       function schedule(){const next=motion&&visible&&!document.hidden&&!disposed&&!gl.isContextLost();if(next&&!active){active=true;last=0;raf=requestAnimationFrame(render);} else if(!next&&active){active=false;cancelAnimationFrame(raf);raf=0;drawStill();}}
       const hero=canvas.closest(".ae-hero, .ae-global-ambient");
       function onPointer(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=canvas.getBoundingClientRect();pointer={x:Math.min(1,Math.max(0,(e.clientX-r.left)/Math.max(1,r.width))),y:Math.min(1,Math.max(0,(e.clientY-r.top)/Math.max(1,r.height)))};hoverTarget=1;if(!active)drawStill();}
@@ -215,12 +220,12 @@
       document.addEventListener("visibilitychange",onVisible);
       io=typeof IntersectionObserver!=="undefined"?new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??true;schedule();},{threshold:.03}):null;
       io?.observe(canvas);
-      ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(()=>{if(!active)drawStill();}):null;
+      ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(entries=>{size=entries[0].contentRect;sizeDirty=true;if(!active)drawStill();}):null;
       ro?.observe(canvas);
       drawStill();schedule();
       return {
         setMotion(v){motion=Boolean(v);if(portable)portable.setMotion(v);else schedule();},
-        dispose(){if(disposed)return;disposed=true;active=false;cancelAnimationFrame(raf);portable?.dispose();ro?.disconnect();io?.disconnect();document.removeEventListener("visibilitychange",onVisible);hero?.removeEventListener("pointermove",onPointer);hero?.removeEventListener("pointerleave",leave);canvas.removeEventListener("webglcontextlost",onContextLost);gl.deleteBuffer(buffer);gl.deleteProgram(program);}
+        dispose(){if(disposed)return;disposed=true;active=false;cancelAnimationFrame(raf);portable?.dispose();ro?.disconnect();io?.disconnect();document.removeEventListener("visibilitychange",onVisible);hero?.removeEventListener("pointermove",onPointer);hero?.removeEventListener("pointerleave",leave);canvas.removeEventListener("webglcontextlost",onContextLost);gl.deleteBuffer(buffer);gl.deleteProgram(program);gl.getExtension("WEBGL_lose_context")?.loseContext();}
       };
     } catch(err) {
       console.warn("Aether: using portable canvas particle scene",err.message);

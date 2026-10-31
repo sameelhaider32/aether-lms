@@ -9,7 +9,7 @@
   const root=document.documentElement,framed=window!==top;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const journal=new Map(),observers=[];
-  const ownedClasses=['ae-card-table','ae-card-list','ae-record-card','ae-card-container','ae-card-heading-static','ae-card-header-row','ae-card-context-row','ae-academic-tool','ae-native-table'];
+  const ownedClasses=['ae-card-table','ae-card-list','ae-record-card','ae-card-container','ae-card-heading-static','ae-card-header-row','ae-card-context-row','ae-academic-tool','ae-native-table','ae-large-records'];
   const pointerKeys=['--ae-hover-x','--ae-hover-y','--ae-rx','--ae-ry'];
   const excluded='#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,nav,[role="navigation"],[role="menu"],[role="menubar"],[role="tablist"],[role="tree"],.nav,.nav-tabs,.nav-pills,.breadcrumb,.pagination,.dropdown-menu,.navIntraTool,.itemAction,.act,.btn-group,.tool-toolbar,.resource-toolbar,[contenteditable="true"],.cke,.tox,.ui-datepicker';
   let live=null,timer=0,deadlineTimer=0,nextDeadline=Infinity,scanTime=0,raf=0,pending=null,lastCard=null;
@@ -156,7 +156,7 @@
   }
   function applyTable(plan){
     const {group,header,rows,contextRows,labels,primary,type}=plan;
-    klass(group,'ae-card-table');attr(group,'role','table');
+    klass(group,'ae-card-table');klass(group,'ae-large-records',type==='resource'&&rows.length>40);attr(group,'role','table');
     if(group.tHead)attr(group.tHead,'role','rowgroup');
     attr(header,'role','row');klass(header,'ae-card-header-row');
     for(const th of header.cells){attr(th,'role','columnheader');klass(th,'ae-card-heading-static',!th.querySelector('a[href],button,input,select'));}
@@ -229,9 +229,9 @@
   }
   function schedule(records){
     if(records?.length){const scope=framed?document.body:document.querySelector('main#content');if(records.every(r=>{const target=r.target.nodeType===1?r.target:r.target.parentElement,changed=r.type==='childList'?[...r.addedNodes,...r.removedNodes]:[];return changed.length&&changed.every(n=>n.nodeType===1&&n.matches('[data-ae-download-control]'))||target?.closest('#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-global-ambient,.ae-resource-preview,[data-ae-assignment-badges],[data-ae-preview-control]')||scope&&!scope.contains(target)&&(!target?.contains(scope)||r.type==='childList'&&![...r.addedNodes,...r.removedNodes].some(n=>n===scope||n.contains?.(scope)));}))return;}
-    // Mutation observers run before rendering. No DOMContentLoaded wait or
-    // debounce that exposes the native table for several painted frames.
-    if(!timer){timer=1;queueMicrotask(update);}
+    // Coalesce parser chunks and native changes once before paint. Never scan
+    // the entire resource table repeatedly inside a mutation microtask.
+    if(!timer)timer=requestAnimationFrame(update);
   }
   function resetPointer(card){if(card&&journal.get(card)?.has('style'))restoreStyles(card);}
   function pointer(e){
@@ -251,7 +251,7 @@
   function boot(){
     update();
     const bodyObserver=new MutationObserver(schedule);bodyObserver.observe(root,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['colspan','rowspan','hidden','datetime','data-due-date','data-submission-status','data-sort-value','data-open-date','data-submitted-at','data-accept-until','data-grade','data-feedback-status']});observers.push(bodyObserver);
-    const stateObserver=new MutationObserver(()=>schedule());stateObserver.observe(topDoc.documentElement,{attributes:true,attributeFilter:['class']});observers.push(stateObserver);
+    let state=enabled()+":"+moving();const stateObserver=new MutationObserver(()=>{const next=enabled()+":"+moving();if(next!==state){state=next;if(!enabled()){cancelAnimationFrame(timer);timer=0;update();}else schedule();}});stateObserver.observe(topDoc.documentElement,{attributes:true,attributeFilter:['class']});observers.push(stateObserver);
     const header=topDoc.querySelector('.portal-header .header-tool-title');
     if(header){const titleObserver=new MutationObserver(()=>schedule());titleObserver.observe(header,{childList:true,subtree:true,characterData:true});observers.push(titleObserver);}
     if(!globalThis.AetherMotion)document.addEventListener('pointermove',pointer,{passive:true});
@@ -261,6 +261,6 @@
     document.addEventListener('visibilitychange',schedule);
     window.addEventListener('pageshow',schedule);
   }
-  window.addEventListener('pagehide',e=>{if(e.persisted)return;observers.forEach(o=>o.disconnect());clearTimeout(deadlineTimer);cancelAnimationFrame(raf);document.removeEventListener('visibilitychange',schedule);window.removeEventListener('pageshow',schedule);document.removeEventListener('pointermove',pointer);reduced.removeEventListener('change',schedule);});
+  window.addEventListener('pagehide',e=>{if(e.persisted)return;observers.forEach(o=>o.disconnect());clearTimeout(deadlineTimer);cancelAnimationFrame(timer);cancelAnimationFrame(raf);document.removeEventListener('visibilitychange',schedule);window.removeEventListener('pageshow',schedule);document.removeEventListener('pointermove',pointer);reduced.removeEventListener('change',schedule);});
   boot();
 })();

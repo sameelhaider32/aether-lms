@@ -1,8 +1,19 @@
 # Aether LMS
 
+## v2.0 — performance and shared design
+
+Geist Sans and Mono are bundled locally. Original and Monochrome share a quieter type scale, consistent controls, opaque academic surfaces and restrained glass on navigation and temporary UI. The retained Home composition and procedural artwork remain.
+
+Startup adapters batch parser changes, graphics size through observers, shader work yields to idle time, and large read-only Resources collections render offscreen contents on demand. Spotlight discovery and protected session-cache restoration start when used. Motion OFF, reduced motion, native forms, frame tools, copyright, downloads and account/session boundaries remain supported.
+
+See [design direction](docs/v2-design-direction.md), [measured performance and limits](docs/v2-performance.md), and [visual review](docs/v2-visual-review.md). Select **Aether Original** or **Monochrome** in the header. Red is reserved for a later release.
+
+The existing installation destination is `%USERPROFILE%\Downloads\aether lms latest`. An older Chrome path may be a Windows junction to this folder; keep it to preserve the extension ID. Open `chrome://extensions`, reload Aether LMS, then refresh the LMS tab. No new unpacked folder or ZIP is needed.
+
+
 A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Chrome extension that adds course cards, document previews, and a glowing starfield to your existing LMS.
 
-**Current version: 1.8.2 · Browser-session document cache · Public beta · MIT licensed**
+**Current version: 2.0.0 · Performance & shared design · Public beta · MIT licensed**
 
 [![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
 [![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)

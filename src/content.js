@@ -12,7 +12,9 @@
   const K = { enabled:"aether:v02:enabled", motion:"aether:v02:motion", orders:"aether:v02:orders", cache:"aether:v08:orders-cache" };
   let enabled=doc.classList.contains("aether-enabled");
   let motion=true, motionRequested=true, editMode=false, orders={}, scene=null, ambientScene=null, workspace=null, toolbar=null, ambientRoot=null;
-  let renderedSignature="", refreshPending=false, refreshForced=false, heroSignature="", effectCanvas=null, effectFrame=0, effectPreview=null;
+  let renderedSignature="", refreshPending=false, refreshForced=false, heroSignature="", effectCanvas=null, effectFrame=0, effectIdle=0, effectPreview=null;
+  const scheduleIdle=window.requestIdleCallback?fn=>window.requestIdleCallback(fn,{timeout:1500}):fn=>setTimeout(fn,180);
+  const cancelIdle=window.cancelIdleCallback?id=>window.cancelIdleCallback(id):id=>clearTimeout(id);
   const TEXT={arrow:'<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h12m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     star:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.5 8L22.5 12l-8 2.5-2.5 8-2.5-8-8-2.5 8-2.5L12 1.5Z" fill="none" stroke="currentColor" stroke-width="1.1"/></svg>',
     drag:'<svg viewBox="0 0 16 16" aria-hidden="true"><g fill="currentColor"><circle cx="5" cy="3.5" r="1"/><circle cx="11" cy="3.5" r="1"/><circle cx="5" cy="8" r="1"/><circle cx="11" cy="8" r="1"/><circle cx="5" cy="12.5" r="1"/><circle cx="11" cy="12.5" r="1"/></g></svg>'};
@@ -77,7 +79,8 @@
   function pageTitle(){
     // Portal routes are opaque identifiers: detect from Sakai's visible tool breadcrumb.
     const titles=[...document.querySelectorAll(".portal-header .header-tool-title, main#content .header-tool-title")];
-    const visible=titles.find(el=>el.getClientRects().length>0);
+    // Breadcrumb text is semantic context, not a reason to flush layout.
+    const visible=titles.find(el=>!el.hidden&&!el.closest('[hidden],[aria-hidden="true"]'));
     return label((visible||titles[0])?.textContent);
   }
   function context(){const main=document.querySelector("main#content.portal-main-content");if(!main)return null;
@@ -115,7 +118,8 @@
     window.dispatchEvent(new Event("aether-settings-change"));
   }
   function setMotion(v,persist=true){if(persist)motionRequested=Boolean(v);motion=motionRequested&&!matchMedia('(prefers-reduced-motion: reduce)').matches;doc.classList.toggle("aether-reduced-motion",!motion);if(scene)scene.setMotion(enabled&&motion);if(ambientScene)ambientScene.setMotion(enabled&&motion);
-    const toggle=workspace?.querySelector(".ae-motion-btn");if(toggle){toggle.textContent=motion?"MOTION · ON":"MOTION · OFF";toggle.setAttribute("aria-pressed",String(motion));}
+    const toggle=workspace?.querySelector(".ae-motion-btn");if(toggle){toggle.textContent=motion?"Motion · On":"Motion · Off";toggle.setAttribute("aria-pressed",String(motion));}
+    if(motion&&!scene)scheduleEffects(effectCanvas);
     if(persist)try{localStorage.setItem(K.motion,String(motionRequested));}catch{}
     window.dispatchEvent(new Event("aether-settings-change"));
   }
@@ -157,7 +161,7 @@
     },{passive:true});
     hero.addEventListener("pointerleave",()=>sparks.forEach(s=>{s.style.removeProperty("--lit");s.style.removeProperty("--zoom");}));
     const copy=make("div","ae-hero-copy");
-    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 1.7'));
+    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 2.0'));
     const eyebrow=make("div","ae-hero-eyebrow");eyebrow.append(make("span","ae-status-dot"),document.createTextNode(course?`LUMS / ${ctx.courseCode||"COURSE"} / ${(ctx.toolTitle||"OVERVIEW").toUpperCase()}`:`LUMS / ACADEMIC WORKSPACE / ${new Date().getFullYear()}`));copy.append(eyebrow);
     const h1=make("h1","ae-hero-heading");
     if(ctx.home){h1.append(document.createTextNode("A little space "),make("em","","for big ideas."));}
@@ -171,13 +175,13 @@
     copy.append(make("p","ae-hero-intro",ctx.home?"Your courses. Your next question. Room to connect the dots.":ctx.resources?"Readings, lecture notes, and shared files. Pick up where you left off.":ctx.assignment?"Coursework, submission status, and original deadlines.":`${ctx.toolTitle||"Course overview"} · Your ${shorten(ctx.courseTitle||"course")} workspace.`));
     const actions=make("div","ae-hero-actions");
     const target=ctx.home?"#aether-course-dock":ctx.resources?".Mrphs-sakai-resources,.Mrphs-sakai-resources-tool":"#aether-tool-dock";
-    const cta=btn("ae-hero-cta",ctx.home?"EXPLORE COURSES":ctx.resources?"VIEW RESOURCES":"COURSE TOOLS",()=>{
+    const cta=btn("ae-hero-cta",ctx.home?"Explore courses":ctx.resources?"View resources":"Course tools",()=>{
       let node=document.querySelector(target);
       if(!node&&ctx.resources)node=[...ctx.main.children].find(el=>el!==workspace&&el.classList.contains("Mrphs-container"));
       node?.scrollIntoView({behavior:motion?"smooth":"auto",block:"start"});
     });cta.insertAdjacentHTML("beforeend",TEXT.arrow);actions.append(cta);
     if(ctx.home){
-      const deadlines=btn("ae-hero-cta ae-deadlines-cta","VIEW DEADLINES",()=>{
+      const deadlines=btn("ae-hero-cta ae-deadlines-cta","View deadlines",()=>{
         const section=document.querySelector('#aether-mission-control');if(!section)return;
         // Move keyboard navigation into the dashboard without focusing its
         // animated title, which would hold the shared dissolve fully revealed.
@@ -188,9 +192,9 @@
       deadlines.setAttribute('aria-controls','aether-mission-control');actions.append(deadlines);
     }
     const pause=btn("ae-motion-btn","",()=>setMotion(!motionRequested));actions.append(pause);copy.append(actions);
-    if(ctx.home)copy.append(make("div","ae-hero-micro","BUILT FOR THE WORK THAT MATTERS."));
+    if(ctx.home)copy.append(make("div","ae-hero-micro","Built for the work that matters."));
     hero.append(copy);
-    if(ctx.home){const plate=make('div','ae-instrument');plate.setAttribute('aria-hidden','true');plate.append(make('span','ae-instrument-number',String(pinnedCourses(ctx).length).padStart(2,'0')),make('span','','PINNED COURSES'),make('span','ae-instrument-mark','↗'));hero.append(plate);const caption=make('div','ae-sculpture-caption','FIG. 01 / FOLDED FIELD · PROCEDURAL');caption.setAttribute('aria-hidden','true');hero.append(caption);}
+    if(ctx.home){const plate=make('div','ae-instrument');plate.setAttribute('aria-hidden','true');plate.append(make('span','ae-instrument-number',String(pinnedCourses(ctx).length).padStart(2,'0')),make('span','','Pinned courses'),make('span','ae-instrument-mark','↗'));hero.append(plate);const caption=make('div','ae-sculpture-caption','FIG. 01 / FOLDED FIELD · PROCEDURAL');caption.setAttribute('aria-hidden','true');hero.append(caption);}
     return {hero,canvas};
   }
   function moveItem(section,item,step,type){const cards=[...section.querySelectorAll("[data-order-item]")];const index=cards.indexOf(item),target=cards[index+step];
@@ -219,7 +223,7 @@
     const right=make("div","ae-head-right");right.append(make("span","ae-section-meta",note));
     const edit=btn("ae-customize",editMode?"DONE":"REORDER ↕",()=>{editMode=!editMode;requestRefresh(true);});edit.setAttribute("aria-pressed",String(editMode));right.append(edit);row.append(right);section.append(row);}
   function makeCourses(ctx){if(!ctx.home)return null;const courses=sorted(pinnedCourses(ctx),"courses");
-    const section=make("section","ae-section ae-courses");section.id="aether-course-dock";section.setAttribute("aria-label","Your pinned course shortcuts");appendHead(section,"01  /  YOUR WORKSPACE","Your courses",`${courses.length} PINNED`);
+    const section=make("section","ae-section ae-courses");section.id="aether-course-dock";section.setAttribute("aria-label","Your pinned course shortcuts");appendHead(section,"Your workspace","Your courses",`${courses.length} PINNED`);
     if(!courses.length){section.querySelector('.ae-customize').disabled=true;section.append(make('p','ae-courses-empty','Pin courses in the Sakai sidebar to add shortcuts here.'));return section;}
     const deck=make("div","ae-course-deck");deck.dataset.edit=editMode?"true":"false";
     courses.forEach((s,i)=>{
@@ -249,21 +253,22 @@
     catch(error){ambientRoot.remove();ambientRoot=null;console.debug("Aether ambient unavailable",error);}
   }
   function disposeAmbient(){ambientScene?.dispose();ambientScene=null;ambientRoot?.remove();ambientRoot=null;}
-  function cancelEffectsStart(){cancelAnimationFrame(effectFrame);effectFrame=0;effectPreview?.dispose();effectPreview=null;}
+  function cancelEffectsStart(){cancelAnimationFrame(effectFrame);effectFrame=0;cancelIdle(effectIdle);effectIdle=0;effectPreview?.dispose();effectPreview=null;}
   function scheduleEffects(canvas){
     if(canvas)effectCanvas=canvas;
     if(!enabled||!effectCanvas?.isConnected)return;
     // Stars draw during parsing, independently of tool frames and page readiness.
     mountAmbient();
-    if(scene||effectFrame)return;
+    if(scene||effectFrame||effectIdle)return;
     const pendingCanvas=effectCanvas;
     // Paint the same procedural field cheaply before compiling any GPU shaders.
     if(!effectPreview)try{effectPreview=globalThis.AetherLivingScene?.prime(pendingCanvas)||null;}catch{/* decoration fails open */}
-    // Two frames allow the first composition to reach the screen before GPU work.
-    effectFrame=requestAnimationFrame(()=>{effectFrame=requestAnimationFrame(()=>{
-      effectFrame=0;if(!enabled||effectCanvas!==pendingCanvas||!pendingCanvas.isConnected)return;
+    // Let the initial composition paint, then compile shaders outside startup.
+    if(!motion)return;
+    effectFrame=requestAnimationFrame(()=>{effectIdle=scheduleIdle(()=>{
+      effectFrame=0;effectIdle=0;if(!enabled||!motion||document.hidden||effectCanvas!==pendingCanvas||!pendingCanvas.isConnected)return;
       try{
-        scene=globalThis.AetherLivingScene?.create(pendingCanvas,{motion:enabled&&motion})||null;
+        scene=globalThis.AetherLivingScene?.create(pendingCanvas,{motion:enabled&&motion,onReady(){effectPreview?.dispose();effectPreview=null;}})||null;
         if(pendingCanvas.dataset.aeRendered||pendingCanvas.nextElementSibling?.matches('canvas[data-ae-rendered]')){effectPreview?.dispose();effectPreview=null;}
       }catch(error){console.debug('Aether scene unavailable',error);}
     });});
@@ -286,14 +291,15 @@
     ctx.main.prepend(workspace);globalThis.AetherSpotlight?.mount(ctx);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
   }
   function requestRefresh(force=false){refreshForced ||= force;if(refreshPending)return;refreshPending=true;
-    queueMicrotask(()=>{refreshPending=false;const forced=refreshForced;refreshForced=false;render(forced);});
+    requestAnimationFrame(()=>{refreshPending=false;const forced=refreshForced;refreshForced=false;render(forced);});
   }
   globalThis.AetherActions={toggleMotion:()=>setMotion(!motionRequested)};
   readSettings();
   const observer=new MutationObserver(records=>{
     for(const r of records){
       const target=r.target.nodeType===1?r.target:r.target.parentElement;
-      if(target?.closest('#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
+      if(r.type==='childList'&&[...r.addedNodes,...r.removedNodes].length&&[...r.addedNodes,...r.removedNodes].every(n=>n.nodeType===1&&n.matches('[data-ae-preview-control],[data-ae-assignment-badges],[data-ae-download-control],#aether-theme-control,#aether-global-ambient')))continue;
+      if(target?.closest('#aether-theme-control,#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
       if(target===document.body&&document.body.classList.contains('is-logged-out')){globalThis.AetherMissionControl?.mount(null);requestRefresh();return;}
       if(target?.closest('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item')){requestRefresh();return;}
       if([...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&n.matches('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item'))){requestRefresh();return;}
@@ -303,6 +309,7 @@
   observer.observe(doc,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','href','title','aria-current','data-type','data-pinned']});
   document.addEventListener('DOMContentLoaded',()=>{render();scheduleEffects(effectCanvas);},{once:true});
   window.addEventListener('pageshow',()=>requestRefresh());
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)scheduleEffects(effectCanvas);});
   const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
   motionPreference.addEventListener('change',()=>setMotion(motionRequested,false));
   window.addEventListener('pagehide',e=>{if(e.persisted)return;observer.disconnect();cancelEffectsStart();scene?.dispose();disposeAmbient();});

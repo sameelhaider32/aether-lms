@@ -149,12 +149,13 @@
  function snapshot(){return {documents:docs.size,chars:totalChars,chunks:chunks.size,opted,cached,cacheStatus,restoring:!!cacheTask,report:report.slice(),busy:running||!!queue.length,batch:batch?{...batch}:null};}
  document.addEventListener('aether-document-departure',()=>{departing=true;clear({localOnly:true});});
  document.addEventListener('aether-session-change',clear);document.addEventListener('aether-preview-session-change',clear);
- window.addEventListener('aether-settings-change',()=>{if(!enabled())clear({all:true});else restore();});
+ window.addEventListener('aether-settings-change',()=>{if(!enabled())clear({all:true});else if(opted||docs.size)restore();});
  window.addEventListener('pagehide',()=>{departing=true;clear({localOnly:true});clearInterval(timer);observer.disconnect();},{capture:true});
- window.addEventListener('pageshow',()=>{departing=false;observe();restore();});
- document.addEventListener('DOMContentLoaded',()=>{if(enabled())restore();else if(document.body?.classList.contains('is-logged-out')||document.querySelector('#loginForm input[type=password]'))clear();},{once:true});
+ window.addEventListener('pageshow',()=>{departing=false;observe();if(opted||docs.size)restore();});
+ document.addEventListener('DOMContentLoaded',()=>{if(!enabled()&&(document.body?.classList.contains('is-logged-out')||document.querySelector('#loginForm input[type=password]')))clear();},{once:true});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden&&(running||queue.length))cancel();});
  const observer=new MutationObserver(()=>{if(!enabled()&&(scope||opted||docs.size||queue.length))clear();});
- function observe(){observer.observe(document.documentElement,{attributes:true,attributeFilter:['class'],subtree:true,childList:true});clearInterval(timer);timer=setInterval(()=>{if(scope)verify().catch(clear);},30000);}observe();
+ function observe(){observer.observe(document.documentElement,{attributes:true,attributeFilter:['class'],subtree:true,childList:true});clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&scope&&(opted||docs.size||running))verify().catch(clear);},30000);}observe();
  cache?.subscribe(message=>{if(departing)return;if(message.reason==='cleared'||message.reason==='identity'){clear({localOnly:true});}else{for(const id of (message.removed||[]).slice(0,100))remove(id);cacheReady=false;notify();if(enabled()&&!running)restore();}});
  store()?.subscribe(()=>{const s=store().snapshot();if((scope||opted||docs.size||queue.length)&&(s.blocked||scope&&s.scope!==scope))clear();});
  globalThis.AetherSpotlightContent={LIMITS,supported,descriptor,available,query,opened,optIn,stopOpened,start,cancel,clear:()=>clear({all:true}),snapshot,verify,restore,setSource(fn){source=fn;},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn);}};

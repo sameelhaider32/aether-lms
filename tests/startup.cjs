@@ -18,7 +18,7 @@ const dir=path.join(root,'reports','startup-v'+version);fs.mkdirSync(dir,{recurs
    if(workspace&&!times.workspaceMs)times.workspaceMs=t;
    if(ambient?.width>500&&!times.starsMs)times.starsMs=t;
    if(preview?.dataset.aeRendered&&!times.firstFieldMs)times.firstFieldMs=t;
-   if((field?.dataset.aeRendered||field?.width>500)&&!times.actualFieldMs){times.actualFieldMs=t;times.firstFieldMs ||= t;}
+   if((field?.dataset.aeRendered)&&!times.actualFieldMs){times.actualFieldMs=t;times.firstFieldMs ||= t;}
   };
   new MutationObserver(scan).observe(document,{subtree:true,childList:true,attributes:true,attributeFilter:['width','data-ae-rendered']});
   document.addEventListener('DOMContentLoaded',()=>{times.domContentLoadedMs=performance.now();scan();},{once:true});
@@ -43,6 +43,7 @@ const dir=path.join(root,'reports','startup-v'+version);fs.mkdirSync(dir,{recurs
  if(!measureOnly){
   await run('GPU handoff removes the first-frame canvas without duplicates',async()=>{assert.equal(await page.locator('.ae-scene-first-frame').count(),0);assert.equal(await page.locator('.ae-living-canvas').count(),1);assert.equal(await page.locator('#aether-global-ambient').count(),1);assert(await page.locator('.ae-living-canvas').getAttribute('data-ae-rendered'));});
   await run('Reduced motion receives the same immediate first visuals',async()=>{await page.emulateMedia({reducedMotion:'reduce'});await page.goto(origin+'/portal/site/home?reduced=1',{waitUntil:'commit'});await page.waitForFunction(()=>window.aetherStartup?.starsMs&&window.aetherStartup?.firstFieldMs);const timing=await page.evaluate(()=>window.aetherStartup);assert(!timing.domContentLoadedMs);assert(await page.locator('html.aether-reduced-motion').count());await page.waitForLoadState('domcontentloaded');return {timing};});
+  await page.emulateMedia({reducedMotion:'no-preference'});
   await run('Early OFF cancels the pending GPU upgrade and ON restarts cleanly',async()=>{
    await page.addInitScript(()=>{const observer=new MutationObserver(()=>{if(document.querySelector('.ae-scene-first-frame')){observer.disconnect();document.querySelector('#aether-native-toggle')?.click();}});observer.observe(document,{subtree:true,childList:true});});
    await page.goto(origin+'/portal/site/home?early-off=1',{waitUntil:'commit'});await page.waitForFunction(()=>document.querySelector('#aether-native-toggle')?.getAttribute('aria-pressed')==='false');await page.waitForTimeout(100);assert.equal(await page.locator('#aether-global-ambient,.ae-scene-first-frame').count(),0);assert.equal(await page.locator('.ae-living-canvas[data-ae-rendered]').count(),0);await page.locator('#aether-native-toggle').click();await page.locator('.ae-living-canvas[data-ae-scene-target][data-ae-rendered]').waitFor();assert.equal(await page.locator('#aether-global-ambient').count(),1);assert.equal(await page.locator('.ae-scene-first-frame').count(),0);await page.waitForLoadState('domcontentloaded');

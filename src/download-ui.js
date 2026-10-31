@@ -161,6 +161,6 @@
  }
  function scheduleControls(){if(!queued){queued=true;queueMicrotask(controls);}}
  document.addEventListener('aether-records-change',scheduleControls);window.addEventListener('aether-settings-change',scheduleControls);document.addEventListener('DOMContentLoaded',scheduleControls,{once:true});window.addEventListener('pageshow',scheduleControls);
- const settings=new MutationObserver(scheduleControls);settings.observe(host.documentElement,{attributes:true,attributeFilter:['class']});
+ const settings=new MutationObserver(()=>{if(!enabled())controls();else scheduleControls();});settings.observe(host.documentElement,{attributes:true,attributeFilter:['class']});
  window.addEventListener('pagehide',e=>{if(!e.persisted)settings.disconnect();});scheduleControls();
 })();

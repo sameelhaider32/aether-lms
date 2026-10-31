@@ -1,5 +1,5 @@
 /* Spotlight is an additive surface; existing page geometry and theme identity stay intact. */
-#aether-spotlight-trigger{display:inline-flex;align-items:center;gap:7px;flex:none;min-height:32px;padding:7px 10px;margin-inline:4px;font:600 10px/1.2 var(--ae-ui);letter-spacing:.06em;color:var(--ae-soft);background:var(--ae-panel);border:1px solid var(--ae-line);border-radius:3px;cursor:pointer}
+#aether-spotlight-trigger{display:inline-flex;align-items:center;gap:7px;flex:none;min-height:32px;padding:7px 10px;margin-inline:4px;font:600 12px/1.2 var(--ae-ui);letter-spacing:.06em;color:var(--ae-soft);background:var(--ae-panel);border:1px solid var(--ae-line);border-radius:3px;cursor:pointer}
 #aether-spotlight-trigger:hover{color:var(--ae-ink);border-color:var(--ae-cyan)}
 #aether-spotlight-trigger:focus-visible{outline:2px solid var(--ae-cyan);outline-offset:3px}
 html:not(.aether-enabled) #aether-spotlight-trigger{display:none}
@@ -10,7 +10,7 @@ html:not(.aether-enabled) #aether-spotlight-trigger{display:none}
 #aether-spotlight button,#aether-spotlight a{font:inherit;cursor:pointer}
 .ae-spot-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 0;gap:16px;flex:none}
 .ae-spot-label{font:700 11px/1.2 var(--ae-digital);letter-spacing:.12em;color:var(--ae-soft)}
-#aether-spotlight .ae-spot-dismiss{background:transparent;border:1px solid var(--ae-line);color:var(--ae-dim);border-radius:4px;padding:3px 7px;font-size:10px}
+#aether-spotlight .ae-spot-dismiss{background:transparent;border:1px solid var(--ae-line);color:var(--ae-dim);border-radius:4px;padding:3px 7px;font-size:12px}
 #aether-spotlight .ae-spot-input{flex:none;width:calc(100% - 44px);margin:14px 22px 18px;padding:8px 0;border:0;border-bottom:1px solid var(--ae-line);border-radius:0;background:transparent;color:var(--ae-ink);font:400 clamp(17px,2.3vw,23px)/1.5 var(--ae-ui);box-shadow:none;outline:none}
 #aether-spotlight .ae-spot-input:focus{border-color:var(--ae-cyan)}
 #aether-spotlight .ae-spot-input::placeholder{color:var(--ae-dim);opacity:1}
@@ -24,15 +24,15 @@ html:not(.aether-enabled) #aether-spotlight-trigger{display:none}
 .ae-spot-icon{display:grid;place-items:center;width:31px;height:31px;flex:none;font:700 12px/1 var(--ae-digital);border:1px solid var(--ae-line);border-radius:5px;color:var(--ae-mint)}
 .ae-spot-result-copy{min-width:0;flex:1;display:block}
 .ae-spot-result-title{display:block;color:var(--ae-ink);font-size:14px;overflow-wrap:anywhere}
-.ae-spot-result-meta{display:block;color:var(--ae-dim);font-size:10px;overflow-wrap:anywhere;margin-top:3px}
-.ae-spot-type{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--ae-dim);flex:none}
+.ae-spot-result-meta{display:block;color:var(--ae-dim);font-size:12px;overflow-wrap:anywhere;margin-top:3px}
+.ae-spot-type{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ae-dim);flex:none}
 #aether-spotlight mark{color:var(--ae-mint);background:transparent;font-weight:700}
 .ae-spot-empty{padding:28px 18px;color:var(--ae-soft);font-size:12px;line-height:1.7}
-.ae-spot-status{flex:none;font-size:10px;color:var(--ae-dim);margin:0;padding:10px 22px 5px;border-top:1px solid var(--ae-line)}
+.ae-spot-status{flex:none;font-size:12px;color:var(--ae-dim);margin:0;padding:10px 22px 5px;border-top:1px solid var(--ae-line)}
 .ae-spot-discovery{display:flex;gap:8px;flex-wrap:wrap;padding:5px 22px 12px;flex:none}
-#aether-spotlight .ae-spot-discovery button,#aether-spotlight .ae-spot-footer button{background:transparent;color:var(--ae-soft);border:1px solid var(--ae-line);border-radius:4px;padding:6px 9px;font-size:10px}
+#aether-spotlight .ae-spot-discovery button,#aether-spotlight .ae-spot-footer button{background:transparent;color:var(--ae-soft);border:1px solid var(--ae-line);border-radius:4px;padding:6px 9px;font-size:12px}
 #aether-spotlight button:disabled{opacity:.45;cursor:default}
-.ae-spot-footer{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 22px;background:color-mix(in srgb,var(--ae-bg) 30%,transparent);border-top:1px solid var(--ae-line);color:var(--ae-dim);font-size:10px;flex:none}
+.ae-spot-footer{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 22px;background:color-mix(in srgb,var(--ae-bg) 30%,transparent);border-top:1px solid var(--ae-line);color:var(--ae-dim);font-size:12px;flex:none}
 .ae-spot-footer>span{flex:1}
 #aether-spotlight .ae-spot-native{color:var(--ae-mint);text-decoration:none;font-size:11px}
 #aether-spotlight :is(button,a):focus-visible{outline:2px solid var(--ae-cyan);outline-offset:2px}
