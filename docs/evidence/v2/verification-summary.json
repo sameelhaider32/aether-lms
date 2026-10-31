@@ -44,5 +44,13 @@
     "No GPU/process-memory or field-INP claims",
     "Residual frame tails documented"
   ],
-  "installation": "Chrome Default registered historical path is a Windows junction to Downloads/aether lms latest; ID and preferences unchanged"
+  "installation": "Chrome Default registered historical path is a Windows junction to Downloads/aether lms latest; ID and preferences unchanged",
+  "fullBrowser": [
+    126,
+    126
+  ],
+  "readerLifecycle": [
+    22,
+    22
+  ]
 }

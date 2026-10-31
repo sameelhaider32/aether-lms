@@ -4,7 +4,7 @@ All browser cases intercept fictional LMS requests. No real academic submission,
 
 | Gate | Evidence |
 |---|---|
-| Core workflows / previews / file consent / resource native controls | 80/80 [browser cases](evidence/v2/core-regression.json) |
+| Core workflows / previews / file consent / resource native controls | 126/126 [complete browser cases](evidence/v2/full-browser-regression.json); earlier 80-case core subset also passes |
 | Gradebook / statistics / Roster / editing / tool frames / OFF | 17/17 [academic cases](evidence/v2/academic-regression.json), including the five required widths |
 | Mission Control | 15/15 focused cases, including source coverage, account failure and native navigation |
 | Downloader | 24/24 browser cases; model, network, controller and streaming archive checks pass |
@@ -13,7 +13,7 @@ All browser cases intercept fictional LMS requests. No real academic submission,
 | Visual review | 120/120 static compositions, 10 live WebGL compositions; [review](v2-visual-review.md) |
 | Lifetime / performance | Bounded warm-cycle counts, zero 35s idle requests, emulated hidden suspension, before/after medians; [limits and raw evidence](v2-performance.md) |
 
-The academic pass found a real OFF timing regression: generic batching delayed role restoration by a frame. The fix restores OFF synchronously in the state observer while retaining frame-batched ordinary updates; the affected Gradebook, Roster and frame checks now pass. The font-dependent tests now assert Geist roles, and the startup test checks a rendered field rather than canvas size alone. The test browser can use `AETHER_CHROMIUM` consistently. CI also exposed two old motion-test assumptions (the previous ambient rate and >4px lift); the updated checks remain rate-independent and enforce the new 2px lift budget. A Windows PDF redraw race is fixed by keeping page-navigation requests while rendering and giving the document pane an explicit keyboard focus target; a deterministic lifecycle check covers this case and preserves native select-key behavior.
+The academic pass found a real OFF timing regression: generic batching delayed role restoration by a frame. The fix restores OFF synchronously in the state observer while retaining frame-batched ordinary updates; the affected Gradebook, Roster and frame checks now pass. The font-dependent tests now assert Geist roles, and the startup test checks a rendered field rather than canvas size alone. The GPU context-loss check explicitly enables motion so it exercises WebGL rather than the intended static Motion OFF fallback. The full local sequence now passes all 126 cases. The test browser can use `AETHER_CHROMIUM` consistently. CI also exposed two old motion-test assumptions (the previous ambient rate and >4px lift); the updated checks remain rate-independent and enforce the new 2px lift budget. A Windows PDF redraw race is fixed by keeping page-navigation requests while rendering and giving the document pane an explicit keyboard focus target; a deterministic lifecycle check covers this case and preserves native select-key behavior.
 
 The requested source folder is the actual Chrome destination: Default's historical `Downloads/Aether LMS/aether-lms-extension-v1.3.0/aether-lms-extension-v1.3.0` path is a junction targeting `Downloads/Aether LMS Latest`. The junction, extension ID and stored preferences were preserved. Local rollback checkpoint: `checkpoint/aether-1.8.2-before-2.0`, at `2753d6d`.
 
