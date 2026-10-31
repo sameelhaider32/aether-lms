@@ -4,3 +4,5 @@
 #fit{font:12px "Geist Sans","Segoe UI",sans-serif;background:rgb(var(--ae-tone-060,37,70,56));color:rgb(var(--ae-tone-248,225,255,237));border:1px solid rgb(var(--ae-tone-116,78,128,101));border-radius:3px;padding:5px;min-height:30px}#zoom{min-width:38px;text-align:center;font-variant-numeric:tabular-nums}
 
 nav button{font-family:"Geist Sans","Segoe UI",sans-serif}
+
+#paper:focus-visible{outline:2px solid rgb(var(--ae-tone-228,137,223,216));outline-offset:-2px}

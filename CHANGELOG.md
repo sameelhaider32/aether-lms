@@ -7,6 +7,7 @@
 - Bound graphics detail and preserve complete geometry as budgets change; release replaced WebGL contexts and portable preview canvases.
 - Render offscreen internals of large read-only resource collections on demand while retaining native DOM, find, focus, sorting and menus.
 - Defer Spotlight metadata/session restore until use; stop hidden-tab discovery/extraction and empty-index identity polling.
+- Queue PDF keyboard page navigation during redraw and provide a focusable document pane without intercepting native select keys.
 - Retain the working v1.8.2 features, settings, security boundaries and home composition. No Red theme or spatial-home branch.
 - Add reproducible fixture measurements, visual matrix and lifetime checks. See `docs/v2-performance.md` for actual results and remaining live-validation limits.
 
