@@ -48,6 +48,9 @@ function pageFor(u){
   await page.waitForFunction(()=>document.querySelector('.mc-next-list')?.textContent.includes('PA3 Consensus'));
   await open();await query.fill('DS resources');await page.waitForFunction(()=>document.querySelector('.ae-spot-option .ae-spot-result-title')?.textContent==='Resources');
   assert.match(await page.locator('.ae-spot-option').first().innerText(),/Distributed Systems/);assert.equal(await page.locator('.ae-spot-native').getAttribute('href'),origin+'/portal/site/cs200/page/Resources?tool=Resources');
+  // Opening paints first, then starts bounded discovery asynchronously. Isolate
+  // typing traffic from that permitted work instead of sampling an idle button.
+  await page.waitForFunction(()=>document.querySelector('.ae-spot-status')?.textContent.includes('Check finished')&&document.querySelector('[data-spot-cancel]')?.hidden);
   const before=requests.length;for(const word of ['cloud','CS487','resorces','PA3','consensus','> motion'])await query.fill(word);assert.equal(requests.length,before,'Typing triggered a request');
   await query.fill('PA3');assert.equal(await page.locator('.ae-spot-option').count(),3);assert.equal(await palette.getByText(/SECRET/).count(),0);assert.match(await page.locator('.ae-spot-option').first().innerText(),/Draft saved|Submitted/);assert(await palette.locator('mark').count());
   const first=await query.getAttribute('aria-activedescendant');await page.keyboard.press('ArrowDown');assert.notEqual(await query.getAttribute('aria-activedescendant'),first);await page.keyboard.press('ArrowUp');assert.equal(await query.getAttribute('aria-activedescendant'),first);
