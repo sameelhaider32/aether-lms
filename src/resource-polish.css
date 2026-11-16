@@ -2,16 +2,16 @@
    Pure presentation: never hide, detach, duplicate, intercept, or replace Sakai controls.
    Applied both to the top-level Resources page and its same-origin tool frames. */
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface){
-  --ae-files-border:rgba(165,233,197,.17);
-  --ae-files-dim:#9bb7a8;
-  --ae-files-bright:#d5ffe8;
-  --ae-files-shine:#b0ffdc;
+  --ae-files-border:rgba(var(--ae-tone-216,165,233,197),.17);
+  --ae-files-dim:rgb(var(--ae-tone-176,155,183,168));
+  --ae-files-bright:rgb(var(--ae-tone-244,213,255,232));
+  --ae-files-shine:rgb(var(--ae-tone-236,176,255,220));
 }
 
 /* Make the native tab row feel like an application navigation control. */
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(.nav-tabs,.resource-toolbar,.tab-navigation){
-  border-color:#29433a!important;
+  border-color:rgb(var(--ae-tone-060,41,67,58))!important;
   gap:7px;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
@@ -26,29 +26,29 @@
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(.nav-tabs .nav-link.active,.nav-tabs .active .nav-link,.resource-toolbar .btn:first-child){
-  background:#245440!important;
-  border-color:#52876c!important;
-  color:#e9fff3!important;
-  box-shadow:inset 0 0 0 1px #93efc615!important;
+  background:rgb(var(--ae-tone-072,36,84,64))!important;
+  border-color:rgb(var(--ae-tone-120,82,135,108))!important;
+  color:rgb(var(--ae-tone-248,233,255,243))!important;
+  box-shadow:inset 0 0 0 1px rgba(var(--ae-tone-216,147,239,198),0.08235294)!important;
 }
 
 /* File list as a crisp desktop file browser, rather than alternating gray bands. */
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table){
   width:100%;
-  background:#111a18!important;
-  border:1px solid #385247!important;
+  background:rgb(var(--ae-tone-024,17,26,24))!important;
+  border:1px solid rgb(var(--ae-tone-076,56,82,71))!important;
   border-radius:11px!important;
   border-collapse:separate!important;
   border-spacing:0!important;
-  box-shadow:0 12px 50px rgba(0,0,0,.12),inset 0 1px rgba(190,249,212,.055)!important;
+  box-shadow:0 12px 50px rgba(0,0,0,.12),inset 0 1px rgba(var(--ae-tone-232,190,249,212),.055)!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) :is(thead tr>th,thead tr>td,th[scope="col"]){
-  background:linear-gradient(180deg,#203630,#1b2f29)!important;
-  color:#e0f7e8!important;
-  border-color:#446052!important;
-  border-bottom:1px solid #476353!important;
+  background:linear-gradient(180deg,rgb(var(--ae-tone-048,32,54,48)),rgb(var(--ae-tone-044,27,47,41)))!important;
+  color:rgb(var(--ae-tone-240,224,247,232))!important;
+  border-color:rgb(var(--ae-tone-088,68,96,82))!important;
+  border-bottom:1px solid rgb(var(--ae-tone-092,71,99,83))!important;
   padding:14px 12px!important;
   font:650 12px/1.3 var(--ae-ui,"Aether Space","Segoe UI",sans-serif)!important;
   letter-spacing:.04em!important;
@@ -56,39 +56,39 @@
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr>td{
   position:relative;
-  background:#121b18!important;
+  background:rgb(var(--ae-tone-024,18,27,24))!important;
   background-image:none!important;
-  color:#e5eee7!important;
-  border-color:#25392f!important;
-  border-top:1px solid rgba(148,190,163,.055)!important;
+  color:rgb(var(--ae-tone-236,229,238,231))!important;
+  border-color:rgb(var(--ae-tone-052,37,57,47))!important;
+  border-top:1px solid rgba(var(--ae-tone-180,148,190,163),.055)!important;
   padding:12px 11px!important;
   line-height:1.45!important;
   transition:background-color .21s ease,box-shadow .21s ease,color .21s ease,border-color .21s ease!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr:nth-child(even)>td{
-  background:#16201c!important;
+  background:rgb(var(--ae-tone-028,22,32,28))!important;
   background-image:none!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr:hover>td,
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr:focus-within>td{
-  background:#1c3229!important;
-  background-image:radial-gradient(165px circle at var(--ae-hover-x,50%) var(--ae-hover-y,50%),rgba(161,255,204,.14),transparent 96%)!important;
-  border-top-color:#416b54!important;
-  color:#f4fff7!important;
-  box-shadow:inset 0 1px #b9ffda13!important;
+  background:rgb(var(--ae-tone-044,28,50,41))!important;
+  background-image:radial-gradient(165px circle at var(--ae-hover-x,50%) var(--ae-hover-y,50%),rgba(var(--ae-tone-232,161,255,204),.14),transparent 96%)!important;
+  border-top-color:rgb(var(--ae-tone-096,65,107,84))!important;
+  color:rgb(var(--ae-tone-252,244,255,247))!important;
+  box-shadow:inset 0 1px rgba(var(--ae-tone-236,185,255,218),0.0745098)!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr:hover>td:first-child,
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr:focus-within>td:first-child{
-  box-shadow:inset 3px 0 #9df7ca,inset 0 1px #b9ffda13!important;
+  box-shadow:inset 3px 0 rgb(var(--ae-tone-224,157,247,202)),inset 0 1px rgba(var(--ae-tone-236,185,255,218),0.0745098)!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr>td a[href]{
-  color:#aeeed3!important;
+  color:rgb(var(--ae-tone-224,174,238,211))!important;
   text-decoration-color:transparent!important;
   text-underline-offset:3px;
   transition:color .18s ease,text-shadow .18s ease,text-decoration-color .18s ease!important;
@@ -97,9 +97,9 @@
   :is(table,.table) tbody tr:hover>td a[href],
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr>td a[href]:focus-visible{
-  color:#eefff5!important;
-  text-decoration-color:#abffda!important;
-  text-shadow:0 0 13px #b1ffd533!important;
+  color:rgb(var(--ae-tone-252,238,255,245))!important;
+  text-decoration-color:rgb(var(--ae-tone-236,171,255,218))!important;
+  text-shadow:0 0 13px rgba(var(--ae-tone-236,177,255,213),0.2)!important;
 }
 /* PDF badge only when the native anchor truly resolves to a PDF path. */
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
@@ -108,9 +108,9 @@
   display:inline-block;
   margin-left:9px;
   vertical-align:2px;
-  border:1px solid #4b6f5c;
-  color:#96c7b0;
-  background:#24362c;
+  border:1px solid rgb(var(--ae-tone-100,75,111,92));
+  color:rgb(var(--ae-tone-188,150,199,176));
+  background:rgb(var(--ae-tone-048,36,54,44));
   border-radius:4px;
   padding:2px 4px;
   font:700 8px/1.2 Arial,sans-serif;
@@ -119,33 +119,33 @@
 /* Existing Actions menu remains a real Sakai dropdown. */
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(button.btn,a.btn,input[type="button"],input[type="submit"],.dropdown-toggle){
-  border:1px solid #4b7760!important;
+  border:1px solid rgb(var(--ae-tone-108,75,119,96))!important;
   border-radius:8px!important;
-  color:#dcf6e7!important;
-  background:#1c3129!important;
+  color:rgb(var(--ae-tone-240,220,246,231))!important;
+  background:rgb(var(--ae-tone-044,28,49,41))!important;
   background-image:none!important;
-  box-shadow:inset 0 1px #dbffe50b!important;
+  box-shadow:inset 0 1px rgba(var(--ae-tone-244,219,255,229),0.04313725)!important;
   transition:background-color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(button.btn,a.btn,input[type="button"],input[type="submit"],.dropdown-toggle):hover{
-  color:#f4fff6!important;
-  background:#29553f!important;
-  background-image:radial-gradient(150px circle at var(--ae-hover-x,50%) var(--ae-hover-y,50%),#d3ffe638,transparent 83%)!important;
-  border-color:#8cd7ab!important;
-  box-shadow:0 0 0 1px #9df7c115,0 5px 18px #6cf6af16,inset 0 1px #dfffe620!important;
+  color:rgb(var(--ae-tone-252,244,255,246))!important;
+  background:rgb(var(--ae-tone-076,41,85,63))!important;
+  background-image:radial-gradient(150px circle at var(--ae-hover-x,50%) var(--ae-hover-y,50%),rgba(var(--ae-tone-244,211,255,230),0.21960784),transparent 83%)!important;
+  border-color:rgb(var(--ae-tone-196,140,215,171))!important;
+  box-shadow:0 0 0 1px rgba(var(--ae-tone-224,157,247,193),0.08235294),0 5px 18px rgba(var(--ae-tone-212,108,246,175),0.08627451),inset 0 1px rgba(var(--ae-tone-248,223,255,230),0.1254902)!important;
   transform:translateY(-1px)!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(button.btn,a.btn,input[type="button"],input[type="submit"],.dropdown-toggle):active{
   transform:translateY(0)!important;
-  box-shadow:inset 0 2px 6px #071b11aa!important;
+  box-shadow:inset 0 2px 6px rgba(var(--ae-tone-024,7,27,17),0.66666667)!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(button.btn,a.btn,input[type="button"],input[type="submit"],.dropdown-toggle):focus-visible,
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) a[href]:focus-visible{
-  outline:2px solid #b3ffdc!important;
+  outline:2px solid rgb(var(--ae-tone-236,179,255,220))!important;
   outline-offset:3px!important;
 }
 /* Native icon remains native. The movement is exclusively decorative. */
@@ -155,18 +155,18 @@
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(table,.table) tbody tr:hover>td :is(img,svg,.fa,.bi){
-  filter:drop-shadow(0 0 6px #91ffbd6b);
+  filter:drop-shadow(0 0 6px rgba(var(--ae-tone-228,145,255,189),0.41960784));
   transform:translateY(-1px);
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
   :is(input:not([type="checkbox"]),select){
-  background:#172620!important;
-  color:#ebfdf1!important;
-  border:1px solid #446e58!important;
+  background:rgb(var(--ae-tone-036,23,38,32))!important;
+  color:rgb(var(--ae-tone-248,235,253,241))!important;
+  border:1px solid rgb(var(--ae-tone-100,68,110,88))!important;
   border-radius:8px!important;
 }
 :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
-  input[type="checkbox"]{accent-color:#a5f6c8}
+  input[type="checkbox"]{accent-color:rgb(var(--ae-tone-224,165,246,200))}
 @media(max-width:760px){
   :is(html.aether-enabled.ae-page-resources main#content,html.ae-resource-surface)
     :is(table,.table) :is(th,td){padding:9px 7px!important}

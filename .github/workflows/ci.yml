@@ -54,6 +54,9 @@ jobs:
       - name: Mission Control fixture checks
         if: '!cancelled()'
         run: npm run test:mission
+      - name: Theme fixture checks
+        if: '!cancelled()'
+        run: npm run test:theme
       - name: Graphics and cancellation regressions
         if: '!cancelled()'
         run: node tests/fallbacks.cjs

@@ -125,7 +125,16 @@
       const glyph=make("span","ae-toggle-glyph");glyph.innerHTML=TEXT.star;
       const name=make("span","ae-toggle-brand","AETHER");const state=make("span","ae-toggle-word",enabled?"ON":"OFF");native.append(glyph,name,state);
       native.setAttribute("aria-label","Toggle Aether interface; return to original Sakai anytime");header.append(native);
-    }toolbar=native;toolbar.setAttribute("aria-pressed",String(enabled));}
+    }toolbar=native;toolbar.setAttribute("aria-pressed",String(enabled));
+    if(!header.querySelector('#aether-theme-control')){
+      const control=make('label','');control.id='aether-theme-control';
+      const name=make('span','','THEME'),select=make('select','');select.id='aether-theme-select';select.setAttribute('aria-label','Aether theme');
+      for(const [value,title] of [['aether','Aether Original'],['monochrome','Monochrome']]){const option=make('option','',title);option.value=value;select.append(option);}
+      select.value=globalThis.AetherTheme?.get()||'aether';
+      select.addEventListener('change',()=>globalThis.AetherTheme?.set(select.value));
+      control.append(name,select);native.after(control);
+    }}
+  window.addEventListener('aether-theme-change',()=>{const select=document.querySelector('#aether-theme-select');if(select)select.value=globalThis.AetherTheme?.get()||'aether';});
   function createFlare(parent,x,y,index){const n=make("span","ae-sparkle");n.style.left=x+"%";n.style.top=y+"%";n.style.setProperty("--n",String(index));parent.append(n);return n;}
   function makeHero(ctx){
     // Keep the general campus slogan on Home only. Course pages use the real
@@ -148,7 +157,7 @@
     },{passive:true});
     hero.addEventListener("pointerleave",()=>sparks.forEach(s=>{s.style.removeProperty("--lit");s.style.removeProperty("--zoom");}));
     const copy=make("div","ae-hero-copy");
-    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 1.5'));
+    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 1.6'));
     const eyebrow=make("div","ae-hero-eyebrow");eyebrow.append(make("span","ae-status-dot"),document.createTextNode(course?`LUMS / ${ctx.courseCode||"COURSE"} / ${(ctx.toolTitle||"OVERVIEW").toUpperCase()}`:`LUMS / ACADEMIC WORKSPACE / ${new Date().getFullYear()}`));copy.append(eyebrow);
     const h1=make("h1","ae-hero-heading");
     if(ctx.home){h1.append(document.createTextNode("A little space "),make("em","","for big ideas."));}

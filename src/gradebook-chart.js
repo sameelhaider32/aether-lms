@@ -10,12 +10,13 @@
   } catch { return; }
   const context = 'html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable)';
   const surface = '.wicket-modal:has(canvas) .w_content_1:has(canvas),.gb-modal-dialog:has(> .gb-modal-content > canvas)';
-  const originals = new WeakMap();
+  const originals = new WeakMap(), modes = new WeakMap();
+  const monochrome = () => host.dataset.aetherTheme === "monochrome";
   let library = null, queued = false, disposed = false;
   const active = chart => host.classList.contains('aether-enabled') &&
     document.documentElement.matches(context) && chart.canvas?.isConnected && chart.canvas.closest(surface);
   const color = value => typeof value === 'string' ?
-    ({'#15597e':'#329d79', '#5bc0de':'#9df8d6'}[value.toLowerCase()] || value) : value;
+    ((monochrome() ? {'#15597e':'#9a9a9a', '#5bc0de':'#eeeeee'} : {'#15597e':'#329d79', '#5bc0de':'#9df8d6'})[value.toLowerCase()] || value) : value;
 
   function restore(chart) {
     const records = originals.get(chart);
@@ -31,7 +32,9 @@
   }
   function theme(chart) {
     if (!active(chart)) return restore(chart);
-    let records = originals.get(chart), changed = false;
+    let changed = false;
+    if (modes.get(chart) !== monochrome()) { changed = restore(chart); modes.set(chart, monochrome()); }
+    let records = originals.get(chart);
     if (!records) { records = new Map(); originals.set(chart, records); }
     function set(object, key, value) {
       if (!object || object[key] === value) return;
@@ -54,12 +57,12 @@
       }
     }
     const options = chart.options;
-    set(options?.title, 'fontColor', '#9df8d6');
+    set(options?.title, 'fontColor', monochrome() ? '#eeeeee' : '#9df8d6');
     for (const axis of [...(options?.scales?.xAxes || []), ...(options?.scales?.yAxes || [])]) {
-      set(axis.ticks, 'fontColor', '#a7cfbd');
-      set(axis.scaleLabel, 'fontColor', '#9df8d6');
-      set(axis.gridLines, 'color', 'rgba(88,143,116,0.14)');
-      set(axis.gridLines, 'zeroLineColor', 'rgba(88,143,116,0.14)');
+      set(axis.ticks, 'fontColor', monochrome() ? '#c2c2c2' : '#a7cfbd');
+      set(axis.scaleLabel, 'fontColor', monochrome() ? '#eeeeee' : '#9df8d6');
+      set(axis.gridLines, 'color', monochrome() ? 'rgba(160,160,160,0.14)' : 'rgba(88,143,116,0.14)');
+      set(axis.gridLines, 'zeroLineColor', monochrome() ? 'rgba(160,160,160,0.14)' : 'rgba(88,143,116,0.14)');
     }
     return changed;
   }
@@ -87,8 +90,8 @@
     if (!queued && !disposed) { queued = true; queueMicrotask(refresh); }
   }
   const state = new MutationObserver(schedule);
-  state.observe(host, {attributes:true, attributeFilter:['class']});
-  if (document.documentElement !== host) state.observe(document.documentElement, {attributes:true, attributeFilter:['class']});
+  state.observe(host, {attributes:true, attributeFilter:['class','data-aether-theme']});
+  if (document.documentElement !== host) state.observe(document.documentElement, {attributes:true, attributeFilter:['class','data-aether-theme']});
   const dom = new MutationObserver(records => {
     if (records.some(r => r.target.closest?.(surface) || [...r.addedNodes, ...r.removedNodes].some(n =>
       n.nodeType === 1 && (n.matches('canvas,script') || n.querySelector('canvas,script'))))) schedule();

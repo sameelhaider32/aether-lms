@@ -10,7 +10,7 @@ const assert=require('node:assert/strict'),{createHash}=require('node:crypto');
  assert.equal(createHash('sha256').update(source).digest('hex'),'3ecd297f831ae5d53ecd22349be4a9c2afbd404e448cbe72b7475f5863c4ba04');
  const extension=path.resolve(process.env.AETHER_EXTENSION||path.join(__dirname,'..'));
  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'aether-chart-smoke-'));
- const context=await chromium.launchPersistentContext(profile,{channel:'chromium',headless:true,
+ const context=await chromium.launchPersistentContext(profile,{channel:'chromium',executablePath:process.env.AETHER_CHROMIUM||undefined,headless:true,
   ignoreDefaultArgs:['--disable-extensions'],args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],
   viewport:{width:1440,height:1000},reducedMotion:'reduce'});
  try{
@@ -53,6 +53,15 @@ const assert=require('node:assert/strict'),{createHash}=require('node:crypto');
    assert(themed.axes.every(a=>a[0]==='#a7cfbd'&&a[1]==='#9df8d6'&&a[2]==='rgba(88,143,116,0.14)'));
    assert.deepEqual(themed.pixels,[[50,157,121,255],[157,248,214,255],[50,157,121,255]]);
    assert(themed.untouched&&themed.identity&&themed.callbacks);
+   const defaultSnapshot=await page.evaluate(()=>chartColorSnapshot(statsChart));
+   await page.selectOption('#aether-theme-select','monochrome');
+   await page.waitForFunction(()=>statsChart.data.datasets[0].backgroundColor[0]==='#9a9a9a');
+   assert.deepEqual(await page.evaluate(()=>statsChart.data.datasets[0].backgroundColor),['#9a9a9a','#eeeeee','#9a9a9a']);
+   assert.equal(await page.evaluate(()=>statsChart.options.scales.xAxes[0].ticks.fontColor),'#c2c2c2');
+   assert(await page.evaluate(()=>statsChart.options.tooltips.callbacks===nativeTooltip&&statsChart.options.scales.yAxes[0].ticks.callback===nativeTick));
+   await page.selectOption('#aether-theme-select','aether');
+   await page.waitForFunction(()=>statsChart.data.datasets[0].backgroundColor[0]==='#329d79');
+   assert.equal(await page.evaluate(()=>chartColorSnapshot(statsChart)),defaultSnapshot);
    await page.evaluate(()=>document.querySelector('#aether-native-toggle').click());
    await page.waitForFunction(()=>statsChart.data.datasets[0].backgroundColor===nativeColors);
    const original=await page.evaluate(()=>chartColorSnapshot(statsChart));
