@@ -29,6 +29,9 @@ The development-only PowerPoint generator's `image-size` dependency is overridde
 - `npm run test:contents`: focused fictional document extraction, consent/privacy/cancellation and content-result UI smoke.
 - `npm run test:spotlight`: focused ranking/browser smoke using fictional intercepted responses, including keyboard/frame entry, native links, privacy, cancellation, preview reuse and both themes.
 - `npm run test:theme`: focused theme switching, storage, frames, reader chrome and native-control smoke checks. `node tests/gradebook-chart.cjs` also covers both statistics modal variants and live monochrome chart switching.
+- `npm run test:v2-performance`: reproducible fictional Home/300-file Resources measurements; compare runs on the same browser and hardware. See `docs/v2-performance.md` for methodology and limits.
+- `npm run test:v2-visual`: the two-theme, five-width fixture screenshot matrix. Inspect the actual images for alignment, overflow and readability.
+- `npm run test:v2-lifetime`: repeated temporary-surface cycles and an idle/visibility probe; report native visibility separately from emulation.
 - `node tests/browser.cjs --smoke`: package-oriented checks, including hover dismissal and role/document variants.
 - `node tests/package.cjs`: verifies the built ZIP's hashes, unpacked bytes, licenses, permissions, and exclusion of development/private artifacts. Run the package builder first.
 
@@ -48,6 +51,7 @@ Checked-in PPTX, DOCX, XLSX, ZIP, and audio fixtures contain fictional content. 
 |---|---|
 | `src/prepaint.js`, `content.js`, `dashboard.js` | Early preferences, native page extraction, workspace, shortcuts, on-page activity. |
 | `src/scene.js`, `ambient.js`, `motion.js` | Folded field, stars, contours, animation scheduling, fallbacks. |
+| `src/fonts.css`, `system.css`, `palette.css`, `theme-settings.js` | Local Geist typography, shared components/materials, theme tokens and persistent theme coordination. |
 | `src/classifier.js`, `lists.js`, `assignment-state.js` | Reversible native record styling and conservative assignment states. |
 | `src/resource-info.js`, `resource-access.js`, `resource-preview.js` | File descriptors, same-origin reads, copyright consent, preview lifecycle. |
 | `preview/` | Local PDF/Office readers and archive bounds. |

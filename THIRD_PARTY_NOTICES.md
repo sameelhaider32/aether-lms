@@ -4,10 +4,6 @@ All runtime assets are locally packaged. License texts remain beside their asset
 
 | Asset | Source | License notice |
 |---|---|---|
-| Doto variable font, including ROND roundness | [Doto](https://github.com/oliverlalan/Doto), via [Google Fonts](https://github.com/google/fonts/tree/main/ofl/doto) | SIL OFL 1.1, `fonts/doto-OFL.txt` |
-| Oswald variable font | [Oswald](https://github.com/googlefonts/OswaldFont), via [Google Fonts](https://github.com/google/fonts/tree/main/ofl/oswald) | SIL OFL 1.1, `fonts/oswald-OFL.txt` |
-| Space Grotesk variable font | [Space Grotesk](https://github.com/floriankarsten/space-grotesk), via [Google Fonts](https://github.com/google/fonts/tree/main/ofl/spacegrotesk) | SIL OFL 1.1, `fonts/spacegrotesk-OFL.txt` |
-| Lato Regular/Bold | Unchanged v0.8.1 assets | SIL OFL 1.1, `fonts/OFL.txt` |
 | PDF.js 5.6.205 and worker | Unchanged v0.8.1 assets; [Mozilla PDF.js](https://github.com/mozilla/pdf.js) | Apache 2.0, `vendor/pdfjs/LICENSE` |
 | PDF.js character maps, fonts and decoders | Unchanged v0.8.1 assets | Notices in `vendor/pdfjs/cmaps/`, `standard_fonts/` and `wasm/` |
 | Playwright 1.64.1 | [Microsoft Playwright](https://github.com/microsoft/playwright) | Apache 2.0; development only, excluded from release |
@@ -24,3 +20,6 @@ All runtime assets are locally packaged. License texts remain beside their asset
 Segoe UI is an installed-system font fallback; no Microsoft fonts are redistributed. Graphics use native browser APIs without Three.js, Lenis or D3 runtime dependencies. No racing-reference branding, photographs or models are included.
 
 Office runtime bundles are preserved without source modifications. `vendor/office/provenance.json` records pinned npm package integrity, per-file hashes and supplemental license sources. All viewers are packaged locally; academic files are not sent to a third-party conversion service.
+
+## Geist Sans / Geist Mono
+Locally bundled unmodified variable WOFF2 assets from vercel/geist-font. SIL Open Font License 1.1; see fonts/Geist-OFL.txt and fonts/Geist-source.json for pinned source and checksums. No runtime font requests leave the extension.

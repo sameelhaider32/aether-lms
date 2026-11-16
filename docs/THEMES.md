@@ -1,10 +1,12 @@
-# Selectable themes (1.6)
+# Selectable themes
 
 Choose **Aether Original** or **Monochrome** from **THEME**, beside the existing AETHER switch. New installations keep Aether Original. Reload the existing unpacked extension at `chrome://extensions`, then refresh LMS tabs after updating files; no build or new folder is needed.
 
 ## Reference and design
 
-The actual [Vexon preview](https://www.getlayers.ai/templates?layer=vexon) was inspected in Chrome. It uses a black field, a bright silver particle halo, gray/white headline contrast, fine outlined controls and some faint blue lighting. The surrounding GetLayers library and performance panels are not the template. Aether borrows the neutral light and border treatment, retaining its existing fonts, typography, hero, folded field, sidebar, course cards and academic layouts. No template source or assets are copied. Red is reserved for later.
+The actual [Vexon preview](https://www.getlayers.ai/templates?layer=vexon) was inspected in Chrome. It uses a black field, a bright silver particle halo, gray/white headline contrast, fine outlined controls and some faint blue lighting. The surrounding GetLayers library and performance panels are not the template. Aether borrows the neutral light and border treatment, retaining its hero, folded field, sidebar, course cards and academic layouts. No template source or assets are copied. Red is reserved for later.
+
+In Aether 2.0, both themes share locally bundled Geist Sans/Mono, spacing, component geometry and selective glass. Switching themes changes the palette while keeping the same typography and layout. See the [shared design direction](v2-design-direction.md) and [visual review](v2-visual-review.md).
 
 ## Implementation
 
@@ -13,6 +15,7 @@ The actual [Vexon preview](https://www.getlayers.ai/templates?layer=vexon) was i
 - `content.js` adds only the labelled select, using the existing header and settings behavior. `gradebook-chart.js` observes theme changes, restores its tracked original values before changing modes, and updates only existing statistics chart presentation. Native data and callbacks remain intact.
 - Only decorative canvases and extension-owned glyphs use grayscale filters. No filter is applied to page ancestors or authored document canvases; fixed overlays and native chart coordinates keep their geometry. The PDF/Office HTML pages load the same theme coordinator and palette for their reader chrome. The manifest keeps the existing storage-only permission and LUMS host scope.
 - Existing enable/OFF and motion settings continue unchanged. State badges keep labels, including overdue, submitted, opened and access failures, so grayscale does not remove their meaning.
+- `src/fonts.css` and `src/system.css` own the shared typography and component/material foundations. Header/sidebar transitions follow Motion OFF and system reduced motion; authored documents and editable content retain their own fonts.
 
 ## Focused validation
 
