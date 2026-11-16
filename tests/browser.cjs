@@ -21,6 +21,8 @@ const test=async(name,fn)=>{
  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'aether-regression-'));
  const context=await chromium.launchPersistentContext(profile,{channel:'chromium',executablePath:process.env.AETHER_CHROMIUM||undefined,ignoreDefaultArgs:['--disable-extensions'],headless:true,args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});
  context.setDefaultTimeout(12000);
+ // Cold browser navigation is separate from the action/readiness budget.
+ context.setDefaultNavigationTimeout(30000);
  await context.route('https://**/*',async r=>{
   const req=r.request(),u=new URL(req.url());requests.push({url:req.url(),method:req.method(),type:req.resourceType()});
   if(u.origin!==origin)return r.abort();
