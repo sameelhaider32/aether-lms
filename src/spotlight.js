@@ -48,10 +48,11 @@
    const info=(doc.defaultView?.AetherResourceInfo||globalThis.AetherResourceInfo)?.describe(card);if(info?.id)visible.set(info.id,info);
   }
   const courses=new Map([...observed.rows,...store.snapshot().courses.map(c=>({siteId:c.id,course:c.title,url:c.url,type:'course'}))].filter(r=>r.type==='course').map(r=>[r.siteId,r]));
+  const tools=new Map([...observed.rows,...(store.snapshot().tools||[]).map(t=>({...t,type:'tool'}))].filter(t=>t.type==='tool'&&/^resources$/i.test(t.title)).map(t=>[t.siteId,t]));
   const rows=[];
   for(const node of controller.tree.nodes.values()){
    if(!node.parent||!['file','folder'].includes(node.type)||!controller.tree.available(node))continue;
-   const info=visible.get(node.id),course=courses.get(node.site),tool=[...observed.rows,...(store.snapshot().tools||[]).map(t=>({...t,type:'tool'}))].find(t=>t.siteId===node.site&&/^resources$/i.test(t.title));
+   const info=visible.get(node.id),course=courses.get(node.site),tool=tools.get(node.site);
    const href=info?.kind==='folder'?globalThis.AetherAcademicSources.nativeURL(info.a.getAttribute('href'),info.a.ownerDocument.URL):node.type==='file'?safe(node.url):null;
    const url=href||tool?.url||course?.url;if(!url)continue;
    const fileType=node.type==='folder'?'folder':(node.name.match(/\.([a-z0-9]{1,7})$/i)?.[1]||node.id.match(/\.([a-z0-9]{1,7})$/i)?.[1]||node.mime||'file');
@@ -66,7 +67,8 @@
   for(const id of controller?.tree.roots||[]){const n=controller.tree.nodes.get(id);if(!map.has(n.site))map.set(n.site,{id:n.site,title:n.name,url:location.origin+'/portal/site/'+encodeURIComponent(n.site)});}
   return [...map.values()];
  }
- function scopeOptions(){if(!scopeSelect)return;const old=courseScope;scopeSelect.replaceChildren();for(const c of [{id:'',title:'All courses'},...courses()]){const o=el('option','',c.title);o.value=c.id;scopeSelect.append(o);}if([...scopeSelect.options].some(o=>o.value===old))scopeSelect.value=old;else courseScope='';}
+ let scopeSignature='';
+ function scopeOptions(){if(!scopeSelect)return;const signature=JSON.stringify(courses().map(c=>[c.id,c.title]));if(scopeSelect.options.length&&scopeSignature===signature)return;scopeSignature=signature;const old=courseScope;scopeSelect.replaceChildren();for(const c of [{id:'',title:'All courses'},...courses()]){const o=el('option','',c.title);o.value=c.id;scopeSelect.append(o);}if([...scopeSelect.options].some(o=>o.value===old))scopeSelect.value=old;else courseScope='';}
  function commands(){
   const rows=[],add=(key,title,fn,meta)=>rows.push({key:'command:'+key,type:'command',title,run:fn,meta:meta||'Aether interface command'});
   const home=observed.home||globalThis.AetherAcademicSources.nativeURL(ctx?.sites.find(s=>s.home)?.href,location.href);
@@ -197,18 +199,19 @@
   dialog.addEventListener('cancel',event=>{event.preventDefault();close();});dialog.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close();}},{capture:true});dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)close();}});
   list.addEventListener('click',event=>{const n=event.target.closest('[data-index]');if(n)perform(matches[Number(n.dataset.index)]);});
   input.addEventListener('input',()=>{selected=0;render(true);});input.addEventListener('keydown',event=>{if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();selected=(selected+(event.key==='ArrowDown'?1:-1)+matches.length)%Math.max(1,matches.length);updateSelection();}else if(event.key==='Enter'){event.preventDefault();perform(matches[selected],event.altKey);}});
-  dialog.showModal();rebuild();input.focus();ready().then(()=>{if(dialog&&Date.now()-(autoChecked.get(courseScope)||0)>=300000)return discover('resources',true);}).catch(()=>{message='Sources unavailable. Native Sakai remains available.';render();});
-  identityTimer=setInterval(()=>store.verify().then(()=>rebuild()),30000);return true;
+  dialog.showModal();rebuild();input.focus();setTimeout(()=>{if(!dialog)return;ready().then(()=>{if(dialog&&Date.now()-(autoChecked.get(courseScope)||0)>=300000)return discover('resources',true);}).catch(()=>{message='Sources unavailable. Native Sakai remains available.';render();});},0);
+  identityTimer=setInterval(()=>{if(!document.hidden)store.verify().then(()=>rebuild());},30000);return true;
  }
  function wipe(){close();cancel();gradeRows.clear();gradeChecked.clear();autoChecked.clear();observed={rows:[],home:null};index=[];frames.clear();if(controller&&resourceListener)controller.listeners.delete(resourceListener);controller=null;resourceListener=null;}
  function mount(context){
   ctx=context;const next=document.querySelector('.portal-header');
   if(!enabled()){wipe();trigger?.remove();trigger=null;header=null;signature='';store.clear(document.body?.classList.contains('is-logged-out')||!!document.querySelector('#loginForm input[type=password]'));return;}
   if(!trigger?.isConnected||header!==next){trigger?.remove();header=next;if(header){trigger=button('',()=>open({trigger}));trigger.id='aether-spotlight-trigger';trigger.setAttribute('aria-label','Open Aether Spotlight');trigger.setAttribute('aria-keyshortcuts','Control+K Meta+K Alt+Shift+K');trigger.title='Spotlight · Ctrl/Cmd+K · Alt+Shift+K';trigger.innerHTML='<svg width="17" height="17" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m12 12 5 5" stroke="currentColor" stroke-width="1.5"/></svg><span class="ae-spot-trigger-label">SPOTLIGHT</span>';header.append(trigger);}}
-  if(signature!==ctx.signature){signature=ctx.signature;close();observed={rows:[],home:null};ready().catch(()=>{});}
+  if(signature!==ctx.signature){signature=ctx.signature;close();observed={rows:[],home:null};/* Authenticated discovery begins when Spotlight is used. */}
  }
  store.subscribe(()=>{const snapshot=store.snapshot();if(!enabled()||!snapshot.scope&&!snapshot.blocked){wipe();}else if(snapshot.blocked){if(!privacyLocked){privacyLocked=true;wipe();}else rebuild();}else{privacyLocked=false;clearTimeout(timer);timer=setTimeout(rebuild,50);}});
  document.addEventListener('aether-records-change',requestCapture);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel();});
  window.addEventListener('aether-settings-change',()=>{if(!enabled()){wipe();trigger?.remove();trigger=null;store.clear();}else mount(ctx);});
  window.addEventListener('pagehide',()=>{wipe();clearTimeout(timer);clearTimeout(scheduled);scheduled=0;});
  globalThis.AetherSpotlight={mount,open,frame(doc){try{if(doc.defaultView.top===window&&doc.defaultView.location.origin===location.origin&&frames.size<11){frames.add(doc);requestCapture();}}catch{}},removeFrame(doc){frames.delete(doc);requestCapture();}};

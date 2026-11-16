@@ -37,7 +37,7 @@ const neutral=value=>[...value.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].ever
   assert.deepEqual(remaining,[],'Home contains unexpected chromatic UI colors');
   assert.match(await page.locator('#aether-mission-control select').first().evaluate(e=>getComputedStyle(e).backgroundImage),/%23dddddd/);
   assert(await page.locator('html.aether-reduced-motion').count());
-  assert.match(await page.locator('.ae-living-canvas').evaluate(e=>getComputedStyle(e).filter),/grayscale\(1\)/);
+  assert.match(await page.locator('.ae-living-canvas[data-ae-rendered]').evaluate(e=>getComputedStyle(e).filter),/grayscale\(1\)/);
   await page.screenshot({path:path.join(out,'monochrome-home.png'),fullPage:true});
   // Remove the page cache to prove chrome.storage.local restores the selection.
   await page.evaluate(()=>localStorage.removeItem('aether:v16:theme'));await page.reload();

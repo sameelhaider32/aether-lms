@@ -21,6 +21,10 @@ const test=async(name,fn)=>{
  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'aether-regression-'));
  const context=await chromium.launchPersistentContext(profile,{channel:'chromium',executablePath:process.env.AETHER_CHROMIUM||undefined,ignoreDefaultArgs:['--disable-extensions'],headless:true,args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});
  context.setDefaultTimeout(12000);
+ // Cold browser navigation is separate from the action/readiness budget.
+ context.setDefaultNavigationTimeout(30000);
+ try{
+ await require('./extension-ready.cjs')(context,extension);
  await context.route('https://**/*',async r=>{
   const req=r.request(),u=new URL(req.url());requests.push({url:req.url(),method:req.method(),type:req.resourceType()});
   if(u.origin!==origin)return r.abort();
@@ -55,5 +59,6 @@ const test=async(name,fn)=>{
  if(!baseline&&!smoke)await require('./extended.cjs')({page,context,test,go,card,preview,reportDir,assert,requests,errors});
  if(!baseline&&smoke)await require('./hover-preview.cjs')({page,context,test,go,assert});
  if(!baseline&&smoke)await require('./resource-variants.cjs')({page,context,test,go,reportDir,assert,requests});
- const report={baseline,smoke,extension,browser:context.browser()?.version(),platform:process.platform,arch:process.arch,fixtureOnly:true,results,requests,errors};fs.writeFileSync(path.join(reportDir,'results.json'),JSON.stringify(report,null,2));await context.close();console.log(`${results.filter(x=>x.passed).length}/${results.length} passed`);process.exitCode=results.some(x=>!x.passed)?1:0;
+ const report={baseline,smoke,extension,browser:context.browser()?.version(),platform:process.platform,arch:process.arch,fixtureOnly:true,results,requests,errors};fs.writeFileSync(path.join(reportDir,'results.json'),JSON.stringify(report,null,2));console.log(`${results.filter(x=>x.passed).length}/${results.length} passed`);process.exitCode=results.some(x=>!x.passed)?1:0;
+ }finally{await context.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

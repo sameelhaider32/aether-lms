@@ -1,17 +1,25 @@
 # Aether LMS
 
-A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Chrome extension that adds course cards, document previews, and a glowing starfield to your existing LMS.
+A Chrome extension for **LUMS Sakai** with a calmer interface, course cards, local document readers, resource downloads and Spotlight search. It runs over the existing LMS, preserving Sakai's authentication, permissions, navigation and academic workflows.
 
-**Current version: 1.8.2 · Browser-session document cache · Public beta · MIT licensed**
+**Current version: 2.0.0 · Public beta · MIT licensed**
 
-[![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
-[![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
+[![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
+[![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
 
 Works on [lms.lums.edu.pk](https://lms.lums.edu.pk). This is an independent project, unaffiliated with LUMS or the Sakai project.
 
-![Aether Mission Control with observed coursework, course cards and the folded particle field](docs/images/mission-control.png)
+![Aether 2.0 Home with the retained layout, Geist typography and procedural artwork](docs/evidence/v2/final-full-home.png)
 
 *Screenshot uses fictional courses and test content.*
+
+## Aether 2.0
+
+Original and Monochrome now share locally bundled Geist Sans/Mono, consistent spacing and controls, clear academic surfaces and restrained glass on navigation, Spotlight and reader chrome. The existing Home layout, procedural artwork, native course navigation and saved preferences remain. Red is reserved for a later release.
+
+The performance work batches native-page updates, removes repeated geometry reads, defers shader compilation, renders large Resources collections on demand and starts Spotlight discovery/session-cache restoration when needed. On the controlled 300-file fixture, median first content paint improved from **996 to 392 ms** and Spotlight opening from **237 to 74 ms**. These are fixture measurements, not live-LMS latency guarantees; some full-motion frame delays remain.
+
+See the [performance comparison and limits](docs/v2-performance.md), [screenshots and visual review](docs/v2-visual-review.md), [verification record](docs/v2-verification.md) and [design direction](docs/v2-design-direction.md).
 
 ## Install in five steps
 
@@ -23,13 +31,15 @@ Works on [lms.lums.edu.pk](https://lms.lums.edu.pk). This is an independent proj
 
 No build, terminal commands, or separate account needed. Keep the extracted folder: Chrome loads the extension from that location.
 
-To update, back up your current folder, replace its contents with the new version, select **Reload** on Aether's extension card, and refresh your LMS tabs. Keep the same folder location and only one Aether installation enabled to retain your saved preferences.
+### Update an existing installation
+
+Back up your current folder, update its contents from the repository's `main` branch, select **Reload** on Aether's card in `chrome://extensions`, then refresh the LMS tab. Keep the same folder and only one Aether installation enabled to preserve the extension ID and saved preferences. If your installation uses `%USERPROFILE%\Downloads\aether lms latest`, update that folder in place; an older registered Chrome path may be a Windows junction to it. You do not need to load a second copy. Extension reloads clear temporary indexed document text; preferences remain saved.
 
 ## Features
 
 | Area | What Aether adds |
 |---|---|
-| Spotlight | Search known courses, native tools, observed assignments/events/announcements and discovered resource metadata. Open from the header, Ctrl/Cmd+K where available, or Alt+Shift+K outside forms/assessments. Type `>` for safe UI commands. |
+| Spotlight | Search known courses, native tools, observed assignments/events/announcements, published student Gradebook items, discovered filenames and explicitly indexed document contents. Open from the header, Ctrl/Cmd+K where available, or Alt+Shift+K outside forms/assessments. Type `>` for safe UI commands. |
 | Home | Hero, pinned courses, then Mission Control: observed academic counts, Next Up, a planning timeline, announcements and course outlook. **View deadlines** jumps straight to the dashboard; saved course order remains available. |
 | Navigation | Reorder course and tool shortcuts with drag-and-drop or keyboard buttons; your order is saved locally. |
 | Appearance | Choose **Aether Original** (the existing mint/cyan design) or **Monochrome** beside the AETHER toggle. Selection saves on this device and switches instantly, including supported tool frames and reader controls. Both retain bundled fonts, 3D cards, stars, glow and motion preferences. |
@@ -53,15 +63,15 @@ Native authentication, access permissions, forms, and actions remain in Sakai. A
 
 Monochrome uses black panels, silver lighting and neutral borders inspired by the Vexon preview, within Aether's existing layout. Assignment and resource states retain their text labels in grayscale. **AETHER OFF** returns to native Sakai; switching back on restores your chosen theme. Authored document pages, images, and cross-origin tools retain their own content styling. Red is reserved for a later update. See [theme implementation and validation](docs/THEMES.md).
 
-## Spotlight (1.8.2)
+## Spotlight and document search
 
 Open **SPOTLIGHT** in the existing header, or press **Ctrl/Cmd+K** where Chrome permits it. **Alt+Shift+K** is the alternate shortcut. Shortcuts leave typing fields, editors, assessments and native dialogs alone. Type a title, course code, abbreviation such as `DS resources`, path or file type; use categories, arrow keys and Enter. Escape or click-away closes the palette and returns focus. Type `>` for context-aware safe commands: Home, Mission Control/deadlines when present, Download Manager, theme switching, motion and the existing appearance control.
 
-Search is local and uses known native navigation, Mission Control's observed records and the Download Manager's metadata. **Check academic sources** reuses a shared bounded check/cache, while **opening Spotlight** now starts bounded filename/folder metadata discovery, so known course resources appear without first opening Download Manager. It reads up to 32 folders across up to 32 known roots and eight folder levels, with a 35-second combined source-check deadline. Cached folders are reused; **Search more available resources** refreshes roots and continues into undiscovered folders. Use **Search in** to target a course such as Blockchain. Published student **Gradebook** items are also checked through discovered native tool links (up to 12 courses/check). Typing does not send queries or fetch documents; file bodies still require explicit content indexing/preview/export. Results indicate partial coverage; missing/unreleased/unsupported items are not invented. Files retain native opening and use the existing safe preview/copyright flow when previewed. Choose **Index document contents**, select discovered files by course/folder or across courses, then **Start indexing**. PDF, DOCX, PPTX, XLSX and text/source contents are searchable with safe excerpts and page/slide/cell/line references in **Contents**. The session opt-in also includes deliberately opened previews using already-downloaded bytes; hover never indexes. Copyright requires the existing explicit preview consent. Indexing is local and memory-only, with cancellation and per-file outcomes. See [supported formats, exact bounds and limitations](docs/FULL_TEXT_SEARCH.md).
+Search is local and uses known native navigation, Mission Control's observed records and the Download Manager's metadata. **Check academic sources** reuses a shared bounded check/cache, while **opening Spotlight** now starts bounded filename/folder metadata discovery, so known course resources appear without first opening Download Manager. It reads up to 32 folders across up to 32 known roots and eight folder levels, with a 35-second combined source-check deadline. Cached folders are reused; **Search more available resources** refreshes roots and continues into undiscovered folders. Use **Search in** to target a course such as Blockchain. Published student **Gradebook** items are also checked through discovered native tool links (up to 12 courses/check). Typing does not send queries or fetch documents; file bodies still require explicit content indexing/preview/export. Results indicate partial coverage; missing/unreleased/unsupported items are not invented. Files retain native opening and use the existing safe preview/copyright flow when previewed. Choose **Index document contents**, select discovered files by course/folder or across courses, then **Start indexing**. PDF, DOCX, PPTX, XLSX and text/source contents are searchable with safe excerpts and page/slide/cell/line references in **Contents**. The session opt-in also includes deliberately opened previews using already-downloaded bytes; hover never indexes. Copyright requires the existing explicit preview consent. Indexing runs locally with cancellation and per-file outcomes; completed text can be reused from protected Chrome session memory as described below. See [supported formats, exact bounds and limitations](docs/FULL_TEXT_SEARCH.md).
 
 Completed document indexes use temporary Chrome session memory and survive LMS refreshes and closed/reopened LMS tabs until Chrome restarts or the extension reloads. Account and current resource metadata are checked before restoring text. Start indexing reuses unchanged text; Refresh selected contents forces a new read. Clear indexed contents, OFF, logout/unavailable identity or account changes clear the shared cache. Other metadata remains page-local. See [browser-session cache behavior and limits](docs/SESSION_CACHE.md). Following a session change, refresh the LMS tab before indexing the new account; stale DOM is not attributed to a different user. Both themes and the retained homepage/sidebar remain intact. See [Spotlight architecture and limits](docs/SPOTLIGHT.md).
 
-## Mission Control (1.5)
+## Mission Control
 
 Home brings accessible coursework into one read-only planning view. **View deadlines** in the hero jumps past your pinned courses to Mission Control. **Next Up** leads with approaching deadlines and events; past-due assignments remain available in a separate counted group. Unknown submission states stay neutral and drafts remain distinct from submitted work. The summary strip follows the selected course and clearly labels its next-seven-days window, independently of the timeline range and type/status filters. It counts observed assignments due, verified items needing attention, upcoming events and newly observed announcements. Missing sources or a missing prior announcement baseline show **—**, never a fabricated zero.
 
@@ -130,6 +140,8 @@ The extension requests `storage` to remember preferences and runs only on `https
 Fonts and readers are bundled locally. There are no analytics, external document uploads, or cloud conversion services. See [PRIVACY.md](PRIVACY.md) for details.
 
 ## Compatibility and testing
+
+The v2.0 verification includes 126 main browser cases, focused search/cache/downloader and academic checks, and reviewed Original/Monochrome screenshots across 390, 775, 1024, 1440 and 1920 px. The [verification record](docs/v2-verification.md) distinguishes local fixture evidence from live-LMS and native hidden-tab behavior that still require validation. GitHub's required checks test the exact PR revision on Windows and Linux before merging.
 
 The focused `npm run test:mission` check uses fictional intercepted requests with the real unpacked extension, including modern/legacy student lists, tool frames, cross-course records, filters, source failures, hidden/future exclusions, account/OFF cancellation, native actions and desktop/phone layouts. Existing startup, sign-in, assignment-state, Gradebook and shared downloader checks remain available; no live LMS credentials or test submissions are required.
 

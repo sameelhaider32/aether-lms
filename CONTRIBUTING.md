@@ -29,6 +29,9 @@ The development-only PowerPoint generator's `image-size` dependency is overridde
 - `npm run test:contents`: focused fictional document extraction, consent/privacy/cancellation and content-result UI smoke.
 - `npm run test:spotlight`: focused ranking/browser smoke using fictional intercepted responses, including keyboard/frame entry, native links, privacy, cancellation, preview reuse and both themes.
 - `npm run test:theme`: focused theme switching, storage, frames, reader chrome and native-control smoke checks. `node tests/gradebook-chart.cjs` also covers both statistics modal variants and live monochrome chart switching.
+- `npm run test:v2-performance`: reproducible fictional Home/300-file Resources measurements; compare runs on the same browser and hardware. See `docs/v2-performance.md` for methodology and limits.
+- `npm run test:v2-visual`: the two-theme, five-width fixture screenshot matrix. Inspect the actual images for alignment, overflow and readability.
+- `npm run test:v2-lifetime`: repeated temporary-surface cycles and an idle/visibility probe; report native visibility separately from emulation.
 - `node tests/browser.cjs --smoke`: package-oriented checks, including hover dismissal and role/document variants.
 - `node tests/package.cjs`: verifies the built ZIP's hashes, unpacked bytes, licenses, permissions, and exclusion of development/private artifacts. Run the package builder first.
 
@@ -40,6 +43,10 @@ The optional native-tab visibility probe is `AETHER_HEADFUL=1 node tests/fallbac
 
 Hosted CI sets `AETHER_SHARED_RUNNER=1` for startup checks: visuals must appear within 150 ms of workspace creation and before the deliberately delayed DOMContentLoaded event. Whole-navigation timings are recorded in `first-load-timing.json`, but the 1.5-second absolute budget is not enforced on shared VMs with variable cold-browser startup. Local startup tests retain that absolute budget by default. This is a functional CI check, not a controlled hardware performance benchmark.
 
+The general browser suite gives cold navigation a separate 30-second ceiling while retaining its 12-second action/readiness limits. [Playwright supports independent navigation budgets](https://playwright.dev/docs/api/class-page#page-set-default-navigation-timeout). This is a fixture setup allowance, not an Aether responsiveness target. Retention profiles wait for parsed pages and actual entry controls, close Chrome in `finally`, and retain all cycle/count/privacy assertions. Large-tree geometry and footer reachability are checked directly; visual captures are reviewed separately so screenshot generation does not perturb the retention profile. See [large-selection visual evidence](docs/v2-visual-review.md).
+
+General browser/download functional fixtures also use `tests/extension-ready.cjs` to wait for the declared MV3 background worker and registered message handler before first navigation, following [Playwright's extension fixture pattern](https://playwright.dev/docs/chrome-extensions). The helper makes no LMS request and does not warm document data or preferences. Historical manifests without workers skip this step. Startup/performance probes keep their original cold-start ordering.
+
 Checked-in PPTX, DOCX, XLSX, ZIP, and audio fixtures contain fictional content. Regenerate them with `node tests/generate-office.cjs` after installing development dependencies.
 
 ## Source layout
@@ -48,6 +55,7 @@ Checked-in PPTX, DOCX, XLSX, ZIP, and audio fixtures contain fictional content. 
 |---|---|
 | `src/prepaint.js`, `content.js`, `dashboard.js` | Early preferences, native page extraction, workspace, shortcuts, on-page activity. |
 | `src/scene.js`, `ambient.js`, `motion.js` | Folded field, stars, contours, animation scheduling, fallbacks. |
+| `src/fonts.css`, `system.css`, `palette.css`, `theme-settings.js` | Local Geist typography, shared components/materials, theme tokens and persistent theme coordination. |
 | `src/classifier.js`, `lists.js`, `assignment-state.js` | Reversible native record styling and conservative assignment states. |
 | `src/resource-info.js`, `resource-access.js`, `resource-preview.js` | File descriptors, same-origin reads, copyright consent, preview lifecycle. |
 | `preview/` | Local PDF/Office readers and archive bounds. |

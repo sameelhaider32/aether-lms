@@ -9,7 +9,9 @@ const listings={
  [root+'Week/Deep/']:[child('Week/Deep/deep.txt',{size:12})], [root+'Empty/']:[], ['/group/cs300/']:[{resourceId:'/group/cs300/other.txt',name:'Other.txt',size:10}]
 };
 (async()=>{
- const context=await chromium.launchPersistentContext(fs.mkdtempSync(path.join(os.tmpdir(),'aether-dl-')),{channel:'chromium',headless:true,ignoreDefaultArgs:['--disable-extensions'],args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});context.setDefaultTimeout(12000);
+ const context=await chromium.launchPersistentContext(fs.mkdtempSync(path.join(os.tmpdir(),'aether-dl-')),{channel:'chromium',executablePath:process.env.AETHER_CHROMIUM||undefined,headless:true,ignoreDefaultArgs:['--disable-extensions'],args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});context.setDefaultTimeout(12000);
+ try{
+ await require('./extension-ready.cjs')(context,extension);
  await context.route('https://**/*',async r=>{const u=new URL(r.request().url());requests.push({url:u.href,method:r.request().method()});if(u.origin!==origin)return r.abort();
   if(u.pathname==='/direct/session/current.json')return r.fulfill({json:{userId:account}});
   if(u.pathname==='/direct/site.json')return r.fulfill({json:{site_collection:Number(u.searchParams.get('_start'))===0?[{id:'cs200',title:'Cloud Development',type:'course'},{id:'cs300',title:'Distributed Systems',type:'course'}]:[]}});
@@ -23,7 +25,8 @@ const listings={
  });
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));const panel=page.locator('#aether-download-manager');
  const test=async(name,fn)=>{if(process.env.AETHER_TEST_FILTER&&!new RegExp(process.env.AETHER_TEST_FILTER).test(name))return;const start=Date.now();try{await fn();results.push({name,passed:true,ms:Date.now()-start});console.log('PASS',name);}catch(e){results.push({name,passed:false,error:e.message});console.log('FAIL',name,e.message);await page.screenshot({path:path.join(report,'failure-'+results.length+'.png')}).catch(()=>{});}};
- const go=async()=>{await page.goto(route('Resources'));await page.locator('[data-ae-download-entry="toolbar"]').waitFor();};
+ // Gate the functional checks on the parsed page and usable download entry.
+ const go=async()=>{await page.goto(route('Resources'),{waitUntil:'domcontentloaded'});await page.locator('[data-ae-download-entry="toolbar"]').waitFor();};
  const open=async()=>{await page.locator('[data-ae-download-entry="toolbar"]').click();await panel.waitFor();};
  const expand=name=>panel.getByRole('button',{name:'Expand '+name,exact:true}).click();
  const check=name=>panel.getByRole('checkbox',{name,exact:true}).check();
@@ -105,5 +108,6 @@ const listings={
  });
  await test('Same-origin frame entry points open one top-level manager; OFF restores native controls',async()=>{await page.goto(route('Frame'));const frame=page.frameLocator('iframe[title="Resources tool frame"]');await frame.locator('[data-ae-download-entry="toolbar"]').click();await panel.waitFor();assert.equal(await page.locator('#aether-download-manager').count(),1);await panel.getByRole('button',{name:'Close',exact:true}).click();await page.locator('#aether-native-toggle').click();assert.equal(await frame.locator('[data-ae-download-entry]').count(),0);assert.equal(await panel.count(),0);});
  await test('All requests remain same-origin and read-only, with no browser errors',async()=>{assert(requests.every(r=>r.method==='GET'&&new URL(r.url).origin===origin));assert.deepEqual(errors,[]);});
- fs.writeFileSync(path.join(report,'browser.json'),JSON.stringify({platform:process.platform,browser:context.browser()?.version(),fixtureOnly:true,results,requests,errors,probes},null,2));await context.close();console.log(results.filter(r=>r.passed).length+'/'+results.length+' downloader browser checks passed');if(results.some(r=>!r.passed))process.exitCode=1;
+ fs.writeFileSync(path.join(report,'browser.json'),JSON.stringify({platform:process.platform,browser:context.browser()?.version(),fixtureOnly:true,results,requests,errors,probes},null,2));console.log(results.filter(r=>r.passed).length+'/'+results.length+' downloader browser checks passed');if(results.some(r=>!r.passed))process.exitCode=1;
+ }finally{await context.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

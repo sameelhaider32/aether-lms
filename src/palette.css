@@ -77,11 +77,11 @@ html.aether-enabled[data-aether-theme="monochrome"] #aether-workspace .ae-hero-c
 html.aether-enabled[data-aether-theme="monochrome"] #aether-workspace .ae-hero-cta:hover{background:#fff}
 /* Embedded SVG record glyphs and native tool icons have their own authored ink. */
 html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface) .ae-tool-icon{filter:grayscale(1)}
-#aether-theme-control{display:inline-flex;align-items:center;gap:6px;flex:none;margin-inline:3px 10px;font:500 10px/1.3 var(--ae-ui,"Aether Space","Segoe UI",sans-serif);color:var(--ae-soft,#c0cac3)}
+#aether-theme-control{display:inline-flex;align-items:center;gap:6px;flex:none;margin-inline:3px 10px;font:500 12px/1.3 var(--ae-ui,"Geist Sans","Segoe UI",sans-serif);color:var(--ae-soft,#c0cac3)}
 #aether-theme-select{font:inherit;max-width:142px;min-height:32px;padding:5px 7px;border:1px solid var(--ae-line,#385b4d);border-radius:3px;background:var(--ae-panel,#14211f);color:var(--ae-ink,#f1f4ee);cursor:pointer}
 #aether-theme-select:focus-visible{outline:2px solid var(--ae-cyan,#9df8d6);outline-offset:3px}
 html:not(.aether-enabled) #aether-theme-control{display:none}
-@media(max-width:690px){#aether-theme-control>span{display:none}#aether-theme-control{margin-inline:2px}#aether-theme-select{max-width:104px;font-size:9px}}
+@media(max-width:690px){#aether-theme-control>span{display:none}#aether-theme-control{margin-inline:2px}#aether-theme-select{max-width:104px;font-size:11px}}
 
 html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface) .ae-record-card::before,
 html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface) .ae-record-card>[data-ae-cell="primary"]::before{filter:grayscale(1)}

@@ -1,0 +1,225 @@
+{
+  "fixtureOnly": true,
+  "environment": "Headful Chromium, offscreen window; no live requests",
+  "nativeVisibilityObserved": false,
+  "hiddenSignalEmulated": true,
+  "cycles": 10,
+  "warmupCycles": 6,
+  "coldBefore": {
+    "heap": 3116308,
+    "nodes": 793,
+    "listeners": 175,
+    "script": 1.829816,
+    "layout": 0.168714,
+    "task": 2.570493,
+    "observers": {
+      "MutationObserver": 9,
+      "IntersectionObserver": 2,
+      "ResizeObserver": 2
+    },
+    "motion": {
+      "subscribers": 2,
+      "framePending": true,
+      "cards": 0,
+      "reveals": 0,
+      "hidden": false
+    },
+    "interactionTimers": {
+      "timeouts": [
+        1800000
+      ],
+      "intervals": []
+    }
+  },
+  "before": {
+    "heap": 3418116,
+    "nodes": 795,
+    "listeners": 175,
+    "script": 1.984717,
+    "layout": 0.229584,
+    "task": 3.725029,
+    "observers": {
+      "MutationObserver": 9,
+      "IntersectionObserver": 2,
+      "ResizeObserver": 2
+    },
+    "motion": {
+      "subscribers": 3,
+      "framePending": true,
+      "cards": 1,
+      "reveals": 0,
+      "hidden": false
+    },
+    "interactionTimers": {
+      "timeouts": [
+        1800000
+      ],
+      "intervals": []
+    }
+  },
+  "samples": [
+    {
+      "heap": 3554220,
+      "nodes": 795,
+      "listeners": 175,
+      "script": 2.124576,
+      "layout": 0.278836,
+      "task": 4.810625,
+      "observers": {
+        "MutationObserver": 9,
+        "IntersectionObserver": 2,
+        "ResizeObserver": 2
+      },
+      "motion": {
+        "subscribers": 3,
+        "framePending": true,
+        "cards": 1,
+        "reveals": 0,
+        "hidden": false
+      },
+      "interactionTimers": {
+        "timeouts": [
+          1800000
+        ],
+        "intervals": []
+      }
+    },
+    {
+      "heap": 3557140,
+      "nodes": 795,
+      "listeners": 175,
+      "script": 2.280796,
+      "layout": 0.338619,
+      "task": 6.018769,
+      "observers": {
+        "MutationObserver": 9,
+        "IntersectionObserver": 2,
+        "ResizeObserver": 2
+      },
+      "motion": {
+        "subscribers": 3,
+        "framePending": true,
+        "cards": 1,
+        "reveals": 0,
+        "hidden": false
+      },
+      "interactionTimers": {
+        "timeouts": [
+          1800000
+        ],
+        "intervals": []
+      }
+    }
+  ],
+  "after": {
+    "heap": 3557140,
+    "nodes": 795,
+    "listeners": 175,
+    "script": 2.280796,
+    "layout": 0.338619,
+    "task": 6.018769,
+    "observers": {
+      "MutationObserver": 9,
+      "IntersectionObserver": 2,
+      "ResizeObserver": 2
+    },
+    "motion": {
+      "subscribers": 3,
+      "framePending": true,
+      "cards": 1,
+      "reveals": 0,
+      "hidden": false
+    },
+    "interactionTimers": {
+      "timeouts": [
+        1800000
+      ],
+      "intervals": []
+    }
+  },
+  "retainedGrowthBytes": 139024,
+  "idleSeconds": 35,
+  "idleRequests": [],
+  "idleScriptMs": 1390.6999999999998,
+  "hidden": {
+    "before": {
+      "heap": 3474252,
+      "nodes": 793,
+      "listeners": 175,
+      "script": 3.734281,
+      "layout": 0.338619,
+      "task": 9.743099,
+      "observers": {
+        "MutationObserver": 9,
+        "IntersectionObserver": 2,
+        "ResizeObserver": 2
+      },
+      "motion": {
+        "subscribers": 0,
+        "framePending": false,
+        "cards": 0,
+        "reveals": 0,
+        "hidden": true
+      },
+      "interactionTimers": {
+        "timeouts": [
+          1800000
+        ],
+        "intervals": []
+      }
+    },
+    "after": {
+      "heap": 3445504,
+      "nodes": 793,
+      "listeners": 175,
+      "script": 3.744673,
+      "layout": 0.338619,
+      "task": 10.970954,
+      "observers": {
+        "MutationObserver": 9,
+        "IntersectionObserver": 2,
+        "ResizeObserver": 2
+      },
+      "motion": {
+        "subscribers": 0,
+        "framePending": false,
+        "cards": 0,
+        "reveals": 0,
+        "hidden": true
+      },
+      "interactionTimers": {
+        "timeouts": [
+          1800000
+        ],
+        "intervals": []
+      }
+    },
+    "scriptMs": 10.391999999999957
+  },
+  "off": {
+    "heap": 3898204,
+    "nodes": 646,
+    "listeners": 181,
+    "script": 3.789791,
+    "layout": 0.369327,
+    "task": 11.652752,
+    "observers": {
+      "MutationObserver": 9,
+      "IntersectionObserver": 2,
+      "ResizeObserver": 2
+    },
+    "motion": {
+      "subscribers": 0,
+      "framePending": false,
+      "cards": 0,
+      "reveals": 0,
+      "hidden": false
+    },
+    "interactionTimers": {
+      "timeouts": [],
+      "intervals": []
+    }
+  },
+  "errors": [],
+  "note": "Observer counts are retained instances after GC, including disconnected retained objects; not active-observation counts. Timer probe covers timers created during interactions; startup interval is separately audited in source. Heap is renderer JS, not GPU/process memory."
+}
