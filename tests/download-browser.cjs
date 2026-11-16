@@ -23,7 +23,8 @@ const listings={
  });
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));const panel=page.locator('#aether-download-manager');
  const test=async(name,fn)=>{if(process.env.AETHER_TEST_FILTER&&!new RegExp(process.env.AETHER_TEST_FILTER).test(name))return;const start=Date.now();try{await fn();results.push({name,passed:true,ms:Date.now()-start});console.log('PASS',name);}catch(e){results.push({name,passed:false,error:e.message});console.log('FAIL',name,e.message);await page.screenshot({path:path.join(report,'failure-'+results.length+'.png')}).catch(()=>{});}};
- const go=async()=>{await page.goto(route('Resources'));await page.locator('[data-ae-download-entry="toolbar"]').waitFor();};
+ // Gate the functional checks on the parsed page and usable download entry.
+ const go=async()=>{await page.goto(route('Resources'),{waitUntil:'domcontentloaded'});await page.locator('[data-ae-download-entry="toolbar"]').waitFor();};
  const open=async()=>{await page.locator('[data-ae-download-entry="toolbar"]').click();await panel.waitFor();};
  const expand=name=>panel.getByRole('button',{name:'Expand '+name,exact:true}).click();
  const check=name=>panel.getByRole('checkbox',{name,exact:true}).check();
