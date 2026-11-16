@@ -15,4 +15,6 @@ No workflow automatically merges or publishes releases. The maintainer chooses w
 
 ## Dependencies
 
+Keep all `github/codeql-action` steps on the same pinned commit. The initialization and analysis actions share configuration and fail when their versions differ. Dependabot groups these steps in one `codeql-action` update; a unit/configuration check guards the shared-version requirement. Review and test the grouped change before merging.
+
 Dependabot proposes updates; it does not merge them. Review changes, licenses, test results, and relevant advisories. Npm/action checks do not cover every bundled binary or minified runtime library. For `vendor/` upgrades, update the actual local bundle, notices and provenance together, verify the new hashes, and test the affected file readers with valid, invalid, oversized, and permission-restricted fictional samples.
