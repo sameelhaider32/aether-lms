@@ -51,7 +51,9 @@ async function fixtures(){
   const page=await ctx.newPage();page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
   const isolated=async expression=>{const cdp=await ctx.newCDPSession(page),worlds=[];cdp.on('Runtime.executionContextCreated',e=>worlds.push(e.context));await cdp.send('Runtime.enable');const main=(await cdp.send('Page.getFrameTree')).frameTree.frame.id;try{for(const w of worlds){if(w.auxData?.frameId!==main)continue;const p=await cdp.send('Runtime.evaluate',{contextId:w.id,expression:'typeof AetherSpotlightContent!=="undefined"',returnByValue:true});if(p.result.value){const r=await cdp.send('Runtime.evaluate',{contextId:w.id,expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value;}}throw Error('Content isolated world unavailable');}finally{await cdp.detach();}};
   const snap=()=>isolated('AetherSpotlightContent.snapshot()');
-  const done=async()=>{await page.waitForFunction(()=>!document.querySelector('[data-content-cancel]')||document.querySelector('[data-content-cancel]').hidden,{},{timeout:45000});};
+  // Start awaits session/cache validation before showing Cancel. Its initially
+  // hidden control is not evidence that the requested batch has completed.
+  const done=async()=>{const deadline=Date.now()+45000;let state;while(Date.now()<deadline){state=await snap();if(state.batch?.total>0&&state.batch.completed===state.batch.total&&!state.busy&&!state.restoring)return;await page.waitForTimeout(50);}assert.fail('Index batch did not complete: '+JSON.stringify({busy:state?.busy,restoring:state?.restoring,batch:state?.batch}));};
   const palette=page.locator('#aether-spotlight'),query=page.locator('#ae-spot-input');
   await page.goto(origin+'/portal/site/home');await page.locator('#aether-spotlight-trigger').waitFor();
   assert.equal(requests.filter(r=>r.url.includes('/access/content/')).length,0);
