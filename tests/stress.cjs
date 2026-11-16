@@ -6,6 +6,7 @@ fs.mkdirSync(out,{recursive:true});
 (async()=>{
  const context=await chromium.launchPersistentContext(fs.mkdtempSync(path.join(os.tmpdir(),'aether-stress-')),{channel:'chromium',executablePath:process.env.AETHER_CHROMIUM||undefined,headless:true,ignoreDefaultArgs:['--disable-extensions'],args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce'});
  try{
+ await require('./extension-ready.cjs')(context,extension);
  const errors=[],requests=[],samples=[],latencies=[];
  await context.route('https://**/*',r=>{const u=new URL(r.request().url());requests.push({path:u.pathname,method:r.request().method()});if(u.origin!==origin)return r.abort();if(u.pathname==='/direct/session/current.json')return r.fulfill({json:{userId:'fictional-stress'}});if(u.pathname.startsWith('/portal'))return r.fulfill({contentType:'text/html',body:fixture(u.href)});if(u.pathname.endsWith('.pdf'))return r.fulfill({contentType:'application/pdf',body:pdf()});const name=u.pathname.split('/').pop();if(['preview.pptx','preview.docx','preview.xlsx'].includes(name))return r.fulfill({contentType:'application/octet-stream',body:fs.readFileSync(path.join(__dirname,'data',name))});return r.fulfill({contentType:'text/plain',body:'Fictional text'});});
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);

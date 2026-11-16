@@ -45,6 +45,8 @@ Hosted CI sets `AETHER_SHARED_RUNNER=1` for startup checks: visuals must appear 
 
 The general browser suite gives cold navigation a separate 30-second ceiling while retaining its 12-second action/readiness limits. [Playwright supports independent navigation budgets](https://playwright.dev/docs/api/class-page#page-set-default-navigation-timeout). This is a fixture setup allowance, not an Aether responsiveness target. Retention profiles wait for parsed pages and actual entry controls, close Chrome in `finally`, and retain all cycle/count/privacy assertions. Large-tree geometry and footer reachability are checked directly; visual captures are reviewed separately so screenshot generation does not perturb the retention profile. See [large-selection visual evidence](docs/v2-visual-review.md).
 
+General browser/download functional fixtures also use `tests/extension-ready.cjs` to wait for the declared MV3 background worker and registered message handler before first navigation, following [Playwright's extension fixture pattern](https://playwright.dev/docs/chrome-extensions). The helper makes no LMS request and does not warm document data or preferences. Historical manifests without workers skip this step. Startup/performance probes keep their original cold-start ordering.
+
 Checked-in PPTX, DOCX, XLSX, ZIP, and audio fixtures contain fictional content. Regenerate them with `node tests/generate-office.cjs` after installing development dependencies.
 
 ## Source layout
