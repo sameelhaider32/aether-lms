@@ -1,6 +1,6 @@
-# Spotlight document contents (v1.8)
+# Spotlight document contents
 
-The retained Spotlight palette (v1.8.1) has an additive **Contents** category and **Index document contents** action. Original/Monochrome, existing fonts, Home, sidebar, graphics, motion controls, cards and native academic workflows are retained. This branch builds on `codex/spotlight` / PR #14, which builds on the Monochrome PR #12; it does not include rejected spatial PR #13.
+The Spotlight palette includes a **Contents** category and **Index document contents** action. Document search, introduced in 1.8 and extended with protected browser-session caching in 1.8.2, remains available in Aether 2.0. Original and Monochrome use the shared Geist typography and controls while retaining Home, the sidebar, graphics, motion settings, cards and native academic workflows. The rejected spatial-home design is excluded.
 
 ## Use
 

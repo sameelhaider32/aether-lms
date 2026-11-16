@@ -10,6 +10,7 @@
 - Queue PDF keyboard page navigation during redraw and provide a focusable document pane without intercepting native select keys.
 - Retain the working v1.8.2 features, settings, security boundaries and home composition. No Red theme or spatial-home branch.
 - Add reproducible fixture measurements, visual matrix and lifetime checks. See `docs/v2-performance.md` for actual results and remaining live-validation limits.
+- Integration maintenance (17 November 2026): retain reduced-motion header/sidebar transitions and 360 px Spotlight coverage; refresh the README and feature/development docs for the consolidated 2.0 interface and session cache.
 
 
 ## 1.8.2 — Browser-session document cache — 29 October 2026
@@ -46,6 +47,7 @@
 - Keep default colors as CSS fallbacks and use a shared neutral palette for the sidebar, workspace, Mission Control, cards, academic views, statistics, resources, previews and download manager. Retain original typography, geometry, 3D depth, grayscale lighting and reduced-motion/OFF behavior.
 - Switch native Gradebook Chart.js statistics colors without replacing charts, callbacks, data or geometry; restore original native colors on OFF. Theme bundled PDF/Office reader controls while retaining authored content colors.
 - Add focused fixture smoke coverage for switching, persistence, frame and reader updates, core views, native controls and form preservation, and both Gradebook statistics modal variants. No live academic operations were performed. Red remains deferred.
+- Follow Motion OFF and system reduced motion in header/sidebar color transitions. Retain PDF keyboard requests during redraw and provide a focusable document pane while preserving native select keys.
 
 ## 1.5.0 — Mission Control — 25 October 2026
 

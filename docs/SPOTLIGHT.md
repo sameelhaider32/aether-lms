@@ -1,6 +1,6 @@
-# Aether Spotlight (1.8.2)
+# Aether Spotlight
 
-Spotlight adds a search/command dialog to the retained v1.6 interface. It does not redesign Home, remove the sidebar, alter graphics/fonts or reuse the rejected spatial-home branch. The existing unpacked extension folder remains the installation.
+Spotlight adds a search/command dialog to the retained Aether interface. It now uses the shared 2.0 typography, controls and material system in both themes. Home, the sidebar, native navigation and procedural graphics remain; the rejected spatial-home branch is excluded. The existing unpacked extension folder remains the installation. Metadata discovery and protected session-cache restoration begin when Spotlight is used, keeping that work out of initial page startup.
 
 ## Entry and actions
 

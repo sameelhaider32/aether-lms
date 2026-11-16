@@ -85,3 +85,8 @@ html:not(.aether-enabled) #aether-theme-control{display:none}
 
 html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface) .ae-record-card::before,
 html[data-aether-theme="monochrome"]:is(.aether-enabled,.ae-resource-surface) .ae-record-card>[data-ae-cell="primary"]::before{filter:grayscale(1)}
+
+/* Navigation follows Motion OFF and the system preference too, so theme
+   changes do not briefly interpolate colored borders into Monochrome. */
+html.aether-enabled.aether-reduced-motion :is(.portal-header,#toolMenu) *{transition:none!important;animation:none!important}
+@media(prefers-reduced-motion:reduce){html.aether-enabled :is(.portal-header,#toolMenu) *{transition:none!important;animation:none!important}}
