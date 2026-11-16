@@ -30,3 +30,11 @@ These pairs use the same performance fixture and scroll/open/close sequence. Cha
 | Home / planning after scrolling | ![Before planning](evidence/v2/baseline-full-home.png) | ![After planning](evidence/v2/final-full-home.png) |
 
 The fixture sidebar glyphs and statistics canvas are deliberately simple fictional stand-ins; they are not captures of real course navigation or a real grade distribution. Native Sakai icons and Chart.js are handled by the retained adapters. The Instagram reel could only be inspected as an excerpt, so no detailed reel technique is claimed. These screenshots do not establish authenticated live-LUMS compatibility.
+
+## Large download selection — integration review, 17 November 2026
+
+These separately reviewed Windows/Chromium156 captures include 1,000 generated filenames plus the native fictional fixture entries. The selected tree, selection summary and controls remain readable at desktop and 390 px. The phone dialog scrolls to its basket and footer. The retention fixture checks viewport bounds and that the review action can be scrolled into view; it keeps screenshot generation outside its memory measurements.
+
+| Desktop | 390 px |
+|---|---|
+| ![Large selected download tree](evidence/v2/download-selection-1000-desktop.png) | ![Large selection on a phone](evidence/v2/download-selection-1000-mobile.png) |
