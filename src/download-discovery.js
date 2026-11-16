@@ -56,10 +56,10 @@
     this.tree.revision++;return node;
    }catch(error){node.state=signal?.aborted?'unloaded':'failed';node.error=signal?.aborted?'Discovery cancelled.':error.message;throw error;}
   }
-  async courses(signal){
+  async courses(signal,{maxPages=100}={}){
    const seen=new Set();let start=0;
    try{
-    for(let page=0;page<100;page++){
+    for(let page=0;page<Math.min(100,maxPages);page++){
      const data=await this.json('/direct/site.json?select=access&_limit=50&_start='+start,signal);
      const sites=Array.isArray(data)?data:data?.site_collection;
      if(!Array.isArray(sites))throw Error('Available-course API unsupported.');

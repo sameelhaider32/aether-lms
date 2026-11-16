@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Aether LMS \u2014 The Academic Interface",
   "description": "An editorial academic workspace with local procedural graphics, tactile records and protected native Sakai workflows.",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "minimum_chrome_version": "111",
   "icons": {
     "16": "icons/aether-16.png",
@@ -27,7 +27,8 @@
         "src/academic.css",
         "src/download.css",
         "src/mission-control.css",
-        "src/palette.css"
+        "src/palette.css",
+        "src/spotlight.css"
       ],
       "js": [
         "src/prepaint.js",
@@ -39,7 +40,10 @@
         "src/assignment-state.js",
         "src/academic-data.js",
         "src/academic-sources.js",
+        "src/academic-store.js",
         "src/mission-control.js",
+        "src/spotlight-search.js",
+        "src/spotlight.js",
         "src/content.js"
       ],
       "run_at": "document_start",
@@ -63,7 +67,8 @@
         "src/download-discovery.js",
         "src/download-archive.js",
         "src/download-controller.js",
-        "src/download-ui.js"
+        "src/download-ui.js",
+        "src/spotlight-bridge.js"
       ],
       "css": [
         "src/resource-frame.css",

@@ -2,7 +2,7 @@
 
 A cleaner, calmer interface for **LUMS Sakai**. Aether is a free, open-source Chrome extension that adds course cards, document previews, and a glowing starfield to your existing LMS.
 
-**Current version: 1.6.0 · Selectable themes · Public beta · MIT licensed**
+**Current version: 1.7.0 · Spotlight · Public beta · MIT licensed**
 
 [![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
 [![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
@@ -29,6 +29,7 @@ To update, back up your current folder, replace its contents with the new versio
 
 | Area | What Aether adds |
 |---|---|
+| Spotlight | Search known courses, native tools, observed assignments/events/announcements and discovered resource metadata. Open from the header, Ctrl/Cmd+K where available, or Alt+Shift+K outside forms/assessments. Type `>` for safe UI commands. |
 | Home | Hero, pinned courses, then Mission Control: observed academic counts, Next Up, a planning timeline, announcements and course outlook. **View deadlines** jumps straight to the dashboard; saved course order remains available. |
 | Navigation | Reorder course and tool shortcuts with drag-and-drop or keyboard buttons; your order is saved locally. |
 | Appearance | Choose **Aether Original** (the existing mint/cyan design) or **Monochrome** beside the AETHER toggle. Selection saves on this device and switches instantly, including supported tool frames and reader controls. Both retain bundled fonts, 3D cards, stars, glow and motion preferences. |
@@ -51,6 +52,14 @@ To update, back up your current folder, replace its contents with the new versio
 Native authentication, access permissions, forms, and actions remain in Sakai. Aether does not grant access to hidden grades or restricted files. Mission Control reports observed records and explicitly labels partial or unavailable coverage; it cannot guarantee a complete semester inventory.
 
 Monochrome uses black panels, silver lighting and neutral borders inspired by the Vexon preview, within Aether's existing layout. Assignment and resource states retain their text labels in grayscale. **AETHER OFF** returns to native Sakai; switching back on restores your chosen theme. Authored document pages, images, and cross-origin tools retain their own content styling. Red is reserved for a later update. See [theme implementation and validation](docs/THEMES.md).
+
+## Spotlight (1.7)
+
+Open **SPOTLIGHT** in the existing header, or press **Ctrl/Cmd+K** where Chrome permits it. **Alt+Shift+K** is the alternate shortcut. Shortcuts leave typing fields, editors, assessments and native dialogs alone. Type a title, course code, abbreviation such as `DS resources`, path or file type; use categories, arrow keys and Enter. Escape or click-away closes the palette and returns focus. Type `>` for context-aware safe commands: Home, Mission Control/deadlines when present, Download Manager, theme switching, motion and the existing appearance control.
+
+Search is local and uses known native navigation, Mission Control's observed records and the Download Manager's metadata. **Check academic sources** reuses a shared bounded check/cache, while **Search more available resources** explicitly discovers up to 12 folders across at most eight course roots, with a two-level expansion limit. Neither typing nor opening the palette crawls course files. Results indicate partial coverage; missing/unreleased/unsupported items are not invented. Files retain native opening and use the existing safe preview/copyright flow when previewed. No document contents are indexed.
+
+The index is memory-only and clears on OFF, navigation/logout or observed identity changes. Following a session change, refresh the LMS tab before indexing the new account; stale DOM is not attributed to a different user. Both themes and the retained homepage/sidebar remain intact. See [Spotlight architecture and limits](docs/SPOTLIGHT.md).
 
 ## Mission Control (1.5)
 
