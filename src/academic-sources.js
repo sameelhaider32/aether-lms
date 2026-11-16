@@ -2,7 +2,7 @@
 (() => {
  'use strict';
  const D=globalThis.AetherAcademicData,MAX=2*1024*1024,LIMIT=8;
- function nativeURL(value,base){const href=D.url(value,base);if(!href)return null;const u=new URL(href);if(!/^\/(?:portal\/(?:site|tool|directtool)\/|tool\/)/.test(u.pathname)||/logout|login|[?&](?:sakai_action|eventSubmit|action)=/i.test(href))return null;return href;}
+ function nativeURL(value,base){const href=D.url(value,base);if(!href)return null;const u=new URL(href);if(!/^\/+(?:portal\/(?:site|tool|directtool)\/|tool\/)/.test(u.pathname)||/logout|login|[?&](?:sakai_action|eventSubmit|action)=/i.test(href))return null;return href;}
  function inert(html){const t=document.createElement('template');t.innerHTML=html;t.content.querySelectorAll('script,style,link,img,object,embed').forEach(n=>n.remove());return t.content;}
  function visible(n){if(n.closest('[hidden],[aria-hidden="true"],.hidden,.d-none'))return false;for(let p=n;p?.nodeType===1;p=p.parentElement)if(/display\s*:\s*none|visibility\s*:\s*hidden/i.test(p.getAttribute('style')||''))return false;return true;}
  function identity(anchor){const u=new URL(anchor.href||anchor.getAttribute('href'),location.href);return u.searchParams.get('assignmentReference')||u.searchParams.get('assignmentId')||u.searchParams.get('id')||u.href;}

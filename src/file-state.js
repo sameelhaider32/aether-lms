@@ -60,6 +60,6 @@
  try{chrome.storage.onChanged.addListener(changed);}catch{}
  const refresh=()=>{identity().catch(()=>{});};window.addEventListener('focus',refresh);window.addEventListener('pageshow',refresh);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
- window.addEventListener('pagehide',event=>{generation++;account=null;issues.clear();if(!event.persisted){disposed=true;try{chrome.storage.onChanged.removeListener(changed);}catch{}}});
+ window.addEventListener('pagehide',event=>{generation++;issues.clear();if(!event.persisted){account=null;disposed=true;try{chrome.storage.onChanged.removeListener(changed);}catch{}}});
  globalThis.AetherFileState={describe,opened,problem,clear,version,session:identity,get revision(){return revision;}};
 })();

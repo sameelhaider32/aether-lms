@@ -24,6 +24,9 @@ The development-only PowerPoint generator's `image-size` dependency is overridde
 - `npm run test:startup`: deliberately delayed-page startup checks, root and single/double-slash portal entry routes, and native gateway sign-in preservation.
 - `npm run test:browser`: main Chrome extension regressions, including reader resizing/zoom, attachment previews, native pins, assignment state colors/deadline transitions, and device-local opened-file history/reset behavior.
 - `node tests/fallbacks.cjs`: WebGL-disabled and cancellation checks.
+- `npm run test:search-fixes`: reported filename/Gradebook/ZIP regressions with fictional data and a real unpacked extension.
+- `npm run test:session-cache`: broker lifecycle/quota/sender checks and fictional real-extension reload/tab/browser restart, invalidation and incremental reuse.
+- `npm run test:contents`: focused fictional document extraction, consent/privacy/cancellation and content-result UI smoke.
 - `npm run test:spotlight`: focused ranking/browser smoke using fictional intercepted responses, including keyboard/frame entry, native links, privacy, cancellation, preview reuse and both themes.
 - `npm run test:theme`: focused theme switching, storage, frames, reader chrome and native-control smoke checks. `node tests/gradebook-chart.cjs` also covers both statistics modal variants and live monochrome chart switching.
 - `node tests/browser.cjs --smoke`: package-oriented checks, including hover dismissal and role/document variants.

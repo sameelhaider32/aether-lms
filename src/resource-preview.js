@@ -15,7 +15,13 @@
  function contentURL(u){return u?.origin===origin&&/^\/access\/content\//.test(u.pathname);}
  const info=card=>globalThis.AetherResourceInfo.describe(card);
  const read=(...args)=>globalThis.AetherResourceAccess.read(...args);
- function success(state){if(!active(state)||state.failed)return;state.rendered=true;if(state.pinned&&!state.recorded){state.recorded=true;globalThis.AetherFileState?.opened(state.info,true).catch(()=>{});}}
+ function success(state){if(!active(state)||state.failed)return;state.rendered=true;if(state.pinned&&!state.recorded){state.recorded=true;globalThis.AetherFileState?.opened(state.info,true).catch(()=>{});}contentOffer(state);}
+ function contentOffer(state){
+  const service=top.AetherSpotlightContent;if(!service||!state.pinned||!state.contentResult||!service.supported.has(state.info.extension))return;
+  if(!state.contentNoted){state.contentNoted=true;service.opened(state.info,state.contentResult);}
+  if(state.contentOffer)return;const b=el('button','ae-preview-content-optin',service.snapshot().opted?'Opened documents included this session':'Include opened documents in Spotlight');b.type='button';
+  b.onclick=()=>{service.optIn(state.info,state.contentResult);b.textContent='Opened documents included this session';};state.contentOffer=b;state.panel.querySelector('.ae-preview-footer').append(b);
+ }
  function problem(state,kind='unavailable'){if(active(state))globalThis.AetherFileState?.problem(state.info,kind).catch(()=>{});}
  function fileBadge(card,wrap){
   const service=globalThis.AetherFileState,data=info(card);if(!service||!data||data.kind==='folder')return;
@@ -119,6 +125,7 @@
   const cacheKey=u.href+'|'+(globalThis.AetherFileState?.version(state.info)||'unversioned');
   let result=cache.get(cacheKey)?.value;if(!result){result=await globalThis.AetherResourceAccess.resource(state.info,state.abort.signal,limit);if(!active(state))return;remember(cacheKey,result,result.bytes.length);}
   if(!active(state))return;
+  state.contentResult=result;
   const {bytes,mime}=result,prefix=new TextDecoder().decode(bytes.slice(0,1024)),zip=bytes[0]===80&&bytes[1]===75;
   let kind=prefix.includes('%PDF-')?'pdf':zip?(state.info.kind==='archive'?'archive':'office'):globalThis.AetherResourceInfo.kind(state.info.extension,mime);
   state.info.kind=kind;
@@ -159,7 +166,7 @@
   const panel=el('aside','ae-resource-preview');panel.id='aether-resource-preview';panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','false');panel.setAttribute('aria-label','Resource preview: '+data.title);
   const head=el('div','ae-preview-head'),title=el('div','');title.append(el('span','ae-preview-kind',data.kind==='pdf'?'PDF preview':data.kind==='folder'?'Folder contents':'Resource preview'),el('h3','',data.title));const dismiss=el('button','ae-preview-close','×');dismiss.type='button';dismiss.setAttribute('aria-label','Close resource preview');dismiss.onclick=()=>close(true);
   const actions=el('div','ae-preview-window-actions'),expand=el('button','ae-preview-expand','Expand');expand.type='button';expand.setAttribute('aria-label','Expand preview');actions.append(expand,dismiss);head.append(title,actions);
-  const body=el('div','ae-preview-body'),footer=el('div','ae-preview-footer'),original=el('button','ae-preview-open',data.kind==='folder'?'Open folder':'Open original');original.type='button';original.onclick=()=>{close();originalIntent=data.a;try{data.a.click();}finally{originalIntent=null;}};footer.append(original,el('span','','Preview only'));panel.append(head,body,footer);
+  const body=el('div','ae-preview-body'),footer=el('div','ae-preview-footer'),original=el('button','ae-preview-open',data.kind==='folder'?'Open folder':'Open original');original.type='button';original.onclick=()=>{top.AetherSpotlightContent?.opened(data,current?.contentResult);close();originalIntent=data.a;try{data.a.click();}finally{originalIntent=null;}};footer.append(original,el('span','','Preview only'));panel.append(head,body,footer);
   if(globalThis.AetherFileState){const clear=el('button','ae-preview-clear-history','Clear file history');clear.type='button';clear.title='Forget opened-file history on this device';clear.onclick=async()=>{clear.disabled=true;try{await globalThis.AetherFileState.clear();clear.textContent='History cleared';}catch{clear.textContent='Could not clear history · Retry';}finally{clear.disabled=false;}};footer.insertBefore(clear,footer.lastChild);}
   const state={panel,body,info:data,fromMetadata:!!descriptor,pinned:keyboard,expand,abort:new AbortController()};current=state;host.body.append(panel);resizeControls(state);position(state);
   expand.onclick=()=>{state.pinned=true;state.expanded=!state.expanded;position(state);};
@@ -219,7 +226,7 @@
  document.addEventListener('pointermove',outside,{passive:true});document.documentElement.addEventListener('pointerleave',boundary,{passive:true});
  if(host!==document){host.addEventListener('pointerover',outside,{passive:true});host.addEventListener('pointermove',outside,{passive:true});host.documentElement.addEventListener('pointerleave',boundary,{passive:true});}
  document.addEventListener('click',e=>{const trigger=e.target.closest?.('[data-ae-preview-open]');if(trigger){const card=attachmentOwners.get(trigger.closest(own))||trigger.closest('.ae-record-card');if(card)open(card,true);}});
- document.addEventListener('click',e=>{const a=e.target.closest?.('a[href]');if(!enabled()||!a||!e.isTrusted&&a!==originalIntent||e.defaultPrevented||a.closest('.dropdown-menu,.ae-resource-preview,#aether-workspace'))return;const card=a.closest(targetSelector);if(!card)return;const data=info(card);if(data?.a===a)globalThis.AetherFileState?.opened(data).catch(()=>{});});
+ document.addEventListener('click',e=>{const a=e.target.closest?.('a[href]');if(!enabled()||!a||!e.isTrusted&&a!==originalIntent||e.defaultPrevented||a.closest('.dropdown-menu,.ae-resource-preview,#aether-workspace'))return;const card=a.closest(targetSelector);if(!card)return;const data=info(card);if(data?.a===a){globalThis.AetherFileState?.opened(data).catch(()=>{});const cached=cache.get(data.u.href+'|'+(globalThis.AetherFileState?.version(data)||'unversioned'))?.value;top.AetherSpotlightContent?.opened(data,cached);}});
  const key=e=>{if(e.key==='Escape'&&current)close(true);};host.addEventListener('keydown',key);
  const scroll=e=>{if(hoverCard&&!hoverCard.matches(':hover'))cancelHover();if(current&&!contains(current.panel,e?.target)){if(current.pinned)position(current);else close();}};host.addEventListener('scroll',scroll,true);window.addEventListener('scroll',scroll,true);top.addEventListener('resize',scroll);
  const message=e=>{const s=current;if(!s?.frame||s.failed||!active(s)||e.source!==s.frame.contentWindow||e.origin!==s.viewerOrigin||e.data?.type!==(s.viewerKind==='pdf'?'aether-pdf-preview':'aether-office-preview')||e.data.token!==s.token)return;
