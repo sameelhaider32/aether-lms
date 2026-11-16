@@ -1,0 +1,469 @@
+{
+  "baseline": false,
+  "smoke": false,
+  "extension": "same existing unpacked installation",
+  "browser": "156.0.8078.4",
+  "platform": "win32",
+  "arch": "x64",
+  "fixtureOnly": true,
+  "results": [
+    {
+      "name": "Academic legacy Wicket statistics: surface, chart, native controls and OFF smoke",
+      "passed": true,
+      "ms": 1766
+    },
+    {
+      "name": "Academic Gradebook statistics card: native chart, motion and OFF smoke",
+      "passed": true,
+      "ms": 2001
+    },
+    {
+      "name": "Academic Gradebook: published item cards preserve scores and category controls",
+      "passed": true,
+      "ms": 615
+    },
+    {
+      "name": "Academic Gradebook: editing and comparison tables get matching styling and native geometry",
+      "passed": true,
+      "ms": 404
+    },
+    {
+      "name": "Academic Gradebook: live read-only and edit transitions restore the previous mode",
+      "passed": true,
+      "ms": 292
+    },
+    {
+      "name": "Academic Roster: native cards retain photos, profiles, email and group handlers",
+      "passed": true,
+      "ms": 436
+    },
+    {
+      "name": "Academic Roster: search, filters, pagination and native photo view remain functional",
+      "passed": true,
+      "ms": 202
+    },
+    {
+      "name": "Academic Roster: table view cards keep native sorting, profile nodes and pictures",
+      "passed": true,
+      "ms": 232
+    },
+    {
+      "name": "Academic Roster: asynchronous native card changes do not duplicate or stale the records",
+      "passed": true,
+      "ms": 131
+    },
+    {
+      "name": "Academic frames: student Gradebook and Roster receive the same styling",
+      "passed": true,
+      "ms": 358
+    },
+    {
+      "name": "Academic frames: grading controls stay native and OFF restores iframe appearance",
+      "passed": true,
+      "ms": 1269
+    },
+    {
+      "name": "Academic OFF: native Gradebook and Roster roles and original elements are restored",
+      "passed": true,
+      "ms": 230
+    },
+    {
+      "name": "Academic responsive 390px: Gradebook and Roster",
+      "passed": true,
+      "ms": 498
+    },
+    {
+      "name": "Academic responsive 775px: Gradebook and Roster",
+      "passed": true,
+      "ms": 518
+    },
+    {
+      "name": "Academic responsive 1024px: Gradebook and Roster",
+      "passed": true,
+      "ms": 615
+    },
+    {
+      "name": "Academic responsive 1440px: Gradebook and Roster",
+      "passed": true,
+      "ms": 910
+    },
+    {
+      "name": "Academic responsive 1920px: Gradebook and Roster",
+      "passed": true,
+      "ms": 1074
+    }
+  ],
+  "requests": [
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student&legacyStats=1",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20frame?tool=Gradebook%20frame",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/tool/gradebook",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook?tool=Gradebook",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20comparison?tool=Gradebook%20comparison",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster&view=photos",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster&view=table",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20frame?tool=Gradebook%20frame",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/tool/gradebook",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster%20frame?tool=Roster%20frame",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/tool/roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Grading%20frame?tool=Grading%20frame",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/tool/grade-edit",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Gradebook%20student?tool=Gradebook%20student",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/portal/site/cs200/page/Roster?tool=Roster",
+      "method": "GET",
+      "type": "document"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/access/content/group/cs200/diagram.png",
+      "method": "GET",
+      "type": "image"
+    },
+    {
+      "url": "https://lms.lums.edu.pk/direct/session/current.json",
+      "method": "GET",
+      "type": "fetch"
+    }
+  ],
+  "errors": []
+}

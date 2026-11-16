@@ -9,7 +9,7 @@ const listings={
  [root+'Week/Deep/']:[child('Week/Deep/deep.txt',{size:12})], [root+'Empty/']:[], ['/group/cs300/']:[{resourceId:'/group/cs300/other.txt',name:'Other.txt',size:10}]
 };
 (async()=>{
- const context=await chromium.launchPersistentContext(fs.mkdtempSync(path.join(os.tmpdir(),'aether-dl-')),{channel:'chromium',headless:true,ignoreDefaultArgs:['--disable-extensions'],args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});context.setDefaultTimeout(12000);
+ const context=await chromium.launchPersistentContext(fs.mkdtempSync(path.join(os.tmpdir(),'aether-dl-')),{channel:'chromium',executablePath:process.env.AETHER_CHROMIUM||undefined,headless:true,ignoreDefaultArgs:['--disable-extensions'],args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true});context.setDefaultTimeout(12000);
  await context.route('https://**/*',async r=>{const u=new URL(r.request().url());requests.push({url:u.href,method:r.request().method()});if(u.origin!==origin)return r.abort();
   if(u.pathname==='/direct/session/current.json')return r.fulfill({json:{userId:account}});
   if(u.pathname==='/direct/site.json')return r.fulfill({json:{site_collection:Number(u.searchParams.get('_start'))===0?[{id:'cs200',title:'Cloud Development',type:'course'},{id:'cs300',title:'Distributed Systems',type:'course'}]:[]}});

@@ -10,11 +10,25 @@
   const encode=new TextEncoder();if(encode.encode(name).length>150){const ext=name.match(/\.[a-z0-9]{1,12}$/i)?.[0]||'';let base=name.slice(0,name.length-ext.length);while(encode.encode(base+ext).length>150)base=Array.from(base).slice(0,-1).join('');name=base+ext;}
   return name;
  }
+ const mimeExtensions={'application/pdf':'pdf','application/vnd.openxmlformats-officedocument.wordprocessingml.document':'docx','application/vnd.openxmlformats-officedocument.presentationml.presentation':'pptx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'xlsx','application/msword':'doc','application/vnd.ms-powerpoint':'ppt','application/vnd.ms-excel':'xls','text/plain':'txt','text/csv':'csv','application/json':'json','application/zip':'zip','application/x-zip-compressed':'zip','image/jpeg':'jpg','image/png':'png','image/gif':'gif','image/webp':'webp','audio/mpeg':'mp3','video/mp4':'mp4'};
+ const suffix=value=>{const ext=String(value||'').match(/\.([a-z0-9]{1,10})$/i)?.[1]||'';return /[a-z]/i.test(ext)?ext:'';};
+ function dispositionName(value){
+  const extended=String(value||'').match(/(?:^|;)\s*filename\*\s*=\s*(?:"?)(?:UTF-8)''([^;"\r\n]+)/i);
+  if(extended)try{return decodeURIComponent(extended[1].trim());}catch{}
+  return String(value||'').match(/(?:^|;)\s*filename\s*=\s*(?:"([^"\r\n]*)"|([^;\r\n]*))/i)?.slice(1).find(Boolean)?.trim()||'';
+ }
+ function fileName(node,response={}){
+  const name=safeSegment(node.name);if(node.type!=='file'||suffix(name))return name;
+  let path='';try{path=decodeURIComponent(new URL(node.url||'https://lms.lums.edu.pk/access/content'+node.id).pathname).split('/').pop();}catch{}
+  const mime=value=>mimeExtensions[String(value||'').split(';')[0].trim().toLowerCase()]||'';
+  const ext=suffix(dispositionName(response.disposition))||suffix(path)||mime(node.mime)||mime(response.mime)||response.detectedExtension||'';
+  return safeSegment(name+(ext?'.'+ext:''));
+ }
  function paths(tree,nodes){
   const assigned=new Map(),used=new Map();
   function path(node){
    if(assigned.has(node.id))return assigned.get(node.id);
-   const parent=node.parent?tree.nodes.get(node.parent):null,base=parent?path(parent):'',segment=safeSegment(node.name),key=base.toLocaleLowerCase('en-US');
+   const parent=node.parent?tree.nodes.get(node.parent):null,base=parent?path(parent):'',segment=fileName(node),key=base.toLocaleLowerCase('en-US');
    if(!used.has(key))used.set(key,new Set());const names=used.get(key);let unique=segment,index=2;
    const extension=node.type==='file'?(segment.match(/\.[^.]+$/)?.[0]||''):'';
    while(names.has(unique.toLocaleLowerCase('en-US')))unique=segment.slice(0,segment.length-extension.length)+' ('+(index++)+')'+extension;
@@ -24,7 +38,18 @@
   // Stable identities, rather than click order, decide collision suffixes.
   const needed=new Map();for(const node of nodes)for(let n=node;n;n=tree.nodes.get(n.parent))needed.set(n.id,n);
   for(const n of [...needed.values()].sort((a,b)=>a.id<b.id?-1:a.id>b.id?1:0))path(n);
-  return new Map(nodes.map(n=>[n.id,path(n)]));
+  const mapping=new Map(nodes.map(n=>[n.id,path(n)]));
+  // Response headers can restore an extension absent from both title and metadata.
+  // Reserve final names against every selected sibling, including already streamed files.
+  mapping.file=(node,response)=>{
+   const old=mapping.get(node.id),at=old.lastIndexOf('/')+1,base=old.slice(0,at),segment=fileName(node,response);
+   if(old.slice(at)===segment)return old;
+   const names=used.get(base.toLocaleLowerCase('en-US'));names.delete(old.slice(at).toLocaleLowerCase('en-US'));
+   const extension=segment.match(/\.[^.]+$/)?.[0]||'';let unique=segment,index=2;
+   while(names.has(unique.toLocaleLowerCase('en-US')))unique=segment.slice(0,segment.length-extension.length)+' ('+(index++)+')'+extension;
+   names.add(unique.toLocaleLowerCase('en-US'));const result=base+unique;if(new TextEncoder().encode(result).length>4096)throw Error('Archive path is too long. Select a shallower scope.');mapping.set(node.id,result);return result;
+  };
+  return mapping;
  }
  async function load(){
   if(!library)library=import(chrome.runtime.getURL('vendor/zip/zip-core.min.js')).then(()=>{
@@ -62,5 +87,5 @@
    },abort,get bytes(){return bytes;},limit
   };
  }
- globalThis.AetherDownloadArchive={safeSegment,paths,choose,create,BLOB_LIMIT,DIRECT_LIMIT};
+ globalThis.AetherDownloadArchive={safeSegment,fileName,paths,choose,create,BLOB_LIMIT,DIRECT_LIMIT};
 })();
