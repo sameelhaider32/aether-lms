@@ -1,6 +1,12 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),cp=require('node:child_process');
 const root=path.join(__dirname,'..'),manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'))),source=p=>fs.readFileSync(path.join(root,p),'utf8');
 let count=0;function check(name,fn){fn();count++;console.log('PASS',name);}
+check('CodeQL workflow steps use the same pinned action revision',()=>{
+ const steps=[...source('.github/workflows/security.yml').matchAll(/uses:\s*github\/codeql-action\/([\w-]+)@(\S+)/g)];
+ for(const name of ['init','analyze'])assert(steps.some(step=>step[1]===name),`Missing CodeQL ${name} step`);
+ assert(steps.every(step=>/^[a-f0-9]{40}$/.test(step[2])),'CodeQL actions must be pinned to commit revisions');
+ assert.equal(new Set(steps.map(step=>step[2])).size,1,'CodeQL initialization and analysis must use the same version');
+});
 const assignment={};vm.runInNewContext(source('src/assignment-state.js'),assignment);const state=assignment.AetherAssignmentState;
 check('Ambiguous dates and unconfirmed submission statuses remain conservative',()=>{assert(Number.isNaN(state.dueDate('10/11/2026')));for(const s of ['Not graded','Ungraded','Not returned','Graded','unknown'])assert.equal(state.submission(s),null);assert.equal(state.classify('Not graded','2020-10-22').state,'unknown');assert.equal(state.submission('Submitted · Not graded'),true);});
 check('Explicit epoch and PKT timestamps agree',()=>{const expected=Date.parse('2026-10-22T18:30:00+05:00');assert.equal(state.dueDate('Oct 22 2026 18:30 PKT'),expected);assert.equal(state.dueDate(String(expected)),expected);assert.equal(state.dueDate(String(expected/1000)),expected);});
