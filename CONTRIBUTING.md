@@ -43,6 +43,8 @@ The optional native-tab visibility probe is `AETHER_HEADFUL=1 node tests/fallbac
 
 Hosted CI sets `AETHER_SHARED_RUNNER=1` for startup checks: visuals must appear within 150 ms of workspace creation and before the deliberately delayed DOMContentLoaded event. Whole-navigation timings are recorded in `first-load-timing.json`, but the 1.5-second absolute budget is not enforced on shared VMs with variable cold-browser startup. Local startup tests retain that absolute budget by default. This is a functional CI check, not a controlled hardware performance benchmark.
 
+The general browser suite gives cold navigation a separate 30-second ceiling while retaining its 12-second action/readiness limits. [Playwright supports independent navigation budgets](https://playwright.dev/docs/api/class-page#page-set-default-navigation-timeout). This is a fixture setup allowance, not an Aether responsiveness target. Retention profiles wait for parsed pages and actual entry controls, close Chrome in `finally`, and retain all cycle/count/privacy assertions. Large-tree geometry and footer reachability are checked directly; visual captures are reviewed separately so screenshot generation does not perturb the retention profile. See [large-selection visual evidence](docs/v2-visual-review.md).
+
 Checked-in PPTX, DOCX, XLSX, ZIP, and audio fixtures contain fictional content. Regenerate them with `node tests/generate-office.cjs` after installing development dependencies.
 
 ## Source layout
