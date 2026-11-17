@@ -6,6 +6,7 @@
   if (window.top !== window || location.hostname !== "lms.lums.edu.pk") return;
   if (!/^\/+(?:portal(?:\/|$)|$)/.test(location.pathname)) return;
   const doc = document.documentElement;
+  let presentationTheme=doc.dataset.aetherTheme;
   if (doc.dataset.aetherV08 === "installed") return;
   doc.dataset.aetherV08 = "installed";
 
@@ -133,12 +134,12 @@
     if(!header.querySelector('#aether-theme-control')){
       const control=make('label','');control.id='aether-theme-control';
       const name=make('span','','THEME'),select=make('select','');select.id='aether-theme-select';select.setAttribute('aria-label','Aether theme');
-      for(const [value,title] of [['aether','Aether Original'],['monochrome','Monochrome']]){const option=make('option','',title);option.value=value;select.append(option);}
+      for(const [value,title] of [['aether','Aether Original'],['monochrome','Monochrome'],['minimal','Aether Minimal']]){const option=make('option','',title);option.value=value;select.append(option);}
       select.value=globalThis.AetherTheme?.get()||'aether';
       select.addEventListener('change',()=>globalThis.AetherTheme?.set(select.value));
       control.append(name,select);native.after(control);
     }}
-  window.addEventListener('aether-theme-change',()=>{const select=document.querySelector('#aether-theme-select');if(select)select.value=globalThis.AetherTheme?.get()||'aether';});
+  window.addEventListener('aether-theme-change',()=>{const next=doc.dataset.aetherTheme;if(next!==presentationTheme){if(next==='minimal'||presentationTheme==='minimal'){heroSignature='';requestRefresh(true);}presentationTheme=next;}const select=document.querySelector('#aether-theme-select');if(select)select.value=globalThis.AetherTheme?.get()||'aether';});
   function createFlare(parent,x,y,index){const n=make("span","ae-sparkle");n.style.left=x+"%";n.style.top=y+"%";n.style.setProperty("--n",String(index));parent.append(n);return n;}
   function makeHero(ctx){
     // Keep the general campus slogan on Home only. Course pages use the real
@@ -161,7 +162,7 @@
     },{passive:true});
     hero.addEventListener("pointerleave",()=>sparks.forEach(s=>{s.style.removeProperty("--lit");s.style.removeProperty("--zoom");}));
     const copy=make("div","ae-hero-copy");
-    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 2.0'));
+    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 2.1'));
     const eyebrow=make("div","ae-hero-eyebrow");eyebrow.append(make("span","ae-status-dot"),document.createTextNode(course?`LUMS / ${ctx.courseCode||"COURSE"} / ${(ctx.toolTitle||"OVERVIEW").toUpperCase()}`:`LUMS / ACADEMIC WORKSPACE / ${new Date().getFullYear()}`));copy.append(eyebrow);
     const h1=make("h1","ae-hero-heading");
     if(ctx.home){h1.append(document.createTextNode("A little space "),make("em","","for big ideas."));}
@@ -243,7 +244,7 @@
     section.append(list);return section;}
 
   function mountAmbient(){
-    if(!enabled || !document.body || ambientRoot?.isConnected)return;
+    if(!enabled || doc.dataset.aetherTheme==='minimal' || !document.body || ambientRoot?.isConnected)return;
     ambientRoot=make("div","ae-global-ambient");
     ambientRoot.id="aether-global-ambient";
     ambientRoot.setAttribute("aria-hidden","true");
@@ -256,6 +257,7 @@
   function cancelEffectsStart(){cancelAnimationFrame(effectFrame);effectFrame=0;cancelIdle(effectIdle);effectIdle=0;effectPreview?.dispose();effectPreview=null;}
   function scheduleEffects(canvas){
     if(canvas)effectCanvas=canvas;
+    if(doc.dataset.aetherTheme==='minimal'){cancelEffectsStart();scene?.dispose();scene=null;disposeAmbient();return;}
     if(!enabled||!effectCanvas?.isConnected)return;
     // Stars draw during parsing, independently of tool frames and page readiness.
     mountAmbient();
@@ -273,7 +275,7 @@
       }catch(error){console.debug('Aether scene unavailable',error);}
     });});
   }
-  function render(force=false){mountToolbar();const ctx=context();if(!ctx){globalThis.AetherSpotlight?.mount(null);globalThis.AetherMissionControl?.mount(null);if(enabled)mountAmbient();return;}
+  function render(force=false){mountToolbar();const ctx=context();globalThis.AetherMinimal?.mount(ctx);if(!ctx){globalThis.AetherSpotlight?.mount(null);globalThis.AetherMissionControl?.mount(null);if(enabled)mountAmbient();return;}
     if(!force&&ctx.signature===renderedSignature&&workspace?.isConnected){globalThis.AetherSpotlight?.mount(ctx);return;}
     const key=[ctx.home,ctx.courseTitle,ctx.toolTitle,ctx.resources,ctx.assignment].join('|');
     const count=workspace?.querySelector('.ae-instrument-number');if(count)count.textContent=String(pinnedCourses(ctx).length).padStart(2,'0');
@@ -288,7 +290,7 @@
     const mission=globalThis.AetherMissionControl?.mount(ctx);if(mission)workspace.append(mission);
     const tools=makeTools(ctx);if(tools)workspace.append(tools);
     const status=make('div','ae-screen-reader-only');status.id='aether-reorder-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');workspace.append(status);
-    ctx.main.prepend(workspace);globalThis.AetherSpotlight?.mount(ctx);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
+    ctx.main.prepend(workspace);globalThis.AetherMinimal?.mount(ctx);globalThis.AetherSpotlight?.mount(ctx);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
   }
   function requestRefresh(force=false){refreshForced ||= force;if(refreshPending)return;refreshPending=true;
     requestAnimationFrame(()=>{refreshPending=false;const forced=refreshForced;refreshForced=false;render(forced);});
@@ -299,7 +301,7 @@
     for(const r of records){
       const target=r.target.nodeType===1?r.target:r.target.parentElement;
       if(r.type==='childList'&&[...r.addedNodes,...r.removedNodes].length&&[...r.addedNodes,...r.removedNodes].every(n=>n.nodeType===1&&n.matches('[data-ae-preview-control],[data-ae-assignment-badges],[data-ae-download-control],#aether-theme-control,#aether-global-ambient')))continue;
-      if(target?.closest('#aether-theme-control,#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
+      if(target?.closest('#aether-minimal-nav,.am-context,#aether-minimal-planning,#aether-minimal-section,#aether-theme-control,#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
       if(target===document.body&&document.body.classList.contains('is-logged-out')){globalThis.AetherMissionControl?.mount(null);requestRefresh();return;}
       if(target?.closest('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item')){requestRefresh();return;}
       if([...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&n.matches('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item'))){requestRefresh();return;}

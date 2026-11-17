@@ -1,0 +1,330 @@
+/* Minimal presentation tokens. Neutral values also cover supported frame/reader chrome. */
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface,.ae-preview-theme){
+ --ae-tone-008:247,247,247;
+ --ae-tone-012:243,243,243;
+ --ae-tone-016:239,239,239;
+ --ae-tone-020:235,235,235;
+ --ae-tone-024:231,231,231;
+ --ae-tone-028:227,227,227;
+ --ae-tone-032:223,223,223;
+ --ae-tone-036:219,219,219;
+ --ae-tone-040:215,215,215;
+ --ae-tone-044:211,211,211;
+ --ae-tone-048:207,207,207;
+ --ae-tone-052:203,203,203;
+ --ae-tone-056:199,199,199;
+ --ae-tone-060:195,195,195;
+ --ae-tone-064:191,191,191;
+ --ae-tone-068:187,187,187;
+ --ae-tone-072:183,183,183;
+ --ae-tone-076:179,179,179;
+ --ae-tone-080:175,175,175;
+ --ae-tone-084:171,171,171;
+ --ae-tone-088:167,167,167;
+ --ae-tone-092:163,163,163;
+ --ae-tone-096:159,159,159;
+ --ae-tone-100:155,155,155;
+ --ae-tone-104:151,151,151;
+ --ae-tone-108:147,147,147;
+ --ae-tone-112:143,143,143;
+ --ae-tone-116:139,139,139;
+ --ae-tone-120:135,135,135;
+ --ae-tone-124:131,131,131;
+ --ae-tone-128:127,127,127;
+ --ae-tone-132:123,123,123;
+ --ae-tone-136:119,119,119;
+ --ae-tone-144:111,111,111;
+ --ae-tone-148:107,107,107;
+ --ae-tone-152:103,103,103;
+ --ae-tone-156:99,99,99;
+ --ae-tone-160:95,95,95;
+ --ae-tone-164:91,91,91;
+ --ae-tone-168:87,87,87;
+ --ae-tone-172:83,83,83;
+ --ae-tone-176:79,79,79;
+ --ae-tone-180:75,75,75;
+ --ae-tone-184:71,71,71;
+ --ae-tone-188:67,67,67;
+ --ae-tone-192:63,63,63;
+ --ae-tone-196:59,59,59;
+ --ae-tone-200:55,55,55;
+ --ae-tone-204:51,51,51;
+ --ae-tone-208:47,47,47;
+ --ae-tone-212:43,43,43;
+ --ae-tone-216:39,39,39;
+ --ae-tone-220:35,35,35;
+ --ae-tone-224:31,31,31;
+ --ae-tone-228:27,27,27;
+ --ae-tone-232:23,23,23;
+ --ae-tone-236:19,19,19;
+ --ae-tone-240:15,15,15;
+ --ae-tone-244:11,11,11;
+ --ae-tone-248:7,7,7;
+ --ae-tone-252:3,3,3;
+ --ae-bg:#f3f3f3;--ae-panel:#fafafa;--ae-raised:#fff;--ae-line:#242424;--ae-ink:#151515;--ae-soft:#414141;--ae-dim:#555;
+ --ae-cyan:#161616;--ae-mint:#222;--ae-moss:#444;--ae-gold:#333;--ae-paper:#fff;--ae-resource-ink:#111;--ae-resource-accent:#333;
+ --ae-radius:13px;--ae-radius-sm:8px;--ae-shadow:0 2px 0 #1112,0 4px 12px #00000008;--ae-glass:#fafafa;--ae-highlight:#fff;
+ --ae-select-arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23111111'/%3E%3C/svg%3E");color-scheme:light;
+}
+html.aether-enabled[data-aether-theme="minimal"] body{background:#ededed!important;color:#151515}
+html.aether-enabled[data-aether-theme="minimal"] :is(.portal-header,.portal-main-container){background:#f3f3f3!important;backdrop-filter:none!important}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header{position:relative!important;min-height:52px;padding:10px 24px;flex-wrap:wrap;gap:8px!important;border-bottom:1px solid #222!important}
+html.aether-enabled[data-aether-theme="minimal"] :is(#aether-global-ambient,.ae-living-canvas,.ae-hero-orbit,.ae-sparkle,.ae-course-particles){display:none!important}
+html.aether-enabled[data-aether-theme="minimal"] .portal-main-container{padding:24px!important;gap:0!important;margin-left:0!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content{width:100%!important;margin:0!important;max-width:none!important;padding:0!important}
+html.aether-enabled[data-aether-theme="minimal"][data-am-navigation="ready"]:not(.am-tools-open) :is(#toolMenu,#portal-nav-sidebar,.portal-nav-sidebar){display:none!important}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar){display:block!important;position:fixed!important;inset:108px auto 12px 12px;width:min(350px,calc(100vw - 24px))!important;z-index:30000;background:#fafafa!important;overflow:auto;border:1px solid #111;box-shadow:8px 12px 32px #0004}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open #toolMenu{display:block!important;position:fixed!important;inset:108px auto 12px 12px;width:min(350px,calc(100vw - 24px))!important;z-index:30001;background:#fafafa!important;overflow:auto;border:1px solid #111;border-radius:12px;padding:12px}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open #toolMenu>ul{display:block!important;overflow:visible!important}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open #toolMenu .site-page-list{display:block!important}
+html.aether-enabled[data-aether-theme="minimal"] .am-nav{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:12px 24px;border-bottom:1px solid #222;background:#fafafa;color:#111;font:500 14px/1.4 var(--ae-ui);position:relative;z-index:30}
+html.aether-enabled[data-aether-theme="minimal"] .am-brand{font-size:24px;letter-spacing:-.06em;margin-right:18px}
+html.aether-enabled[data-aether-theme="minimal"] :is(.am-button,.am-context a){font:500 13px/1.4 var(--ae-ui);border:1px solid #333;background:#fafafa;color:#111;border-radius:8px;padding:7px 11px;cursor:pointer;text-decoration:none}
+html.aether-enabled[data-aether-theme="minimal"] .am-nav [data-am-section]{border-color:transparent;border-radius:30px}
+html.aether-enabled[data-aether-theme="minimal"] :is(.am-button[aria-pressed="true"],.am-context [aria-current="page"]){background:#111!important;color:#fff!important}
+html.aether-enabled[data-aether-theme="minimal"] .am-context{display:flex;align-items:center;gap:6px;flex-basis:100%;overflow:auto;padding-top:10px;border-top:1px solid #ccc;margin-top:6px}
+html.aether-enabled[data-aether-theme="minimal"] .am-context>*{flex-shrink:0}html.aether-enabled[data-aether-theme="minimal"] .am-context strong{max-width:280px;white-space:normal}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace{display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto 1fr;gap:24px;max-width:none;padding:0;margin:0 0 24px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace>*{min-width:0;grid-column:1/-1}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero{min-height:0!important;background:#fafafa!important;border:1px solid #111;border-radius:14px;box-shadow:var(--ae-shadow);padding:0;margin:0!important;display:block;overflow:hidden}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-copy{width:100%!important;padding:24px 28px!important;max-width:none}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-heading{font-size:clamp(24px,3vw,37px)!important;max-width:none;margin:8px 0 12px!important;letter-spacing:-.04em!important;text-shadow:none}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-heading em{color:inherit!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace :is(.ae-hero-brand,.ae-hero-micro,.ae-instrument,.ae-sculpture-caption,.ae-hero-grid){display:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-intro{font-size:14px;max-width:none;margin:0 0 16px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-actions{margin-top:12px;gap:8px;flex-wrap:wrap}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace :is(.ae-hero-cta,.ae-hero-secondary,.ae-motion-btn){border:1px solid #222!important;border-radius:8px!important;padding:9px 13px!important;min-height:36px!important;background:#fafafa!important;color:#111!important;box-shadow:none!important;font-size:12px!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-courses{grid-column:1;grid-row:3;align-self:start;margin:0!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-minimal-planning{grid-column:2;grid-row:3;display:grid;align-content:start;gap:18px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-course-dock .ae-course-deck{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;perspective:none}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-course-card{background:#fafafa!important;border:1px solid #222!important;border-radius:13px!important;box-shadow:var(--ae-shadow)!important;transform:none!important;overflow:hidden;min-width:0}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-course-link{min-height:156px!important;padding:18px 18px 16px 84px!important;position:relative;display:flex;flex-direction:column;gap:10px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-course-link::before{content:'';position:absolute;left:14px;top:20px;width:54px;height:66px;border:1px solid #333;border-radius:9px;background:repeating-radial-gradient(ellipse at 10% 85%,#111 0 1px,#eee 1px 4px);opacity:.8}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-course-card:nth-child(even) .ae-course-link::before{background:repeating-linear-gradient(135deg,#222 0 1px,#eee 1px 5px)}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-card-name{font-size:16px;line-height:1.35;letter-spacing:-.02em;overflow-wrap:anywhere;text-transform:none;min-height:0}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-card-bottom{margin-top:auto;font-size:10px;letter-spacing:.04em}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-card-index{display:none}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-section-head{margin-bottom:12px;padding-bottom:0;border:0}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-section-title{font-size:22px!important;text-transform:none;letter-spacing:-.035em}
+html.aether-enabled[data-aether-theme="minimal"] :is(.am-panel,.am-section){padding:18px;background:#fafafa;border:1px solid #222;border-radius:13px;box-shadow:var(--ae-shadow)}
+html.aether-enabled[data-aether-theme="minimal"] :is(.am-panel,.am-section) h2{font-size:18px;line-height:1.35;letter-spacing:-.03em;margin:0 0 14px}
+html.aether-enabled[data-aether-theme="minimal"] .am-panel h3{font-size:13px;margin:18px 0 8px}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar-head{display:flex;align-items:center;justify-content:space-between;gap:6px}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar-head h2{font-size:14px;margin:0}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar-head button{padding:4px 8px}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:16px 0;font-variant-numeric:tabular-nums;text-align:center}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar button{position:relative;height:34px;padding:0 0 6px;border-color:transparent;border-radius:8px;font-size:12px;min-width:0}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar button:hover{background:#ececec}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar .am-has-events::after{content:'';position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:#111}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar .am-has-events[aria-pressed="true"]::after{background:#fff}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar [aria-current="date"]{font-weight:700;border-color:#111}
+html.aether-enabled[data-aether-theme="minimal"] .am-weekday{font-size:11px;color:#555}
+html.aether-enabled[data-aether-theme="minimal"] .am-note{font-size:12px;line-height:1.55;color:#555;margin:10px 0}
+html.aether-enabled[data-aether-theme="minimal"] .am-agenda-item{display:block;color:#111!important;text-decoration:none;padding:10px 0;border-bottom:1px solid #ccc;font-size:13px;font-weight:550;overflow-wrap:anywhere}
+html.aether-enabled[data-aether-theme="minimal"] .am-agenda-item small{display:block;font-size:11px;font-weight:400;color:#555;margin-top:5px}
+html.aether-enabled[data-aether-theme="minimal"] .am-destinations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+html.aether-enabled[data-aether-theme="minimal"] .am-destinations a{padding:16px;border:1px solid #333;border-radius:9px;color:#111!important;text-decoration:none;background:#fff}
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) :is(.ae-record-card,.mc-panel,.mc-item,.ae-preview-head,.ae-download-manager,#aether-spotlight,.gb-modal-dialog,.wicket-modal .w_content_1){border-color:#333!important;border-radius:12px!important;box-shadow:var(--ae-shadow)!important;backdrop-filter:none!important;background-color:var(--ae-panel)!important;color:#111!important;transform:none!important}
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) :is(.ae-record-card,.ae-course-card,.ae-hero)::after{display:none!important}
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) :is(.ae-tool-icon,.ae-record-card::before){filter:grayscale(1)}
+html.aether-enabled[data-aether-theme="minimal"] :is(button,a,input,select,summary):focus-visible{outline:2px solid #111!important;outline-offset:3px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control{margin-top:8px;padding-top:28px;border-top:1px solid #222;border-radius:0!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control .mc-summary{gap:12px}
+html.aether-enabled[data-aether-theme="minimal"] .ae-tool-row{flex-wrap:wrap}
+@media(max-width:1150px){html.aether-enabled[data-aether-theme="minimal"] #aether-workspace{grid-template-columns:minmax(0,1fr) 270px;gap:18px}html.aether-enabled[data-aether-theme="minimal"] #aether-course-dock .ae-course-deck{grid-template-columns:1fr}}
+@media(max-width:800px){html.aether-enabled[data-aether-theme="minimal"] #aether-workspace{grid-template-columns:1fr}html.aether-enabled[data-aether-theme="minimal"] #aether-minimal-planning{grid-column:1;grid-row:4;grid-template-columns:repeat(2,minmax(0,1fr))}html.aether-enabled[data-aether-theme="minimal"] #aether-course-dock .ae-course-deck{grid-template-columns:repeat(2,minmax(0,1fr))}html.aether-enabled[data-aether-theme="minimal"] .portal-main-container{padding:16px!important}html.aether-enabled[data-aether-theme="minimal"] .am-nav{padding:12px 16px;gap:4px}html.aether-enabled[data-aether-theme="minimal"] .am-brand{margin-right:8px}}
+@media(max-width:540px){html.aether-enabled[data-aether-theme="minimal"] #aether-course-dock .ae-course-deck,html.aether-enabled[data-aether-theme="minimal"] #aether-minimal-planning,html.aether-enabled[data-aether-theme="minimal"] .am-destinations{grid-template-columns:1fr}html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-copy{padding:20px!important}html.aether-enabled[data-aether-theme="minimal"] .am-brand{flex-basis:100%}html.aether-enabled[data-aether-theme="minimal"] .am-nav [data-am-section]{padding:7px 9px;font-size:12px}html.aether-enabled[data-aether-theme="minimal"] #aether-workspace{gap:18px}}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-home :is(.ae-hero-heading,.ae-hero-intro,.ae-hero-eyebrow){display:none!important}
+html.aether-enabled[data-aether-theme="minimal"] .am-greeting{font:600 clamp(25px,3vw,36px)/1.15 var(--ae-ui);letter-spacing:-.045em;margin:0 0 10px;color:#111}
+html.aether-enabled[data-aether-theme="minimal"] .am-observed{font-size:13px;color:#444;margin:0 0 14px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero{grid-row:1}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace :is(.ae-courses,#aether-minimal-planning){grid-row:2}
+html.aether-enabled[data-aether-theme="minimal"] .am-section:not([hidden]){position:fixed;z-index:29000;top:130px;left:max(16px,calc((100vw - 1000px)/2));right:max(16px,calc((100vw - 1000px)/2));max-height:65vh;overflow:auto}
+@media(max-width:800px){html.aether-enabled[data-aether-theme="minimal"] #aether-workspace #aether-minimal-planning{grid-row:3}}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header :is(a,span,button){color:#111!important}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header :is(img,svg){filter:grayscale(1)}
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) :is(.ae-hero,.ae-record-card,.mc-panel,.ae-download-manager,#aether-spotlight,.gb-modal-dialog,.wicket-modal .w_content_1){background-image:none!important}
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) :is(.ae-hero,.ae-record-card)::before{filter:grayscale(1);background-image:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero .ae-light-layer{display:none}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-copy{background:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-courses{padding-top:0!important}
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) .gb-modal-overlay{background:#0003!important}
+@media(max-width:540px){html.aether-enabled[data-aether-theme="minimal"] .portal-header{padding:10px 16px!important}html.aether-enabled[data-aether-theme="minimal"] .portal-header .header-tool-title:not(a,button):not(:has(a,button,input,select,[role=button])){display:none}html.aether-enabled[data-aether-theme="minimal"] .am-nav{padding-block:8px}html.aether-enabled[data-aether-theme="minimal"] .am-brand{flex-basis:auto;margin-right:auto}html.aether-enabled[data-aether-theme="minimal"] .am-nav>[data-am-tools]{order:-1}html.aether-enabled[data-aether-theme="minimal"] .am-nav [data-am-section]{font-size:12px;padding:6px 8px}}
+html.aether-enabled[data-aether-theme="minimal"] .am-close-tools{display:none}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open .am-close-tools{display:block;position:fixed;top:116px;left:min(254px,calc(100vw - 110px));z-index:30002}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open #toolMenu>ul{padding-top:34px!important}
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface) .ae-record-card>[data-ae-cell="primary"]::before{filter:grayscale(1)!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-course-card{min-height:0!important;opacity:1!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-course-card .ae-course-link{min-height:136px!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-copy{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-copy>:is(h1,p,.ae-hero-eyebrow){flex-basis:100%}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-actions{margin:0!important;display:inline-flex}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-dl-global{margin:0!important;min-height:36px;border:1px solid #222;border-radius:8px;background:#fafafa;color:#111}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero::before{display:none!important}
+@media(max-width:540px){html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-home .ae-hero-cta:first-child{flex-basis:auto}html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-actions{display:flex;width:100%}}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open .am-nav{z-index:30002}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#toolMenu,#portal-nav-sidebar,.portal-nav-sidebar){top:var(--am-drawer-top,108px)!important}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open .am-close-tools{top:calc(var(--am-drawer-top,108px) + 8px)}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar) #toolMenu{position:static!important;width:100%!important;max-height:none!important;border:0;overflow:visible;box-shadow:none;inset:auto!important}
+/* Primary navigation shares the native utility bar; native controls keep their DOM and handlers. */
+html.aether-enabled[data-aether-theme="minimal"] .portal-header{width:100%!important;gap:10px!important}
+html.aether-enabled[data-aether-theme="minimal"] .am-nav{flex:1 1 560px;min-width:0;padding:0!important;border:0;background:transparent;gap:8px}
+html.aether-enabled[data-aether-theme="minimal"] .am-primary{display:flex;gap:2px;min-width:0;overflow:auto;order:1}
+html.aether-enabled[data-aether-theme="minimal"] .am-primary button{flex:none}
+html.aether-enabled[data-aether-theme="minimal"] .am-nav>[data-am-tools]{order:2}
+html.aether-enabled[data-aether-theme="minimal"] .am-context{order:4}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open .portal-header{z-index:30002}
+@media(max-width:800px){html.aether-enabled[data-aether-theme="minimal"] .am-nav{flex-basis:100%;order:2}html.aether-enabled[data-aether-theme="minimal"] .am-primary{flex:1}}
+@media(max-width:540px){html.aether-enabled[data-aether-theme="minimal"] .am-brand{margin-right:auto;flex-basis:auto}html.aether-enabled[data-aether-theme="minimal"] .am-nav>[data-am-tools]{order:1}html.aether-enabled[data-aether-theme="minimal"] .am-primary{order:2;flex-basis:100%}html.aether-enabled[data-aether-theme="minimal"] .am-context{order:3}}
+/* Study.OS composition: greeting and courses at left, planning from the top at right. */
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-home{grid-column:1}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace #aether-minimal-planning{grid-row:1/span 2}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-copy{padding:20px 24px!important;gap:6px}
+html.aether-enabled[data-aether-theme="minimal"] .am-greeting{font-size:clamp(25px,2.5vw,33px);margin-bottom:4px}
+html.aether-enabled[data-aether-theme="minimal"] .am-observed{margin-bottom:8px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-course .ae-hero-heading{font-size:26px!important;margin:4px 0 8px!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-course .ae-hero-intro{margin:0 0 8px!important;font-size:13px}
+html.aether-enabled[data-aether-theme="minimal"] .am-tool-customization{border-block:1px solid #bbb;padding-block:10px;margin:0}
+html.aether-enabled[data-aether-theme="minimal"] .am-tool-customization>summary{font-size:13px;cursor:pointer}
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface) .ae-record-card>[data-ae-cell="primary"]::before{filter:none!important}
+@media(max-width:800px){html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-home{grid-column:1/-1}html.aether-enabled[data-aether-theme="minimal"] #aether-workspace #aether-minimal-planning{grid-row:3}}
+@media(max-width:540px){html.aether-enabled[data-aether-theme="minimal"] #aether-theme-select{max-width:128px}}
+
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) .ae-record-card.ae-record-card{--ae-document:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h4'/%3E%3C/svg%3E")!important}
+
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) .ae-record-card.ae-record-card:is([data-ae-kind="assignment"],[data-ae-kind="assessment"]){--ae-document:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 4H6v17h13V4h-3M9 2h7v5H9zM9 12l2 2 4-4M9 18h7'/%3E%3C/svg%3E")!important}
+
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) .ae-record-card.ae-record-card:is([data-ae-kind="discussion"],[data-ae-kind="message"],[data-ae-kind="announcement"]){--ae-document:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16v12H9l-5 4zM8 8h8M8 12h5'/%3E%3C/svg%3E")!important}
+
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) .ae-record-card.ae-record-card[data-ae-kind="person"]{--ae-document:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3Cpath d='M4 21v-3c0-6 16-6 16 0v3z'/%3E%3C/svg%3E")!important}
+
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) .ae-record-card.ae-record-card::before,html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) .ae-record-card.ae-record-card>[data-ae-cell="primary"]::before{filter:none!important}
+
+html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) .ae-card-list.ae-card-list>.ae-record-card::before{background-image:var(--ae-document)!important}
+html.aether-enabled[data-aether-theme="minimal"] :is(#aether-spotlight,#aether-download-manager)::backdrop{background:#0006;backdrop-filter:none!important}
+/* Live shell (see docs/live-dom-audit.md). The Sakai #pageBody is a grid with a fixed-height header row and a
+   22rem sidebar column; Minimal owns one auto-height bar and releases the column once All Tools is usable. */
+html.aether-enabled[data-aether-theme="minimal"] #pageBody.portal-container{grid-template-rows:auto auto auto minmax(0,1fr)!important}
+@media(min-width:768px){html.aether-enabled[data-aether-theme="minimal"][data-am-navigation="ready"] #pageBody.portal-container{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"paBanner" "jumpLinks" "header" "mainContainer"!important}}
+@media(max-width:767.98px){html.aether-enabled[data-aether-theme="minimal"] #pageBody.portal-container{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto minmax(0,1fr) var(--portal-header-height)!important}}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header{height:auto!important;min-height:56px;padding:8px 24px!important;flex-wrap:wrap;align-items:center!important;justify-content:flex-start!important;gap:8px!important;border-bottom:1px solid #222!important;box-shadow:none!important;z-index:40}
+html.aether-enabled[data-aether-theme="minimal"] .am-nav{order:1;flex:0 1 auto;flex-wrap:nowrap;min-width:0;padding:0!important;gap:8px}
+/* Native breadcrumb: kept as the real links, right-aligned and quiet. */
+html.aether-enabled[data-aether-theme="minimal"] .portal-header>div:has(>.portal-header-breadcrumb){order:2;flex:1 1 0;min-width:0;width:auto!important;height:auto!important;margin:0!important;justify-content:flex-end}
+/* Logo links Home (Dashboard pill) and the hamburger opens the sidebar (All Tools); hidden only while those work. */
+html.aether-enabled[data-aether-theme="minimal"][data-am-navigation="ready"] #logoWrapper{display:none!important}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header .portal-header-breadcrumb{width:auto!important;min-width:0;flex-wrap:nowrap;justify-content:flex-end;gap:6px;font:400 12px/1.4 var(--ae-ui);color:#555!important;overflow:hidden;white-space:nowrap;padding-right:6px}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header .portal-header-breadcrumb :is(a,span,div){color:#555!important;font-size:12px;font-weight:400!important;text-decoration:none;margin:0!important;padding:0!important}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header .portal-header-breadcrumb a:hover{color:#111!important;text-decoration:underline}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header .portal-header-breadcrumb-item{min-width:0;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header .portal-header-breadcrumb .header-tool-title{flex:none}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header .portal-header-breadcrumb .manage-overview-link{flex:none;margin-left:8px!important;padding-left:8px!important;border-left:1px solid #bbb}
+@media(max-width:1180px){html.aether-enabled[data-aether-theme="minimal"] .portal-header>div:has(>.portal-header-breadcrumb) .portal-header-breadcrumb{display:none!important}}
+/* Aether controls, in bar order: toggle, theme, Spotlight. */
+html.aether-enabled[data-aether-theme="minimal"] #aether-native-toggle{order:3;margin:0!important;padding:0 9px!important;height:34px;min-height:34px;gap:7px;z-index:auto;box-shadow:none!important;border-color:#333;color:#111;background:#fafafa}
+html.aether-enabled[data-aether-theme="minimal"] #aether-native-toggle .ae-toggle-brand{display:none}
+html.aether-enabled[data-aether-theme="minimal"] #aether-native-toggle .ae-toggle-glyph{color:#111}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header #aether-native-toggle .ae-toggle-word{background:#111!important;color:#fff!important;font-size:10px!important;border-radius:4px;padding:3px 5px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-theme-control{order:4;margin:0!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-theme-control>span{display:none}
+html.aether-enabled[data-aether-theme="minimal"] #aether-theme-select{height:34px;min-height:34px;max-width:140px;padding:0 26px 0 10px;border-color:#333;background-color:#fafafa;color:#111;box-shadow:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-spotlight-trigger{order:5;margin:0!important;height:34px;min-height:34px;padding:0 10px;border-color:#333;background:#fafafa;color:#111;box-shadow:none!important}
+/* Native system controls (help, sites, calendar, notifications, account): the real buttons, restyled in place. */
+html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators{order:6;margin:0!important;gap:2px;padding-left:8px;border-left:1px solid #bbb}
+html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators>li{margin:0!important;padding:0!important;display:flex;align-items:center}
+html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators>li.d-none{display:none}
+@media(min-width:768px){html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators>li.d-md-inline{display:flex}}
+html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators .icon-button{width:34px;height:34px;min-width:0;padding:0!important;margin:0!important;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:8px;background:transparent!important;color:#111!important}
+html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators .icon-button:hover{border-color:#333;background:#fff!important}
+html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators :is(.bi,.si){font-size:16px;line-height:1;width:auto;height:auto}
+html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators .sak-sysInd-account{margin-left:4px!important}
+html.aether-enabled[data-aether-theme="minimal"] #sakai-system-indicators .sakai-accountProfileImage{width:28px;height:28px;border:1px solid #333}
+/* Course context sits in its own header row, so the bar border can never cross it. */
+html.aether-enabled[data-aether-theme="minimal"] .portal-header>.am-context{order:99;flex:0 0 100%;min-width:0;margin:0;padding-top:8px;border-top:1px solid #ccc;scrollbar-width:none}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header>.am-context strong{max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar) .sticky-footer{background:#fafafa!important;border-top:1px solid #ccc;color:#111}
+html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar) .sticky-footer :is(a,button,span){color:#111!important}
+@media(max-width:900px){html.aether-enabled[data-aether-theme="minimal"] .portal-header{padding:8px 16px!important}html.aether-enabled[data-aether-theme="minimal"] .am-nav{flex:1 1 100%}html.aether-enabled[data-aether-theme="minimal"] .am-primary{flex:1 1 auto;scrollbar-width:none}html.aether-enabled[data-aether-theme="minimal"] .am-brand{margin-right:6px}}
+@media(max-width:540px){html.aether-enabled[data-aether-theme="minimal"] .am-nav{flex-wrap:wrap}}
+/* The account may use the Sakai dark theme; keep Aether scrollbars neutral. scrollbar-color inherits. */
+html.aether-enabled[data-aether-theme="minimal"],html.aether-enabled[data-aether-theme="minimal"] :is(body,.portal-main-container,#aether-workspace *){scrollbar-color:#a8a8a8 transparent}
+/* Course context: title on its own line, then the tools that fit and a More menu (minimal.js fitTools). */
+html.aether-enabled[data-aether-theme="minimal"] .portal-header>.am-context{display:block;overflow:visible;padding-top:8px}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header>.am-context .am-course-title{display:block;max-width:100%;margin:0 0 8px;font:600 15px/1.4 var(--ae-ui);letter-spacing:-.02em;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.aether-enabled[data-aether-theme="minimal"] .am-toolrow{display:flex;align-items:center;gap:6px;min-width:0}
+html.aether-enabled[data-aether-theme="minimal"] .am-tools{display:flex;flex:0 1 auto;gap:6px;min-width:0;overflow:hidden;padding:3px;margin:-3px}
+html.aether-enabled[data-aether-theme="minimal"] .am-tools>a{flex:none;white-space:nowrap}
+html.aether-enabled[data-aether-theme="minimal"] .am-more{position:relative;flex:none}
+html.aether-enabled[data-aether-theme="minimal"] :is(.am-more,.am-more-menu)[hidden]{display:none}
+html.aether-enabled[data-aether-theme="minimal"] .am-more-toggle::after{content:'';display:inline-block;width:6px;height:6px;margin:0 0 3px 8px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header .am-more-toggle:is(.am-more-current,[aria-expanded="true"]){background:#111!important;color:#fff!important}
+html.aether-enabled[data-aether-theme="minimal"] .am-more-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:50;display:grid;gap:2px;min-width:200px;max-height:60vh;overflow:auto;padding:6px;background:#fafafa;border:1px solid #222;border-radius:10px;box-shadow:0 8px 24px #0002}
+html.aether-enabled[data-aether-theme="minimal"] .am-more-menu a{display:block;border-color:transparent;white-space:nowrap}
+html.aether-enabled[data-aether-theme="minimal"] .am-more-menu a:hover{background:#ececec}
+/* Neutral light values for the Sakai theme variables, in the portal and in same-origin tool frames
+   (lists.js marks those with ae-frame-enabled while Aether is on). Covers accounts on the Sakai dark theme. */
+html.aether-enabled[data-aether-theme="minimal"],html.ae-frame-enabled[data-aether-theme="minimal"]{
+ --sakai-primary-color-1:#111;--sakai-primary-color-2:#222;--sakai-primary-color-3:#333;
+ --sakai-active-color-1:#e9e9e9;--sakai-active-color-2:#e0e0e0;--sakai-active-color-3:#d6d6d6;
+ --sakai-passive-color-1:#f0f0f0;--sakai-passive-color-2:#e8e8e8;--sakai-passive-color-3:#dedede;
+ --sakai-background-color-1:#fafafa;--sakai-background-color-2:#f3f3f3;--sakai-background-color-3:#ececec;--sakai-background-color-4:#e4e4e4;--sakai-background-color-5:#dcdcdc;--sakai-background-color-6:#d2d2d2;--sakai-background-color-7:#c8c8c8;
+ --sakai-secondary-color-1:#333;--sakai-tertiary-color-1:#444;--sakai-border-color:#cfcfcf;--sakai-border-color-modal:#222;
+ --sakai-text-color-1:#151515;--sakai-text-color-2:#2a2a2a;--sakai-text-color-3:#111;--sakai-text-color-dimmed:#555;--sakai-text-color-disabled:#888;--sakai-text-color-inverted:#fafafa;
+ --sakai-image-invert:none;--link-color:#111;--link-active-color:#000;--link-hover-color:#000;--link-visited-color:#444;--breadcrumbs-tool-color:#111;--breadcrumbs-hover-color:#000;
+ --sakai-modal-header-bg:#f3f3f3;--sakai-modal-header-color:#111;--sakai-modal-close-btn-bg:#111;--sakai-offcanvas-header-bg:#f3f3f3;--sakai-offcanvas-header-color:#111;--sakai-offcanvas-close-btn-bg:#111;
+ --sakai-selected-page-bg-color:#111;--sakai-scrollbar-thumb-color:#a8a8a8;--sakai-highlight-color:#111;
+ --bs-btn-color:#111;--bs-nav-link-color:#111;--bs-nav-link-hover-color:#000;--bs-dropdown-divider-bg:#ccc;
+ --sakai-calendar-today-background-color:#111;--sakai-calendar-today-color:#fff;--sakai-calendar-has-events-background-color:#e0e0e0;--sakai-calendar-has-events-color:#111;
+ --infoBanner-bordercolor:#222;--infoBanner-bgcolor:#f3f3f3;--infoBanner-color:#151515;--successBanner-bordercolor:#222;--successBanner-bgcolor:#f3f3f3;--successBanner-color:#151515;
+ --warnBanner-bordercolor:#222;--warnBanner-bgcolor:#f3f3f3;--warnBanner-color:#151515;--errorBanner-bordercolor:#222;--errorBanner-bgcolor:#f3f3f3;--errorBanner-color:#151515;
+ --progress-bar-bg:#e0e0e0;--jumbotron-bg:#f3f3f3;color-scheme:light;scrollbar-color:#a8a8a8 transparent
+}
+/* Tool frames: the frame body is the panel interior, so it carries the surface and no chrome of its own. */
+html.ae-frame-enabled[data-aether-theme="minimal"] body{background:#fafafa!important;color:#151515!important;font-family:"Geist Sans","Segoe UI",sans-serif}
+html.ae-frame-enabled[data-aether-theme="minimal"] body.Mrphs-container{border:0!important;border-radius:0!important;box-shadow:none!important}
+html.ae-frame-enabled[data-aether-theme="minimal"] :is(h1,h2,h3,h4){color:#111;letter-spacing:-.01em}
+html.ae-frame-enabled[data-aether-theme="minimal"] a{color:#111}
+/* Native tool panels: off-white surface, 1px dark border, card radius. */
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-container:not(.Mrphs-container--toolTitleNav){background:#fafafa!important;border:1px solid #222!important;border-radius:13px!important;box-shadow:var(--ae-shadow)!important;overflow:hidden}
+html.aether-enabled[data-aether-theme="minimal"] main#content nav.Mrphs-toolTitleNav{background:transparent!important;border:0!important;border-bottom:1px solid #d0d0d0!important;border-radius:0!important;box-shadow:none!important;min-height:44px;padding:0 18px!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content :is(.Mrphs-toolTitleNav__title,.Mrphs-toolTitleNav__text){color:#111!important;font:600 14px/1.4 var(--ae-ui)!important;letter-spacing:-.01em}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-toolBody{background:transparent!important;color:#151515!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-toolBody>.portletBody{padding:18px}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-toolBody iframe.portletMainIframe{display:block;background:#fafafa}
+html.aether-enabled[data-aether-theme="minimal"] main#content>.row{--bs-gutter-x:24px;margin-inline:-12px}
+html.aether-enabled[data-aether-theme="minimal"] main#content>.row>[class*="col-"]{padding:0 12px!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content>.row .Mrphs-container{margin:0 0 24px!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-container>.portletBody{padding:18px}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-pageColumns--single nav.Mrphs-toolTitleNav{min-height:0;border-bottom:0!important}
+/* Mission Control: separate bordered tiles, flat items, outlined controls. */
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control .mc-summary{background:transparent!important;border:0!important;border-radius:0!important;gap:14px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control .mc-stat{background:#fafafa!important;border:1px solid #222!important;border-radius:13px!important;box-shadow:var(--ae-shadow)}
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control .mc-item{background-image:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control :is(.mc-button,select){background-color:#fafafa!important;background-image:none;border:1px solid #333!important;border-radius:8px!important;color:#111!important;box-shadow:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control .mc-button[aria-pressed="true"]{background-color:#111!important;color:#fff!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control .mc-button:disabled{opacity:.55}
+/* Download Manager and its entry buttons. */
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager{border:1px solid #222!important;border-radius:14px!important;background:#fafafa!important;color:#111!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager :is(button,select,input:not([type=checkbox])){background-color:#fff!important;border:1px solid #333!important;border-radius:8px!important;color:#111!important;box-shadow:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager button:hover:not(:disabled){background-color:#ececec!important;border-color:#111!important;transform:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager :is(.ae-dl-basket,.ae-dl-footer){background:#f3f3f3!important;border-color:#222!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager .ae-dl-header{border-color:#222!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager :is(.ae-dl-eyebrow,.ae-dl-rule,.ae-dl-summary,.ae-dl-scope,.ae-dl-status,h2,h3,label,a){color:#111!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager .ae-dl-line{border-color:#d0d0d0!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager .ae-dl-basket-item{background:#fff!important;border-color:#333!important;border-radius:8px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-download-manager input[type=checkbox]{accent-color:#111}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-dl-global,html.aether-enabled[data-aether-theme="minimal"] main#content :is(.ae-dl-entry,.ae-dl-add,.ae-preview-trigger){background:#fafafa!important;border:1px solid #222!important;border-radius:8px!important;color:#111!important;font-size:12px!important}
+html.aether-enabled[data-aether-theme="minimal"] #aether-spotlight :is(select,input){background-color:#fff!important;border-color:#333!important;color:#111!important}
+/* Record cards are flat; state is carried by the badge, not a tinted surface. */
+html.aether-enabled[data-aether-theme="minimal"] #pageBody main#content .ae-record-card.ae-record-card{background:#fafafa!important;background-image:none!important}
+/* Native Sakai controls inside tool panels: white field, 1px dark border. */
+html.aether-enabled[data-aether-theme="minimal"] #pageBody main#content :is(.portletBody,.Mrphs-toolBody) :is(input[type=submit],input[type=button],input[type=reset],button:not([class*="ae-"]):not(.dropdown-item),a.btn,select,input[type=text],input[type=search],.dropdown-toggle),
+html.aether-enabled.ae-page-resources[data-aether-theme="minimal"] #pageBody main#content :is(button.btn,a.btn,input[type=button],input[type=submit],.dropdown-toggle):not(#aether-native-toggle):not(.ae-hero-cta):not(.ae-motion-btn){background-color:#fff!important;background-image:none!important;border:1px solid #333!important;border-radius:8px!important;color:#111!important;box-shadow:none!important;text-shadow:none!important;transform:none!important}
+html.aether-enabled[data-aether-theme="minimal"] #pageBody main#content :is(.portletBody,.Mrphs-toolBody) :is(input[type=submit],input[type=button],button:not([class*="ae-"]),a.btn,.dropdown-toggle):hover:not(:disabled),
+html.aether-enabled.ae-page-resources[data-aether-theme="minimal"] #pageBody main#content :is(button.btn,a.btn,input[type=button],input[type=submit],.dropdown-toggle):not(#aether-native-toggle):not(.ae-hero-cta):not(.ae-motion-btn):hover{background-color:#ececec!important;background-image:none!important;border-color:#111!important}
+html.aether-enabled[data-aether-theme="minimal"] #pageBody main#content :is(.portletBody,.Mrphs-toolBody) :is(input,button,a.btn):disabled{opacity:.5}
+html.aether-enabled[data-aether-theme="minimal"] #pageBody main#content .navIntraTool :is(.current,.current a,.current span,[aria-current]){background-color:#111!important;color:#fff!important;border-radius:8px!important}
+/* Resources: column headings as one chip row, matching the Assignments list. */
+html.aether-enabled[data-aether-theme="minimal"] main#content table.resourcesList .ae-card-header-row{display:flex!important;flex-wrap:wrap;align-items:center;gap:6px;height:auto!important;padding:8px 0!important;margin:0 0 12px;border:0!important;border-bottom:1px solid #d0d0d0!important;background:transparent!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content table.resourcesList .ae-card-header-row>th{display:inline-flex!important;align-items:center;width:auto!important;min-width:0;height:auto!important;padding:6px 10px!important;border:0!important;border-radius:6px;background:#ececec!important;font-size:12px}
+html.aether-enabled[data-aether-theme="minimal"] main#content table.resourcesList .ae-card-header-row>th:empty{display:none!important}

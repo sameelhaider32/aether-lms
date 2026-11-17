@@ -32,3 +32,6 @@ private-data/
 captures/
 browser-profiles/
 *.har
+
+# Live LMS review screenshots (never commit)
+.live-review/

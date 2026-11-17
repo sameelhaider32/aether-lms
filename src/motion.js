@@ -6,7 +6,7 @@
   try { if(top.location.origin!=='https://lms.lums.edu.pk'||!/^\/+(?:portal(?:\/|$)|$)/.test(top.location.pathname))return;host=top.document.documentElement; } catch { return; }
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),coarse=matchMedia('(pointer: coarse)');
   const subscribers=new Map();let nextId=0,raf=0,disposed=false;
-  const moving=()=>host.classList.contains('aether-enabled')&&!host.classList.contains('aether-reduced-motion')&&!reduced.matches;
+  const moving=()=>host.classList.contains('aether-enabled')&&host.dataset.aetherTheme!=='minimal'&&!host.classList.contains('aether-reduced-motion')&&!reduced.matches;
   function tick(now){
     raf=0;if(disposed||document.hidden)return;
     for(const [id,item] of [...subscribers]){
@@ -76,7 +76,7 @@
   }}
   function settings(){if(!moving()){cancel(pointerFrame);pointerFrame=0;pointerSample=null;for(const card of animations.keys())clearCard(card);animations.clear();current=null;if(stopCards){stopCards();stopCards=null;}}for(const [el,stop]of reveals)if(!el.isConnected||!moving()){stop();reveals.delete(el);el.querySelectorAll('.ae-reveal-unit').forEach(n=>n.style.removeProperty('transform'));}}
   function visibility(){if(document.hidden){window.cancelAnimationFrame(raf);raf=0;for(const item of subscribers.values())item.last=0;}else wake();}
-  const stateObserver=new MutationObserver(settings);stateObserver.observe(host,{attributes:true,attributeFilter:['class']});
+  const stateObserver=new MutationObserver(settings);stateObserver.observe(host,{attributes:true,attributeFilter:['class','data-aether-theme']});
   document.addEventListener('pointermove',pointer,{passive:true});document.addEventListener('pointerleave',settle,{passive:true});document.addEventListener('visibilitychange',visibility);reduced.addEventListener('change',settings);
   window.addEventListener('pagehide',e=>{if(e.persisted)return;disposed=true;window.cancelAnimationFrame(raf);subscribers.clear();stateObserver.disconnect();io?.disconnect();settings();document.removeEventListener('pointermove',pointer);document.removeEventListener('pointerleave',settle);document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',settings);},{once:false});
   globalThis.AetherMotion={subscribe,request,cancel,spring,moving,enhance,stats:()=>({subscribers:subscribers.size,framePending:!!raf,cards:animations.size,reveals:reveals.size,hidden:document.hidden})};
