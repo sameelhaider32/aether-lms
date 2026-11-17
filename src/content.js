@@ -301,7 +301,7 @@
     for(const r of records){
       const target=r.target.nodeType===1?r.target:r.target.parentElement;
       if(r.type==='childList'&&[...r.addedNodes,...r.removedNodes].length&&[...r.addedNodes,...r.removedNodes].every(n=>n.nodeType===1&&n.matches('[data-ae-preview-control],[data-ae-assignment-badges],[data-ae-download-control],#aether-theme-control,#aether-global-ambient')))continue;
-      if(target?.closest('#aether-minimal-nav,#aether-minimal-planning,#aether-minimal-section,#aether-theme-control,#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
+      if(target?.closest('#aether-minimal-nav,.am-context,#aether-minimal-planning,#aether-minimal-section,#aether-theme-control,#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
       if(target===document.body&&document.body.classList.contains('is-logged-out')){globalThis.AetherMissionControl?.mount(null);requestRefresh();return;}
       if(target?.closest('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item')){requestRefresh();return;}
       if([...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&n.matches('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item'))){requestRefresh();return;}
