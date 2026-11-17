@@ -3,7 +3,7 @@
  'use strict';
  if(window!==top||globalThis.AetherMinimal)return;
  const root=document.documentElement,D=globalThis.AetherAcademicData;
- let ctx=null,nav=null,aside=null,section=null,drawer=false,opener=null,frame=0,selection='Dashboard',navSignature='',nativeState=[],toolsExpanded=false;
+ let ctx=null,nav=null,aside=null,section=null,drawer=false,opener=null,frame=0,selection='Dashboard',navSignature='',nativeState=[],toolsExpanded=false,toolWidths=null,moreWidth=0,fitFrame=0;
  let month=new Date(),day=new Date().getDate();month.setDate(1);
  const active=()=>root.classList.contains('aether-enabled')&&root.dataset.aetherTheme==='minimal'&&!!ctx;
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -61,9 +61,10 @@
   }
   // Only hide the native navigation once the complete native-tool drawer is usable.
   const menu=document.querySelector('#toolMenu');nav.querySelector('[data-am-tools]').disabled=!menu;if(nav.isConnected&&menu)root.dataset.amNavigation='ready';else{delete root.dataset.amNavigation;close(false);}
-  if(navSignature!==ctx.signature){navSignature=ctx.signature;let sub=document.querySelector('.portal-header>.am-context')||nav.querySelector('.am-context');if(sub)sub.remove();
-  if(!ctx.home){sub=el('div','am-context');sub.append(el('strong','',ctx.courseTitle||'Current site'));
-   for(const t of ctx.menu){const a=anchor(t.text,t.href,[...document.querySelectorAll('#toolMenu .is-current-site .site-page-list a[href]')].find(a=>a.href===t.href));if(t.active||t.text===ctx.toolTitle||new URL(t.href,location.href).pathname===location.pathname||[...document.querySelectorAll('#toolMenu .is-current-site .site-page-list a[href]')].some(n=>n.href===t.href&&(n.getAttribute('aria-current')==='page'||n.closest('.is-current-page,.is-current-tool,.current-page,.selected,.active'))))a.setAttribute('aria-current','page');sub.append(a);}sub.setAttribute('role','navigation');sub.setAttribute('aria-label','Course tools');sub.querySelector('strong').title=ctx.courseTitle||'Current site';nav.after(sub);}}
+  if(navSignature!==ctx.signature){navSignature=ctx.signature;let sub=document.querySelector('.portal-header>.am-context')||nav.querySelector('.am-context');if(sub)sub.remove();toolWidths=null;
+  if(!ctx.home){sub=el('div','am-context');const title=el('strong','am-course-title',ctx.courseTitle||'Current site'),row=el('div','am-toolrow'),list=el('div','am-tools'),more=el('div','am-more'),menu=el('div','am-more-menu'),toggle=button('More',()=>moreMenu(toggle.getAttribute('aria-expanded')!=='true'));
+   title.title=title.textContent;toggle.classList.add('am-more-toggle');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-haspopup','true');menu.hidden=true;more.append(toggle,menu);row.append(list,more);sub.append(title,row);
+   for(const t of ctx.menu){const a=anchor(t.text,t.href,[...document.querySelectorAll('#toolMenu .is-current-site .site-page-list a[href]')].find(a=>a.href===t.href));if(t.active||t.text===ctx.toolTitle||new URL(t.href,location.href).pathname===location.pathname||[...document.querySelectorAll('#toolMenu .is-current-site .site-page-list a[href]')].some(n=>n.href===t.href&&(n.getAttribute('aria-current')==='page'||n.closest('.is-current-page,.is-current-tool,.current-page,.selected,.selected-page,.active'))))a.setAttribute('aria-current','page');list.append(a);}sub.setAttribute('role','navigation');sub.setAttribute('aria-label','Course tools');nav.after(sub);fitTools();document.fonts?.ready.then(()=>{toolWidths=null;scheduleFit();});}}
   syncNavigation();
   if(!workspace)return;
   const dock=workspace.querySelector('#aether-tool-dock');if(dock&&!dock.closest('.am-tool-customization')){const details=el('details','am-tool-customization');details.open=toolsExpanded;details.addEventListener('toggle',()=>{toolsExpanded=details.open;});const summary=el('summary','','Customize course shortcuts');dock.before(details);details.append(summary,dock);}
@@ -71,13 +72,24 @@
   if(ctx.home){if(!aside?.isConnected){aside=el('aside','am-planning');aside.id='aether-minimal-planning';aside.setAttribute('aria-label','Calendar and Next Up');workspace.append(aside);}calendar();const copy=workspace.querySelector('.ae-hero-copy');if(copy){let greeting=copy.querySelector('.am-greeting');if(!greeting){greeting=el('h1','am-greeting','Ready for what’s next.');const summary=el('p','am-observed');copy.prepend(greeting,summary);}const summary=copy.querySelector('.am-observed'),value=ctx.sites.filter(s=>!s.home&&s.pinned).length+' pinned courses · '+(snapshot().checkedAt?'Observed academic sources · partial coverage':'Academic sources not yet available');if(summary.textContent!==value)summary.textContent=value;}}
   else{aside?.remove();aside=null;}
  }
+ // Course tools: the links that fit stay in the row and the rest move into More. Widths are read once per
+ // tool set (one pass, no interleaved writes); a resize only reads the row width.
+ function moreMenu(open){const more=document.querySelector('.portal-header>.am-context .am-more');if(!more)return;const toggle=more.firstChild,menu=more.lastChild;if(menu.hidden===!open)return;menu.hidden=!open;toggle.setAttribute('aria-expanded',String(open));if(open)menu.querySelector('a')?.focus();}
+ function fitTools(){fitFrame=0;const sub=document.querySelector('.portal-header>.am-context');if(!sub)return;const row=sub.querySelector('.am-toolrow'),list=row.firstChild,more=row.lastChild,toggle=more.firstChild,menu=more.lastChild,links=[...list.children,...menu.children],gap=6;
+  if(!toolWidths||toolWidths.length!==links.length){list.append(...links);more.hidden=false;toolWidths=links.map(a=>a.offsetWidth);moreWidth=more.offsetWidth;}
+  const room=row.clientWidth-6;let count=links.length;if(!room)return;
+  if(toolWidths.reduce((sum,w)=>sum+w+gap,-gap)>room){let used=moreWidth;count=0;for(const w of toolWidths){if(used+gap+w>room)break;used+=gap+w;count++;}}
+  if(list.children.length!==count){list.append(...links.slice(0,count));menu.append(...links.slice(count));}
+  more.hidden=count===links.length;toggle.classList.toggle('am-more-current',!!menu.querySelector('[aria-current="page"]'));if(more.hidden)moreMenu(false);}
+ function scheduleFit(){if(!fitFrame&&active())fitFrame=requestAnimationFrame(fitTools);}
  function schedule(){if(!frame)frame=requestAnimationFrame(paint);}
  globalThis.AetherMinimal={mount(context){if(context&&(context.home!==ctx?.home||context.toolTitle!==ctx?.toolTitle||context.courseTitle!==ctx?.courseTitle)){if(section)section.hidden=true;ctx=context;selection=underlyingSection();}else ctx=context;paint();}};
  globalThis.AetherAcademicStore?.subscribe(()=>{if(active())schedule();});
  window.addEventListener('aether-academic-clock',()=>{if(active())schedule();});
  window.addEventListener('aether-theme-change',schedule);window.addEventListener('aether-settings-change',schedule);
- document.addEventListener('keydown',e=>{if(e.defaultPrevented||e.key!=='Escape')return;if(drawer){e.preventDefault();close();}else if(section&&!section.hidden&&(section.contains(e.target)||e.target.closest('[data-am-section]'))){e.preventDefault();closeSection();}});
- document.addEventListener('click',e=>{if(section&&!section.hidden&&!e.target.closest('#aether-minimal-section,#aether-minimal-nav'))closeSection(false);if(drawer&&!e.target.closest('#portal-nav-sidebar,.portal-nav-sidebar,#aether-minimal-nav,#aether-minimal-section'))close(false);});
+ document.addEventListener('keydown',e=>{if(e.defaultPrevented||e.key!=='Escape')return;const more=document.querySelector('.am-more-toggle[aria-expanded="true"]');if(more){e.preventDefault();moreMenu(false);more.focus();}else if(drawer){e.preventDefault();close();}else if(section&&!section.hidden&&(section.contains(e.target)||e.target.closest('[data-am-section]'))){e.preventDefault();closeSection();}});
+ document.addEventListener('click',e=>{if(!e.target.closest('.am-more-toggle'))moreMenu(false);if(section&&!section.hidden&&!e.target.closest('#aether-minimal-section,#aether-minimal-nav'))closeSection(false);if(drawer&&!e.target.closest('#portal-nav-sidebar,.portal-nav-sidebar,#aether-minimal-nav,#aether-minimal-section'))close(false);});
  window.addEventListener('hashchange',()=>{if(active()){selection=underlyingSection();syncNavigation();}});
- window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);close(false);});
+ window.addEventListener('resize',scheduleFit,{passive:true});
+ window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);cancelAnimationFrame(fitFrame);close(false);});
 })();

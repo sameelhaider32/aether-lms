@@ -248,3 +248,51 @@ html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#portal-nav-s
 @media(max-width:540px){html.aether-enabled[data-aether-theme="minimal"] .am-nav{flex-wrap:wrap}}
 /* The account may use the Sakai dark theme; keep Aether scrollbars neutral. scrollbar-color inherits. */
 html.aether-enabled[data-aether-theme="minimal"],html.aether-enabled[data-aether-theme="minimal"] :is(body,.portal-main-container,#aether-workspace *){scrollbar-color:#a8a8a8 transparent}
+/* Course context: title on its own line, then the tools that fit and a More menu (minimal.js fitTools). */
+html.aether-enabled[data-aether-theme="minimal"] .portal-header>.am-context{display:block;overflow:visible;padding-top:8px}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header>.am-context .am-course-title{display:block;max-width:100%;margin:0 0 8px;font:600 15px/1.4 var(--ae-ui);letter-spacing:-.02em;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.aether-enabled[data-aether-theme="minimal"] .am-toolrow{display:flex;align-items:center;gap:6px;min-width:0}
+html.aether-enabled[data-aether-theme="minimal"] .am-tools{display:flex;flex:0 1 auto;gap:6px;min-width:0;overflow:hidden;padding:3px;margin:-3px}
+html.aether-enabled[data-aether-theme="minimal"] .am-tools>a{flex:none;white-space:nowrap}
+html.aether-enabled[data-aether-theme="minimal"] .am-more{position:relative;flex:none}
+html.aether-enabled[data-aether-theme="minimal"] :is(.am-more,.am-more-menu)[hidden]{display:none}
+html.aether-enabled[data-aether-theme="minimal"] .am-more-toggle::after{content:'';display:inline-block;width:6px;height:6px;margin:0 0 3px 8px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+html.aether-enabled[data-aether-theme="minimal"] .portal-header .am-more-toggle:is(.am-more-current,[aria-expanded="true"]){background:#111!important;color:#fff!important}
+html.aether-enabled[data-aether-theme="minimal"] .am-more-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:50;display:grid;gap:2px;min-width:200px;max-height:60vh;overflow:auto;padding:6px;background:#fafafa;border:1px solid #222;border-radius:10px;box-shadow:0 8px 24px #0002}
+html.aether-enabled[data-aether-theme="minimal"] .am-more-menu a{display:block;border-color:transparent;white-space:nowrap}
+html.aether-enabled[data-aether-theme="minimal"] .am-more-menu a:hover{background:#ececec}
+/* Neutral light values for the Sakai theme variables, in the portal and in same-origin tool frames
+   (lists.js marks those with ae-frame-enabled while Aether is on). Covers accounts on the Sakai dark theme. */
+html.aether-enabled[data-aether-theme="minimal"],html.ae-frame-enabled[data-aether-theme="minimal"]{
+ --sakai-primary-color-1:#111;--sakai-primary-color-2:#222;--sakai-primary-color-3:#333;
+ --sakai-active-color-1:#e9e9e9;--sakai-active-color-2:#e0e0e0;--sakai-active-color-3:#d6d6d6;
+ --sakai-passive-color-1:#f0f0f0;--sakai-passive-color-2:#e8e8e8;--sakai-passive-color-3:#dedede;
+ --sakai-background-color-1:#fafafa;--sakai-background-color-2:#f3f3f3;--sakai-background-color-3:#ececec;--sakai-background-color-4:#e4e4e4;--sakai-background-color-5:#dcdcdc;--sakai-background-color-6:#d2d2d2;--sakai-background-color-7:#c8c8c8;
+ --sakai-secondary-color-1:#333;--sakai-tertiary-color-1:#444;--sakai-border-color:#cfcfcf;--sakai-border-color-modal:#222;
+ --sakai-text-color-1:#151515;--sakai-text-color-2:#2a2a2a;--sakai-text-color-3:#111;--sakai-text-color-dimmed:#555;--sakai-text-color-disabled:#888;--sakai-text-color-inverted:#fafafa;
+ --sakai-image-invert:none;--link-color:#111;--link-active-color:#000;--link-hover-color:#000;--link-visited-color:#444;--breadcrumbs-tool-color:#111;--breadcrumbs-hover-color:#000;
+ --sakai-modal-header-bg:#f3f3f3;--sakai-modal-header-color:#111;--sakai-modal-close-btn-bg:#111;--sakai-offcanvas-header-bg:#f3f3f3;--sakai-offcanvas-header-color:#111;--sakai-offcanvas-close-btn-bg:#111;
+ --sakai-selected-page-bg-color:#111;--sakai-scrollbar-thumb-color:#a8a8a8;--sakai-highlight-color:#111;
+ --bs-btn-color:#111;--bs-nav-link-color:#111;--bs-nav-link-hover-color:#000;--bs-dropdown-divider-bg:#ccc;
+ --sakai-calendar-today-background-color:#111;--sakai-calendar-today-color:#fff;--sakai-calendar-has-events-background-color:#e0e0e0;--sakai-calendar-has-events-color:#111;
+ --infoBanner-bordercolor:#222;--infoBanner-bgcolor:#f3f3f3;--infoBanner-color:#151515;--successBanner-bordercolor:#222;--successBanner-bgcolor:#f3f3f3;--successBanner-color:#151515;
+ --warnBanner-bordercolor:#222;--warnBanner-bgcolor:#f3f3f3;--warnBanner-color:#151515;--errorBanner-bordercolor:#222;--errorBanner-bgcolor:#f3f3f3;--errorBanner-color:#151515;
+ --progress-bar-bg:#e0e0e0;--jumbotron-bg:#f3f3f3;color-scheme:light;scrollbar-color:#a8a8a8 transparent
+}
+/* Tool frames: the frame body is the panel interior, so it carries the surface and no chrome of its own. */
+html.ae-frame-enabled[data-aether-theme="minimal"] body{background:#fafafa!important;color:#151515!important;font-family:"Geist Sans","Segoe UI",sans-serif}
+html.ae-frame-enabled[data-aether-theme="minimal"] body.Mrphs-container{border:0!important;border-radius:0!important;box-shadow:none!important}
+html.ae-frame-enabled[data-aether-theme="minimal"] :is(h1,h2,h3,h4){color:#111;letter-spacing:-.01em}
+html.ae-frame-enabled[data-aether-theme="minimal"] a{color:#111}
+/* Native tool panels: off-white surface, 1px dark border, card radius. */
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-container:not(.Mrphs-container--toolTitleNav){background:#fafafa!important;border:1px solid #222!important;border-radius:13px!important;box-shadow:var(--ae-shadow)!important;overflow:hidden}
+html.aether-enabled[data-aether-theme="minimal"] main#content nav.Mrphs-toolTitleNav{background:transparent!important;border:0!important;border-bottom:1px solid #d0d0d0!important;border-radius:0!important;box-shadow:none!important;min-height:44px;padding:0 18px!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content :is(.Mrphs-toolTitleNav__title,.Mrphs-toolTitleNav__text){color:#111!important;font:600 14px/1.4 var(--ae-ui)!important;letter-spacing:-.01em}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-toolBody{background:transparent!important;color:#151515!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-toolBody>.portletBody{padding:18px}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-toolBody iframe.portletMainIframe{display:block;background:#fafafa}
+html.aether-enabled[data-aether-theme="minimal"] main#content>.row{--bs-gutter-x:24px;margin-inline:-12px}
+html.aether-enabled[data-aether-theme="minimal"] main#content>.row>[class*="col-"]{padding:0 12px!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content>.row .Mrphs-container{margin:0 0 24px!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-container>.portletBody{padding:18px}
+html.aether-enabled[data-aether-theme="minimal"] main#content .Mrphs-pageColumns--single nav.Mrphs-toolTitleNav{min-height:0;border-bottom:0!important}
