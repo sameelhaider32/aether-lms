@@ -5,7 +5,7 @@
   // Sakai serves the gateway and Home at / as well as /portal and //portal.
   if (!/^\/+(?:portal(?:\/|$)|$)/.test(location.pathname)) return;
   try {
-    document.documentElement.dataset.aetherTheme = localStorage.getItem("aether:v16:theme") === "monochrome" ? "monochrome" : "aether";
+    document.documentElement.dataset.aetherTheme = ["monochrome","minimal"].includes(localStorage.getItem("aether:v16:theme")) ? localStorage.getItem("aether:v16:theme") : "aether";
     const enabled = localStorage.getItem("aether:v02:enabled") !== "false";
     document.documentElement.classList.toggle("aether-enabled", enabled);
   } catch {

@@ -2,16 +2,26 @@
 
 A Chrome extension for **LUMS Sakai** with a calmer interface, course cards, local document readers, resource downloads and Spotlight search. It runs over the existing LMS, preserving Sakai's authentication, permissions, navigation and academic workflows.
 
-**Current version: 2.0.0 · Public beta · MIT licensed**
+**Current version: 2.1.0 · Public beta · MIT licensed**
 
 [![Checks](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sameelhaider32/aether-lms/actions/workflows/ci.yml)
 [![Security](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/sameelhaider32/aether-lms/actions/workflows/security.yml)
 
 Works on [lms.lums.edu.pk](https://lms.lums.edu.pk). This is an independent project, unaffiliated with LUMS or the Sakai project.
 
-![Aether 2.0 Home with the retained layout, Geist typography and procedural artwork](docs/evidence/v2/final-full-home.png)
+![Optional Aether Minimal dashboard with real navigation and fictional test courses](docs/evidence/v2.1/minimal-home-desktop.png)
 
-*Screenshot uses fictional courses and test content.*
+*Screenshot uses fictional courses and test content. Minimal is optional; new installations keep Aether Original.*
+
+## Aether Minimal — 2.1
+
+Choose **Aether Minimal** in the existing theme control for a separate neutral, light workspace: horizontal navigation, compact greeting, a two-column course collection and a calendar/Next Up planning column. Geist Sans/Mono stay local. Original and Monochrome keep their existing layouts and preferences.
+
+**All Tools** opens the preserved native Sakai navigation. Course navigation forwards ordinary clicks to the current native anchors, keeping their handlers. Grades and Resources use observed native destinations; unavailable coverage is explicit. Calendar and Next Up reuse Mission Control's account-scoped store. There are no invented course percentages or personal completion checkboxes.
+
+Minimal styles supported academic cards, native controls, statistics, Resources, Spotlight, reader chrome and Download Manager. Authored documents and academic forms retain their content and operations. Decorative graphics are static in this appearance; the other appearances retain their artwork.
+
+See the [design direction](docs/v2.1-design-direction.md) and [verification, screenshots and limitations](docs/v2.1-verification.md).
 
 ## Aether 2.0
 
@@ -42,7 +52,7 @@ Back up your current folder, update its contents from the repository's `main` br
 | Spotlight | Search known courses, native tools, observed assignments/events/announcements, published student Gradebook items, discovered filenames and explicitly indexed document contents. Open from the header, Ctrl/Cmd+K where available, or Alt+Shift+K outside forms/assessments. Type `>` for safe UI commands. |
 | Home | Hero, pinned courses, then Mission Control: observed academic counts, Next Up, a planning timeline, announcements and course outlook. **View deadlines** jumps straight to the dashboard; saved course order remains available. |
 | Navigation | Reorder course and tool shortcuts with drag-and-drop or keyboard buttons; your order is saved locally. |
-| Appearance | Choose **Aether Original** (the existing mint/cyan design) or **Monochrome** beside the AETHER toggle. Selection saves on this device and switches instantly, including supported tool frames and reader controls. Both retain bundled fonts, 3D cards, stars, glow and motion preferences. |
+| Appearance | Choose **Aether Original** (the existing mint/cyan design) or **Monochrome**, plus the separate **Aether Minimal** design, beside the AETHER toggle. Selection saves on this device and switches instantly, including supported tool frames and reader controls. Both retain bundled fonts, 3D cards, stars, glow and motion preferences. |
 | Folded field | A procedural 3D particle sculpture with progressive startup and a Canvas fallback when WebGL is unavailable. |
 | Course dissolve | Pinned course titles and the Mission Control heading assemble from local particles as they enter and dissolve at the opposite scroll edge. Course links stay native; keyboard focus, reordering, Motion Off, and the system reduced-motion preference retain readable text. |
 | Resources | Cards for student, TA, and instructor browsing views, including supported management lists and embedded Sakai tools. |

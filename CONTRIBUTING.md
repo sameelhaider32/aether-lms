@@ -96,3 +96,9 @@ For each behavior change, reproduce the bug or new use case in a fictional fixtu
 Dependabot opens weekly update pull requests for npm development dependencies and pinned workflow actions. Dependency review blocks newly introduced high/critical advisories. Bundled runtime libraries in `vendor/` are not automatically upgraded by these npm updates: maintainers must review their upstream security advisories, update local bundles and notices/provenance together, and exercise the format regressions. CodeQL scans first-party `src/` and `preview/`, rather than minified vendor code.
 
 Outside contributors' workflow runs require maintainer approval. Review workflow changes before approving a run; CI never receives university credentials or document samples. Workflows use pinned action commits, minimal permissions, and no automatic publishing. Read [SECURITY.md](SECURITY.md) for private reporting.
+
+## Minimal presentation checks
+
+`npm run test:minimal` tests the third appearance with intercepted fictional records. `npm run test:minimal-visual` captures its five-width matrix; inspect the actual images before delivery. `AETHER_BASELINE` can point `node tests/minimal-preservation.cjs` at a retained **2.0.0** checkout to compare Original/Monochrome geometry, fonts and surface colors at 390/1440 px.
+
+The shared performance harness accepts `AETHER_APPEARANCE` (`aether` or `minimal`) and `AETHER_PERF_MODES` (comma-separated `full,motion-off`, optionally `native`). Use the same browser, fixtures, sample count and host for comparisons. Every measured navigation disables history scroll restoration and asserts the initial scroll is zero. Mounted-control time is a DOM signal; report first paint and long tasks separately. Retain negative results and variability. See `docs/v2.1-verification.md` for the controlled comparison and first-paint tradeoffs.

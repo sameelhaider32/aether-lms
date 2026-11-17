@@ -1,6 +1,6 @@
 # Selectable themes
 
-Choose **Aether Original** or **Monochrome** from **THEME**, beside the existing AETHER switch. New installations keep Aether Original. Reload the existing unpacked extension at `chrome://extensions`, then refresh LMS tabs after updating files; no build or new folder is needed.
+Choose **Aether Original**, **Monochrome**, or **Aether Minimal** from **THEME**, beside the existing AETHER switch. New installations keep Aether Original. Reload the existing unpacked extension at `chrome://extensions`, then refresh LMS tabs after updating files; no build or new folder is needed.
 
 ## Reference and design
 
@@ -10,9 +10,9 @@ In Aether 2.0, both themes share locally bundled Geist Sans/Mono, spacing, compo
 
 ## Implementation
 
-- `src/theme-settings.js` validates the two supported themes. `chrome.storage.local` key `aether:v16:theme` is authoritative; same-origin localStorage caches it for `prepaint.js`. Storage changes update other tabs. A guarded observer mirrors the top document's theme into tool frames, including later frame navigations. Unsupported/cross-origin frames fail open.
+- `src/theme-settings.js` validates the three supported appearances. `chrome.storage.local` key `aether:v16:theme` is authoritative; same-origin localStorage caches it for `prepaint.js`. Storage changes update other tabs. A guarded observer mirrors the top document's theme into tool frames, including later frame navigations. Unsupported/cross-origin frames fail open.
 - `src/palette.css` owns the neutral channel scale and monochrome refinements under `data-aether-theme="monochrome"`, gated by active Aether surface classes. Historical CSS colors in theme, cards, academic, resources, workspace, design, Mission Control, preview and download styles now use this scale with their exact original RGB/alpha as fallbacks. Removing theme scope restores default colors without re-rendering native nodes.
-- `content.js` adds only the labelled select, using the existing header and settings behavior. `gradebook-chart.js` observes theme changes, restores its tracked original values before changing modes, and updates only existing statistics chart presentation. Native data and callbacks remain intact.
+- `content.js` adds the labelled select and mounts the Minimal presentation when selected, using the existing header and settings behavior. `gradebook-chart.js` observes theme changes, restores its tracked original values before changing modes, and updates only existing statistics chart presentation. Native data and callbacks remain intact.
 - Only decorative canvases and extension-owned glyphs use grayscale filters. No filter is applied to page ancestors or authored document canvases; fixed overlays and native chart coordinates keep their geometry. The PDF/Office HTML pages load the same theme coordinator and palette for their reader chrome. The manifest keeps the existing storage-only permission and LUMS host scope.
 - Existing enable/OFF and motion settings continue unchanged. State badges keep labels, including overdue, submitted, opened and access failures, so grayscale does not remove their meaning.
 - `src/fonts.css` and `src/system.css` own the shared typography and component/material foundations. Header/sidebar transitions follow Motion OFF and system reduced motion; authored documents and editable content retain their own fonts.
@@ -24,3 +24,9 @@ In Aether 2.0, both themes share locally bundled Geist Sans/Mono, spacing, compo
 `node tests/gradebook-chart.cjs` additionally uses the pinned Sakai-era Chart.js 2.7 fixture to verify rendered colors, highlight distinction, mode switching/restoration, native OFF colors, callbacks, late initialization, native data replacement and both modern/legacy statistics modal variants.
 
 Live authenticated LUMS workflows and every role-specific markup variant have not been exercised. Native PDF/Office document content and external viewers are intentionally not recolored. Theme smoke screenshots use fictional data. Existing repository CI remains required before merging; the local check is deliberately focused.
+
+## Minimal Workspace (2.1)
+
+Original and Monochrome retain the shared 2.0 layout. Minimal is a separate light presentation, not a replacement palette for either. `src/minimal.css` separates neutral light tokens and structural/component rules from the shared foundations; `src/minimal.js` mounts the horizontal navigation and calendar/Next Up column through the existing batched adapter. No native form or navigation DOM is reconstructed. All Tools restores its temporary native attributes on close/OFF; missing native navigation never triggers sidebar hiding. Other designs dispose Minimal-only nodes and retain their procedural artwork.
+
+Reader HTML loads the same Minimal tokens. Statistics use neutral chart colors while preserving data/callbacks. Minimal uses neutral SVG ink rather than filtered per-record glyphs, static course art and the existing academic store/clock. See [2.1 verification](v2.1-verification.md). `npm run test:minimal` covers navigation, persistence, native handlers/forms, calendar facts, coverage failures, frames/OFF, responsive controls and bounded repeated interactions.
