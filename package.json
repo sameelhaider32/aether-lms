@@ -22,7 +22,8 @@
     "test:v2-visual": "node tests/v2-visual.cjs",
     "test:v2-lifetime": "node tests/v2-lifetime.cjs",
     "test:minimal": "node tests/minimal.cjs",
-    "test:minimal-visual": "node tests/minimal-visual.cjs"
+    "test:minimal-visual": "node tests/minimal-visual.cjs",
+    "test:minimal-live": "node tests/minimal-live-shell.cjs"
   },
   "overrides": {
     "pptxgenjs": {
