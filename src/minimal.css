@@ -71,7 +71,7 @@ html.aether-enabled[data-aether-theme="minimal"] :is(.portal-header,.portal-main
 html.aether-enabled[data-aether-theme="minimal"] .portal-header{position:relative!important;min-height:52px;padding:10px 24px;flex-wrap:wrap;gap:8px!important;border-bottom:1px solid #222!important}
 html.aether-enabled[data-aether-theme="minimal"] :is(#aether-global-ambient,.ae-living-canvas,.ae-hero-orbit,.ae-sparkle,.ae-course-particles){display:none!important}
 html.aether-enabled[data-aether-theme="minimal"] .portal-main-container{padding:24px!important;gap:0!important;margin-left:0!important}
-html.aether-enabled[data-aether-theme="minimal"] main#content{width:100%!important;margin:0 auto!important;max-width:1580px;padding:0!important}
+html.aether-enabled[data-aether-theme="minimal"] main#content{width:100%!important;margin:0!important;max-width:none!important;padding:0!important}
 html.aether-enabled[data-aether-theme="minimal"][data-am-navigation="ready"]:not(.am-tools-open) :is(#toolMenu,#portal-nav-sidebar,.portal-nav-sidebar){display:none!important}
 html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar){display:block!important;position:fixed!important;inset:108px auto 12px 12px;width:min(350px,calc(100vw - 24px))!important;z-index:30000;background:#fafafa!important;overflow:auto;border:1px solid #111;box-shadow:8px 12px 32px #0004}
 html.aether-enabled[data-aether-theme="minimal"].am-tools-open #toolMenu{display:block!important;position:fixed!important;inset:108px auto 12px 12px;width:min(350px,calc(100vw - 24px))!important;z-index:30001;background:#fafafa!important;overflow:auto;border:1px solid #111;border-radius:12px;padding:12px}
@@ -206,7 +206,7 @@ html.aether-enabled[data-aether-theme="minimal"] :is(#aether-spotlight,#aether-d
    22rem sidebar column; Minimal owns one auto-height bar and releases the column once All Tools is usable. */
 html.aether-enabled[data-aether-theme="minimal"] #pageBody.portal-container{grid-template-rows:auto auto auto minmax(0,1fr)!important}
 @media(min-width:768px){html.aether-enabled[data-aether-theme="minimal"][data-am-navigation="ready"] #pageBody.portal-container{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"paBanner" "jumpLinks" "header" "mainContainer"!important}}
-@media(max-width:767.98px){html.aether-enabled[data-aether-theme="minimal"] #pageBody.portal-container{grid-template-rows:auto auto auto minmax(0,1fr) var(--portal-header-height)!important}}
+@media(max-width:767.98px){html.aether-enabled[data-aether-theme="minimal"] #pageBody.portal-container{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto minmax(0,1fr) var(--portal-header-height)!important}}
 html.aether-enabled[data-aether-theme="minimal"] .portal-header{height:auto!important;min-height:56px;padding:8px 24px!important;flex-wrap:wrap;align-items:center!important;justify-content:flex-start!important;gap:8px!important;border-bottom:1px solid #222!important;box-shadow:none!important;z-index:40}
 html.aether-enabled[data-aether-theme="minimal"] .am-nav{order:1;flex:0 1 auto;flex-wrap:nowrap;min-width:0;padding:0!important;gap:8px}
 /* Native breadcrumb: kept as the real links, right-aligned and quiet. */
