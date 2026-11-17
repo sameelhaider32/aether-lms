@@ -84,9 +84,9 @@ html.aether-enabled[data-aether-theme="minimal"] .am-nav [data-am-section]{borde
 html.aether-enabled[data-aether-theme="minimal"] :is(.am-button[aria-pressed="true"],.am-context [aria-current="page"]){background:#111!important;color:#fff!important}
 html.aether-enabled[data-aether-theme="minimal"] .am-context{display:flex;align-items:center;gap:6px;flex-basis:100%;overflow:auto;padding-top:10px;border-top:1px solid #ccc;margin-top:6px}
 html.aether-enabled[data-aether-theme="minimal"] .am-context>*{flex-shrink:0}html.aether-enabled[data-aether-theme="minimal"] .am-context strong{max-width:280px;white-space:normal}
-html.aether-enabled[data-aether-theme="minimal"] #aether-workspace{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;max-width:none;padding:0;margin:0 0 24px}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace{display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto 1fr;gap:24px;max-width:none;padding:0;margin:0 0 24px}
 html.aether-enabled[data-aether-theme="minimal"] #aether-workspace>*{min-width:0;grid-column:1/-1}
-html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero{min-height:0!important;background:#fafafa!important;border:1px solid #111;border-radius:14px;box-shadow:var(--ae-shadow);padding:0;display:block;overflow:hidden}
+html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero{min-height:0!important;background:#fafafa!important;border:1px solid #111;border-radius:14px;box-shadow:var(--ae-shadow);padding:0;margin:0!important;display:block;overflow:hidden}
 html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-copy{width:100%!important;padding:24px 28px!important;max-width:none}
 html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-heading{font-size:clamp(24px,3vw,37px)!important;max-width:none;margin:8px 0 12px!important;letter-spacing:-.04em!important;text-shadow:none}
 html.aether-enabled[data-aether-theme="minimal"] #aether-workspace .ae-hero-heading em{color:inherit!important}
@@ -113,9 +113,11 @@ html.aether-enabled[data-aether-theme="minimal"] .am-calendar-head{display:flex;
 html.aether-enabled[data-aether-theme="minimal"] .am-calendar-head h2{font-size:14px;margin:0}
 html.aether-enabled[data-aether-theme="minimal"] .am-calendar-head button{padding:4px 8px}
 html.aether-enabled[data-aether-theme="minimal"] .am-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:16px 0;font-variant-numeric:tabular-nums;text-align:center}
-html.aether-enabled[data-aether-theme="minimal"] .am-calendar button{padding:5px 0;border-color:transparent;font-size:12px;min-width:0}
-html.aether-enabled[data-aether-theme="minimal"] .am-calendar .am-has-events{border-color:#222}
-html.aether-enabled[data-aether-theme="minimal"] .am-calendar [aria-current="date"]{text-decoration:underline;text-underline-offset:4px}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar button{position:relative;height:34px;padding:0 0 6px;border-color:transparent;border-radius:8px;font-size:12px;min-width:0}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar button:hover{background:#ececec}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar .am-has-events::after{content:'';position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:#111}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar .am-has-events[aria-pressed="true"]::after{background:#fff}
+html.aether-enabled[data-aether-theme="minimal"] .am-calendar [aria-current="date"]{font-weight:700;border-color:#111}
 html.aether-enabled[data-aether-theme="minimal"] .am-weekday{font-size:11px;color:#555}
 html.aether-enabled[data-aether-theme="minimal"] .am-note{font-size:12px;line-height:1.55;color:#555;margin:10px 0}
 html.aether-enabled[data-aether-theme="minimal"] .am-agenda-item{display:block;color:#111!important;text-decoration:none;padding:10px 0;border-bottom:1px solid #ccc;font-size:13px;font-weight:550;overflow-wrap:anywhere}
@@ -126,7 +128,7 @@ html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-ac
 html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) :is(.ae-record-card,.ae-course-card,.ae-hero)::after{display:none!important}
 html[data-aether-theme="minimal"]:is(.aether-enabled,.ae-resource-surface,.ae-academic-surface) :is(.ae-tool-icon,.ae-record-card::before){filter:grayscale(1)}
 html.aether-enabled[data-aether-theme="minimal"] :is(button,a,input,select,summary):focus-visible{outline:2px solid #111!important;outline-offset:3px}
-html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control{margin-top:12px;padding-top:24px;border-top:1px solid #333}
+html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control{margin-top:8px;padding-top:28px;border-top:1px solid #222;border-radius:0!important}
 html.aether-enabled[data-aether-theme="minimal"] #aether-mission-control .mc-summary{gap:12px}
 html.aether-enabled[data-aether-theme="minimal"] .ae-tool-row{flex-wrap:wrap}
 @media(max-width:1150px){html.aether-enabled[data-aether-theme="minimal"] #aether-workspace{grid-template-columns:minmax(0,1fr) 270px;gap:18px}html.aether-enabled[data-aether-theme="minimal"] #aether-course-dock .ae-course-deck{grid-template-columns:1fr}}
@@ -244,3 +246,5 @@ html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#portal-nav-s
 html.aether-enabled[data-aether-theme="minimal"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar) .sticky-footer :is(a,button,span){color:#111!important}
 @media(max-width:900px){html.aether-enabled[data-aether-theme="minimal"] .portal-header{padding:8px 16px!important}html.aether-enabled[data-aether-theme="minimal"] .am-nav{flex:1 1 100%}html.aether-enabled[data-aether-theme="minimal"] .am-primary{flex:1 1 auto;scrollbar-width:none}html.aether-enabled[data-aether-theme="minimal"] .am-brand{margin-right:6px}}
 @media(max-width:540px){html.aether-enabled[data-aether-theme="minimal"] .am-nav{flex-wrap:wrap}}
+/* The account may use the Sakai dark theme; keep Aether scrollbars neutral. scrollbar-color inherits. */
+html.aether-enabled[data-aether-theme="minimal"],html.aether-enabled[data-aether-theme="minimal"] :is(body,.portal-main-container,#aether-workspace *){scrollbar-color:#a8a8a8 transparent}
