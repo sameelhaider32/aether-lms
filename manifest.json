@@ -79,6 +79,7 @@
         "src/spotlight.css",
         "src/spotlight-content.css",
         "src/system.css",
+        "src/original.css",
         "src/minimal.css"
       ],
       "run_at": "document_start",

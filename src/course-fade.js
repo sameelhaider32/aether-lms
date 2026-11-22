@@ -18,10 +18,11 @@
   function invalidate(){for(const item of items.values())item.width=0;queue();}
   // Sample the actual rendered font and wrapping, rather than storing an image
   // or substituting a second title that could change the link's accessible name.
-  function sample(item){
-    const {title}=item,box=title.getBoundingClientRect(),style=getComputedStyle(title);
+  function sample(item,box=item.title.getBoundingClientRect()){
+    const {title}=item;
     if(!box.width||!box.height)return false;
     if(item.width===box.width&&item.height===box.height)return Boolean(item.points?.length);
+    const style=getComputedStyle(title);
     item.width=box.width;item.height=box.height;item.points=null;
     const pad=32,w=Math.ceil(box.width)+pad*2,h=Math.ceil(box.height)+pad*2;
     if(w>2048||h>512)return false;
@@ -63,15 +64,18 @@
     item.ctx.setTransform(dpr,0,0,dpr,0,0);item.color=style.color;item.w=w;item.h=h;
     return true;
   }
+  // Measured once per frame and shared by every card: each ancestor's overflow and box is read
+  // a single time, inside the read phase, instead of once per card between writes.
+  let frameClip=null;
   function bounds(card){
-    let top=0,bottom=innerHeight;
-    // Sakai can scroll main#content instead of the document.
+    if(!frameClip){const header=document.querySelector('.portal-header');frameClip={nodes:new Map(),header:header&&/fixed|sticky/.test(getComputedStyle(header).position)?header.getBoundingClientRect().bottom:0};}
+    let top=frameClip.header,bottom=innerHeight;
+    // Sakai can scroll main#content or .portal-main-container instead of the document.
     for(let node=card.parentElement;node&&node!==document.body;node=node.parentElement){
-      const overflow=getComputedStyle(node).overflowY;
-      if(/auto|scroll|hidden|clip/.test(overflow)){const r=node.getBoundingClientRect();top=Math.max(top,r.top);bottom=Math.min(bottom,r.bottom);}
+      let box=frameClip.nodes.get(node);
+      if(box===undefined){box=/auto|scroll|hidden|clip/.test(getComputedStyle(node).overflowY)?node.getBoundingClientRect():null;frameClip.nodes.set(node,box);}
+      if(box){top=Math.max(top,box.top);bottom=Math.min(bottom,box.bottom);}
     }
-    const header=document.querySelector('.portal-header');
-    if(header&&/fixed|sticky/.test(getComputedStyle(header).position))top=Math.max(top,header.getBoundingClientRect().bottom);
     return {top,bottom};
   }
   function draw(item,dissolve){
@@ -81,16 +85,22 @@
     ctx.fillStyle=item.color;
     for(const p of item.points){
       ctx.globalAlpha=p.alpha*(1-dissolve*.65);
-      ctx.beginPath();ctx.arc(p.x+p.dx*spread,p.y+p.dy*spread+direction*spread*14,p.r,0,Math.PI*2);ctx.fill();
+      // Sub-2px dust reads the same as a disc and costs one rect instead of a path.
+      ctx.fillRect(p.x+p.dx*spread-p.r,p.y+p.dy*spread+direction*spread*14-p.r,p.r*2,p.r*2);
     }
     ctx.globalAlpha=1;
   }
   function update(){
     frame=0;
+    // Read every box first, then write: interleaving them forced a layout per card per frame.
+    const moving=engine.moving(),work=[];frameClip=null;
     for(const item of items.values()){
       if(!item.card.isConnected){remove(item);continue;}
-      if(!engine.moving()||item.card.closest('[data-edit="true"]')||item.card.contains(document.activeElement)){reset(item);continue;}
-      const rect=item.card.getBoundingClientRect(),view=bounds(item.card);
+      if(!moving||item.card.closest('[data-edit="true"]')||item.card.contains(document.activeElement)){work.push({item,skip:true});continue;}
+      work.push({item,rect:item.card.getBoundingClientRect(),box:item.title.getBoundingClientRect(),view:bounds(item.card)});
+    }
+    for(const {item,skip,rect,box,view} of work){
+      if(skip){reset(item);continue;}
       const band=item.heading?Math.min(240,Math.max(160,rect.height*3.2),(view.bottom-view.top)*.4):Math.min(340,rect.height*1.6,(view.bottom-view.top)*.55);
       if(band<=0){reset(item);continue;}
       // Both boundaries use the same reversible dust-to-text transition.
@@ -100,7 +110,7 @@
       if(dissolve<.005){reset(item);continue;}
       if(rect.bottom<view.top||rect.top>view.bottom){reset(item);continue;}
       try{
-        if(!sample(item)){reset(item);continue;}
+        if(!sample(item,box)){reset(item);continue;}
         draw(item,dissolve);
         if(!item.heading)item.card.style.setProperty('--ae-course-opacity',(1-dissolve*.78).toFixed(3));
         item.card.style.setProperty('--ae-title-opacity',(1-smooth(dissolve/.38)).toFixed(3));

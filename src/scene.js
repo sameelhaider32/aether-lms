@@ -155,7 +155,7 @@
     let disposed = false, active = false, visible = true, motion = opts.motion !== false;
     let raf = 0, last = 0, elapsed = 0, lastElapsed = 0, quality=1, average=16, samples=0, drawStep=1;
     let hover = 0, hoverTarget = 0;
-    let pointer = { x: .78, y: .54 };
+    let pointer = { x: .78, y: .54 }, aim = { x: .78, y: .54 };
     const fallback = { setMotion() {}, dispose() {} };
     let gl, program, buffer, ro, io;let size={width:0,height:0},sizeDirty=true,lastDpr=0;
     try {
@@ -197,8 +197,8 @@
         raf=0;if(disposed||!active||gl.isContextLost())return;
         if(now-last<tier().interval){raf=requestAnimationFrame(render);return;}
         if(last){average=average*.94+Math.min(100,now-last)*.06;if(++samples>24&&quality===1&&average>38){quality=2;sizeDirty=true;canvas.dataset.aeQuality='balanced';}}
-        elapsed+=last?Math.min((now-last)/1000,.08):0;last=now;
-        hover+=(hoverTarget-hover)*.17;
+        const step=last?Math.min((now-last)/1000,.08):0;elapsed+=step;last=now;
+        const ease=1-Math.exp(-step*7.5);pointer.x+=(aim.x-pointer.x)*ease;pointer.y+=(aim.y-pointer.y)*ease;hover+=(hoverTarget-hover)*(1-Math.exp(-step*9));
         if(!resize())return void (raf=requestAnimationFrame(render));gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
         gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);
         gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);
@@ -210,8 +210,8 @@
       function drawStill(){if(disposed||gl.isContextLost()||!resize())return;gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);gl.uniform1f(uniforms.time,elapsed);gl.uniform1f(uniforms.hover,0);drawPoints();if(!canvas.dataset.aeRendered){canvas.dataset.aeRendered="webgl";opts.onReady?.();}}
       function schedule(){const next=motion&&visible&&!document.hidden&&!disposed&&!gl.isContextLost();if(next&&!active){active=true;last=0;raf=requestAnimationFrame(render);} else if(!next&&active){active=false;cancelAnimationFrame(raf);raf=0;drawStill();}}
       const hero=canvas.closest(".ae-hero, .ae-global-ambient");
-      function onPointer(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=canvas.getBoundingClientRect();pointer={x:Math.min(1,Math.max(0,(e.clientX-r.left)/Math.max(1,r.width))),y:Math.min(1,Math.max(0,(e.clientY-r.top)/Math.max(1,r.height)))};hoverTarget=1;if(!active)drawStill();}
-      function leave(){hoverTarget=0;}
+      function onPointer(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=canvas.getBoundingClientRect();aim={x:Math.min(1,Math.max(0,(e.clientX-r.left)/Math.max(1,r.width))),y:Math.min(1,Math.max(0,(e.clientY-r.top)/Math.max(1,r.height)))};hoverTarget=1;if(!active){pointer={...aim};drawStill();}}
+      function leave(){hoverTarget=0;aim={x:.78,y:.54};}
       const onVisible=()=>schedule();
       let portable=null;
       const onContextLost=e=>{e.preventDefault();active=false;cancelAnimationFrame(raf);if(portable)return;const replacement=document.createElement('canvas');replacement.className=canvas.className;replacement.setAttribute('aria-hidden','true');canvas.after(replacement);canvas.style.visibility='hidden';const alt=create2DFallback(replacement,{motion});portable={setMotion:v=>alt.setMotion(v),dispose(){alt.dispose();replacement.remove();canvas.style.removeProperty('visibility');}};};

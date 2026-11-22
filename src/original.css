@@ -1,0 +1,82 @@
+/* Aether Original: finish and consistency layer. Scoped to the Original appearance only; the
+   galaxy scene, palette and typography stay as designed. Frame rules use ae-frame-enabled, which
+   lists.js sets on same-origin tool frames while Aether is on. */
+
+/* Sakai's own accent is a corporate blue; inside Original it becomes the Aether teal family. */
+html.aether-enabled[data-aether-theme="aether"],html.ae-frame-enabled[data-aether-theme="aether"]{
+ --sakai-brand:#1f7a68;--sakai-primary-color-1:#1f7a68;--sakai-primary-color-2:#28937d;--sakai-primary-color-3:#33ab92;
+ --sakai-active-color-1:#123a33;--sakai-active-color-2:#18493f;--sakai-active-color-3:#1e5a4d;
+ --sakai-selected-page-bg-color:#143c34;--button-primary-background:#1f7a68;--sakai-curent-site-border-color:#2fc4a3;
+ --sakai-text-color-3:#8fe9c8;--link-color:#8fe9c8;--link-hover-color:#c4ffe9;--link-active-color:#c4ffe9;--link-visited-color:#8fe9c8;
+ --breadcrumbs-tool-color:#8fe9c8;--breadcrumbs-hover-color:#c4ffe9;--site-nav-btn-hover-bg:#143c34;--site-nav-btn-active-bg:rgba(157,248,214,.16);
+ --sakai-calendar-has-events-background-color:#143c34;--sakai-calendar-has-events-color:#bff7e3;--sakai-calendar-today-background-color:#9df8d6;--sakai-calendar-today-color:#08110f;
+ --sakai-scrollbar-thumb-color:rgba(157,248,214,.26);
+ scrollbar-color:rgba(157,248,214,.24) transparent;
+}
+/* Tool frames sit inside Aether panels, so they share the panel surfaces instead of Sakai gray. */
+html.ae-frame-enabled[data-aether-theme="aether"]{
+ --sakai-background-color-1:#0e1515;--sakai-background-color-2:#141d1d;--sakai-background-color-3:#1a2625;--sakai-background-color-4:#20302e;
+ --sakai-background-color-5:#273a37;--sakai-background-color-6:#2e4440;--sakai-background-color-7:#354e4a;
+ --button-background:#16211f;--button-border-color:#2c4640;--button-text-color:#d7f5ea;--sakai-border-color:#26393a;
+}
+html.ae-frame-enabled[data-aether-theme="aether"] body{background:#0e1515!important}
+html.ae-frame-enabled[data-aether-theme="aether"] :is(input[type=button],input[type=submit],button.btn,a.btn,.btn-group>.btn){background:#16211f!important;border:1px solid #2c4640!important;color:#d7f5ea!important;border-radius:6px!important;box-shadow:none!important;transition:border-color .15s,background-color .15s}
+html.ae-frame-enabled[data-aether-theme="aether"] :is(input[type=button],input[type=submit],button.btn,a.btn):hover{border-color:#5fd8b4!important;background:#1b2b28!important}
+
+/* Native sidebar: the current tool reads as part of the palette, not as a blue slab. */
+html.aether-enabled[data-aether-theme="aether"] #toolMenu a.selected-page{background:rgba(157,248,214,.10)!important;border-color:rgba(157,248,214,.30)!important;color:#dffff3!important;box-shadow:inset 2px 0 0 #9df8d6!important}
+html.aether-enabled[data-aether-theme="aether"] #toolMenu a.selected-page :is(i,span){color:inherit!important}
+html.aether-enabled[data-aether-theme="aether"] #contentMenu .current{background:rgba(157,248,214,.14)!important;border:1px solid rgba(157,248,214,.34)!important;color:#dffff3!important}
+
+/* The institution mark is dark artwork; on the dark bar it becomes a quiet light mark. */
+html.aether-enabled[data-aether-theme="aether"] .portal-header .btn-logo{filter:brightness(0) invert(1);opacity:.82;transition:opacity .2s}
+html.aether-enabled[data-aether-theme="aether"] .portal-header .btn-logo:hover{opacity:1}
+
+/* Hero: primary actions and Download resources share one row; the tagline follows it. */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-copy{display:flex;flex-wrap:wrap;align-items:center;column-gap:10px}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-copy>*{flex:0 0 100%}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-copy>.ae-hero-actions{flex:0 0 auto;margin-bottom:0!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-copy>.ae-dl-global{flex:0 0 auto;order:1;margin:0!important;max-width:none;min-height:40px;padding:0 16px!important;border-radius:8px!important;border:1px solid rgba(157,248,214,.28)!important;background:rgba(10,18,17,.55)!important;color:#bff7e3!important;font:500 13px/1.3 var(--ae-ui)!important;letter-spacing:0!important;transition:border-color .18s,background-color .18s,color .18s}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-copy>.ae-dl-global:hover{border-color:#9df8d6!important;background:rgba(157,248,214,.10)!important;color:#fff!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-copy>.ae-hero-micro{order:2}
+/* The pinned-course readout keeps legible over the particle field. */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-instrument{background:rgba(7,12,13,.62);border:1px solid rgba(157,248,214,.14);border-radius:10px;padding:10px 12px}
+
+/* Course cards: titles align to the top, so one- and three-line names share a baseline grid. */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-course-link{justify-content:flex-start!important;transition:color .15s}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-course-link .ae-card-name{margin-top:14px}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-course-link .ae-card-bottom{margin-top:auto}
+
+/* Reorder / Customize is a ghost button, not a button with a stray underline. */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-customize{border:1px solid transparent!important;border-radius:8px!important;padding:0 12px!important;background:transparent!important;transition:border-color .18s,background-color .18s}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-customize:is(:hover,[aria-pressed="true"]){border-color:rgba(157,248,214,.32)!important;background:rgba(157,248,214,.06)!important}
+
+/* Mission Control: whole-card links never underline; inner lists scroll quietly and fade at the edges. */
+html.aether-enabled[data-aether-theme="aether"] #aether-mission-control a.mc-item:is(:hover,:focus-visible),html.aether-enabled[data-aether-theme="aether"] #aether-mission-control a.mc-item:is(:hover,:focus-visible) *{text-decoration:none!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-mission-control :is(.mc-next-list,.mc-past-list,.mc-workload-list,.mc-announcement-list,.mc-source-list){scrollbar-width:thin;scrollbar-color:rgba(157,248,214,.22) transparent;overscroll-behavior:contain;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 12px,#000 calc(100% - 16px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 12px,#000 calc(100% - 16px),transparent 100%)}
+
+/* Sakai's jump-to-top glyph is a white disc; here it is a dark disc with a teal arrow. */
+html.aether-enabled[data-aether-theme="aether"] .jump-to-top{width:36px;height:36px;right:22px!important;bottom:52px!important;opacity:.72;padding:0!important;border-radius:50%!important;border:1px solid rgba(157,248,214,.30)!important;background:rgba(9,15,15,.88)!important;color:#9df8d6!important;display:grid;place-items:center;line-height:1;box-shadow:0 8px 24px #0006;transition:border-color .18s,transform .18s}
+html.aether-enabled[data-aether-theme="aether"] .jump-to-top:hover{opacity:1;border-color:#9df8d6!important;transform:translateY(-2px)}
+html.aether-enabled[data-aether-theme="aether"] .jump-to-top i{font-size:22px;color:inherit!important}
+html.aether-enabled[data-aether-theme="aether"] .jump-to-top i::before{content:"\2191"!important;font:600 18px/1 var(--ae-ui)!important}
+
+/* Single-tool pages: the tool title is already in the header, so its empty strip collapses. */
+html.aether-enabled[data-aether-theme="aether"] main#content .Mrphs-pageColumns--single>.Mrphs-container>nav.Mrphs-toolTitleNav:not(:has(.Mrphs-toolTitleNav__button_container *)){min-height:0!important;height:0;padding:0!important;border:0!important;overflow:hidden}
+
+/* Resources: column headings as one chip row instead of a tall stacked list. */
+html.aether-enabled[data-aether-theme="aether"] main#content table.resourcesList .ae-card-header-row{display:flex!important;flex-wrap:wrap;align-items:center;gap:6px;height:auto!important;padding:8px 0!important;margin:0 0 14px;border:0!important;border-bottom:1px solid rgba(157,248,214,.12)!important;background:transparent!important;box-shadow:none!important}
+html.aether-enabled[data-aether-theme="aether"] main#content table.resourcesList .ae-card-header-row>th{display:inline-flex!important;align-items:center;width:auto!important;min-width:0;height:auto!important;padding:6px 10px!important;border:1px solid rgba(157,248,214,.14)!important;border-radius:6px;background:rgba(157,248,214,.05)!important;font-size:12px}
+html.aether-enabled[data-aether-theme="aether"] main#content table.resourcesList .ae-card-header-row>th:empty{display:none!important}
+
+/* One focus language everywhere in Original. */
+html.aether-enabled[data-aether-theme="aether"] :is(#aether-workspace,.portal-header,#toolMenu) :is(a,button,select,summary,input):focus-visible{outline:2px solid #9df8d6!important;outline-offset:2px}
+/* Side-by-side Mission Control panels keep their own height instead of stretching to the taller one. */
+html.aether-enabled[data-aether-theme="aether"] #aether-mission-control .mc-grid{align-items:start}
+/* Sakai intra-tool tabs (Resources: Site Resources / Transfer Files; calendar Options): inactive tabs are ghost buttons. */
+:is(html.aether-enabled,html.ae-frame-enabled)[data-aether-theme="aether"] :is(.navIntraTool,.actionToolBar,#contentMenu) a{background:transparent!important;border:1px solid rgba(157,248,214,.22)!important;color:#bff7e3!important;border-radius:6px!important;box-shadow:none!important;transition:border-color .15s,background-color .15s}
+:is(html.aether-enabled,html.ae-frame-enabled)[data-aether-theme="aether"] :is(.navIntraTool,.actionToolBar,#contentMenu) a:hover{border-color:#9df8d6!important;background:rgba(157,248,214,.08)!important;color:#fff!important}
+/* Sakai mini-calendar: activity days and today in the Aether palette instead of navy and cream. */
+html.ae-frame-enabled[data-aether-theme="aether"] .calOtherDayWithActivity{background:rgba(20,60,52,.45)!important;color:#8fbfb0!important}
+html.ae-frame-enabled[data-aether-theme="aether"] .calDayWithActivity{background:#143c34!important;color:#bff7e3!important}
+html.ae-frame-enabled[data-aether-theme="aether"] .calToday{background:rgba(157,248,214,.16)!important;color:#eafff6!important;box-shadow:inset 0 0 0 1px #9df8d6!important}

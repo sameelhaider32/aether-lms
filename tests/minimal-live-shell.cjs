@@ -116,7 +116,7 @@ const DARK='rgb(31, 34, 37)',LIGHT='rgb(250, 250, 250)';
    await go(route('Overview'));await choose(theme);await p.locator('#aether-minimal-nav').waitFor({state:'detached'});
    assert.equal(await columns(),2);assert.equal(await p.locator('.am-context,.am-more').count(),0);
    assert(await p.locator('#logoWrapper').isVisible());assert(await p.locator('#toolMenu').isVisible());
-   assert(Math.round((await box('.portal-header')).h)<=64,'header keeps its pre-existing height (existing 64px min-height)');assert.equal((await frameState()).bg,DARK);
+   assert(Math.round((await box('.portal-header')).h)<=64,'header keeps its pre-existing height (existing 64px min-height)');assert.equal((await frameState()).bg,theme==='aether'?'rgb(14, 21, 21)':DARK,'Original frames use the Aether panel surface; Monochrome keeps native');
    assert.equal(await p.locator('main#content .Mrphs-container').first().evaluate(n=>getComputedStyle(n).borderTopLeftRadius==='13px'),false);
   });
  }
