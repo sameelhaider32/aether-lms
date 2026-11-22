@@ -7,7 +7,10 @@
  let month=new Date(),day=new Date().getDate();month.setDate(1);
  // Intl formatters are costly to build; one each instead of one per calendar day and agenda row.
  const fmt={full:new Intl.DateTimeFormat(undefined,{dateStyle:'full'}),month:new Intl.DateTimeFormat(undefined,{month:'long',year:'numeric'}),short:new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}),at:new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})};
- const active=()=>root.classList.contains('aether-enabled')&&/^minimal/.test(root.dataset.aetherTheme)&&!!ctx;
+ // The navigation shell (bar, course tools row, All Tools drawer, destination sections) is shared by
+ // Minimal and Original so both read as one app; the greeting and planning rail stay Minimal-only.
+ const full=()=>root.classList.contains('aether-enabled')&&/^minimal/.test(root.dataset.aetherTheme)&&!!ctx;
+ const active=()=>full()||(root.classList.contains('aether-enabled')&&root.dataset.aetherTheme==='aether'&&!!ctx);
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  const button=(text,fn)=>{const b=el('button','am-button',text);b.type='button';b.addEventListener('click',fn);return b;};
  function anchor(text,href,original){const a=el('a','',text),url=D?.url(href);if(!url)return el('span','am-note',text+' · unavailable');a.href=url;if(original)a.addEventListener('click',e=>{if(!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!e.altKey&&e.button===0){const links=[...document.querySelectorAll('#toolMenu .is-current-site .site-page-list a[href]')],current=links.find(n=>n.href===url&&D.clean(n.textContent)===text)||links.find(n=>n.href===url);if(current){e.preventDefault();current.click();}}});return a;}
@@ -71,6 +74,7 @@
   if(!workspace)return;
   const dock=workspace.querySelector('#aether-tool-dock');if(dock&&!dock.closest('.am-tool-customization')){const details=el('details','am-tool-customization');details.open=toolsExpanded;details.addEventListener('toggle',()=>{toolsExpanded=details.open;});const summary=el('summary','','Customize course shortcuts');dock.before(details);details.append(summary,dock);}
   if(!section?.isConnected){section=el('section','am-section');section.id='aether-minimal-section';section.hidden=true;workspace.prepend(section);}
+  if(!full()){workspace.querySelectorAll('.am-greeting,.am-observed').forEach(n=>n.remove());aside?.remove();aside=null;return;}
   if(ctx.home){if(!aside?.isConnected){aside=el('aside','am-planning');aside.id='aether-minimal-planning';aside.setAttribute('aria-label','Calendar and Next Up');workspace.append(aside);}calendar();const copy=workspace.querySelector('.ae-hero-copy');if(copy){let greeting=copy.querySelector('.am-greeting');if(!greeting){greeting=el('h1','am-greeting','Ready for what’s next.');const summary=el('p','am-observed');copy.prepend(greeting,summary);}const summary=copy.querySelector('.am-observed'),value=ctx.sites.filter(s=>!s.home&&s.pinned).length+' pinned courses · '+(snapshot().checkedAt?'Observed academic sources · partial coverage':'Academic sources not yet available');if(summary.textContent!==value)summary.textContent=value;}}
   else{aside?.remove();aside=null;}
  }

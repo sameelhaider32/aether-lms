@@ -156,10 +156,15 @@
     // One write per frame from a box measured only after scroll or resize: reading layout on every
     // pointermove right after writing these properties forced a style pass per event.
     let heroBox=null,heroEpoch=-1,heroPoint=null,heroFrame=0,heroLast=["",""];const sparkLast=flares.map(()=>["",""]),sparkNow=flares.map(()=>[.18,1]);
+    // Sparkle positions come from layout (an appearance may arrange them differently), measured with the box.
+    let sparkAt=flares.map(p=>[p[0]/100,p[1]/100]);
+    hero.addEventListener("pointerenter",()=>{heroBox=null;},{passive:true});
     hero.addEventListener("pointermove",e=>{heroPoint=[e.clientX,e.clientY];hero.classList.add("ae-hero-tracking");if(!heroFrame)heroFrame=requestAnimationFrame(paintHero);},{passive:true});
     function paintHero(){
       heroFrame=0;if(!heroPoint||!hero.isConnected)return;
-      if(heroEpoch!==layoutEpoch){heroBox=null;heroEpoch=layoutEpoch;}const r=heroBox||(heroBox=hero.getBoundingClientRect()),x=(heroPoint[0]-r.left)/Math.max(1,r.width),y=(heroPoint[1]-r.top)/Math.max(1,r.height);
+      if(heroEpoch!==layoutEpoch){heroBox=null;heroEpoch=layoutEpoch;}
+      if(!heroBox){heroBox=hero.getBoundingClientRect();const w=Math.max(1,heroBox.width),h=Math.max(1,heroBox.height);sparkAt=sparks.map(s=>[s.offsetLeft/w,s.offsetTop/h]);}
+      const r=heroBox,x=(heroPoint[0]-r.left)/Math.max(1,r.width),y=(heroPoint[1]-r.top)/Math.max(1,r.height);
       // Unchanged values are not rewritten: every write restarts sparkle transitions and restyles the hero.
       const px=(Math.round(x*200)/2).toFixed(1)+"%",py=(Math.round(y*200)/2).toFixed(1)+"%";
       if(px!==heroLast[0])hero.style.setProperty("--px",heroLast[0]=px);if(py!==heroLast[1])hero.style.setProperty("--py",heroLast[1]=py);
@@ -167,7 +172,7 @@
       // transition on every frame cost a style pass per sparkle per frame.
       let settling=false;
       for(let i=0;i<sparks.length;i++){
-        const q=flares[i],dist=Math.hypot(q[0]/100-x,q[1]/100-y),now=sparkNow[i];
+        const q=sparkAt[i],dist=Math.hypot(q[0]-x,q[1]-y),now=sparkNow[i];
         const goalLit=Math.max(.18,1.7-Math.max(0,dist-.04)*5),goalZoom=1+Math.max(0,.26-dist)*8;
         now[0]+=(goalLit-now[0])*.28;now[1]+=(goalZoom-now[1])*.28;
         if(Math.abs(goalLit-now[0])+Math.abs(goalZoom-now[1])>.01)settling=true;
@@ -196,6 +201,8 @@
     const cta=btn("ae-hero-cta",ctx.home?"Explore courses":ctx.resources?"View resources":"Course tools",()=>{
       let node=document.querySelector(target);
       if(!node&&ctx.resources)node=[...ctx.main.children].find(el=>el!==workspace&&el.classList.contains("Mrphs-container"));
+      // Course shortcuts may sit behind the "Customize course shortcuts" disclosure; open it first.
+      const fold=node?.closest("details");if(fold&&!fold.open)fold.open=true;
       node?.scrollIntoView({behavior:motion?"smooth":"auto",block:"start"});
     });cta.insertAdjacentHTML("beforeend",TEXT.arrow);actions.append(cta);
     if(ctx.home){

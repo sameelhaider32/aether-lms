@@ -111,15 +111,23 @@ const DARK='rgb(31, 34, 37)',LIGHT='rgb(250, 250, 250)';
   await p.setViewportSize({width:390,height:844});assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await p.screenshot({path:path.join(out,'dark-dashboard-390.png')});await p.setViewportSize({width:1440,height:900});
   await choose('minimal');await p.waitForFunction(()=>getComputedStyle(document.querySelector('.ae-hero')).backgroundColor==='rgb(250, 250, 250)');
  });
- for(const theme of ['aether','monochrome']){
-  await test(`${theme}: native grid, header and frames are untouched by Minimal rules`,async()=>{
-   await go(route('Overview'));await choose(theme);await p.locator('#aether-minimal-nav').waitFor({state:'detached'});
-   assert.equal(await columns(),2);assert.equal(await p.locator('.am-context,.am-more').count(),0);
-   assert(await p.locator('#logoWrapper').isVisible());assert(await p.locator('#toolMenu').isVisible());
-   assert(Math.round((await box('.portal-header')).h)<=64,'header keeps its pre-existing height (existing 64px min-height)');assert.equal((await frameState()).bg,theme==='aether'?'rgb(14, 21, 21)':DARK,'Original frames use the Aether panel surface; Monochrome keeps native');
-   assert.equal(await p.locator('main#content .Mrphs-container').first().evaluate(n=>getComputedStyle(n).borderTopLeftRadius==='13px'),false);
-  });
- }
+ await test('aether: Original shares the Minimal navigation shell in its own palette, frames on the Aether surface',async()=>{
+  await go(route('Overview'));await choose('aether');await p.locator('.portal-header>.am-context').waitFor();await fitted();
+  assert.equal(await p.locator('#aether-minimal-nav').count(),1);assert.equal(await columns(),1);
+  assert(!(await p.locator('#toolMenu').isVisible()));assert(!(await p.locator('#logoWrapper').isVisible()));assert.equal(await p.locator('#aether-minimal-planning,.am-greeting').count(),0);
+  const header=await box('.portal-header');for(const s of ['#aether-minimal-nav','#aether-native-toggle','#aether-theme-control','#aether-spotlight-trigger','.portal-header>.am-context']){const b=await box(s);assert(b.y>=header.y-1&&b.bottom<=header.bottom+1,s+' stays inside the header');}
+  assert.notEqual(await p.locator('.portal-header').evaluate(n=>getComputedStyle(n).backgroundColor),LIGHT);
+  await p.locator('[data-am-tools]').click();assert(await p.locator('#toolMenu').isVisible());await p.keyboard.press('Escape');assert(!(await p.locator('#toolMenu').isVisible()));
+  assert.equal((await frameState()).bg,'rgb(14, 21, 21)','Original frames use the Aether panel surface');
+  assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+ });
+ await test('monochrome: native grid, header and frames are untouched by Minimal rules',async()=>{
+  await go(route('Overview'));await choose('monochrome');await p.locator('#aether-minimal-nav').waitFor({state:'detached'});
+  assert.equal(await columns(),2);assert.equal(await p.locator('.am-context,.am-more').count(),0);
+  assert(await p.locator('#logoWrapper').isVisible());assert(await p.locator('#toolMenu').isVisible());
+  assert(Math.round((await box('.portal-header')).h)<=64,'header keeps its pre-existing height (existing 64px min-height)');assert.equal((await frameState()).bg,DARK,'Monochrome keeps native frames');
+  assert.equal(await p.locator('main#content .Mrphs-container').first().evaluate(n=>getComputedStyle(n).borderTopLeftRadius==='13px'),false);
+ });
  await test('OFF restores the native shell with nothing left behind; ON rebuilds one Minimal bar',async()=>{
   await choose('minimal');await p.locator('.portal-header>.am-context').waitFor();
   await p.locator('#aether-native-toggle').click();await p.locator('#aether-minimal-nav').waitFor({state:'detached'});

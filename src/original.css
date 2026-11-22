@@ -82,3 +82,124 @@ html.ae-frame-enabled[data-aether-theme="aether"] .calDayWithActivity{background
 html.ae-frame-enabled[data-aether-theme="aether"] .calToday{background:rgba(157,248,214,.16)!important;color:#eafff6!important;box-shadow:inset 0 0 0 1px #9df8d6!important}
 /* While the pointer is over the hero, sparkles are eased in script; their CSS transitions return on leave. */
 html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-tracking .ae-sparkle{transition:none!important}
+
+/* ===== One app with Minimal: the same navigation shell, in the Aether palette =====
+   minimal.js builds the bar (Dashboard, Courses, Planner, Grades, Resources, All Tools), the course tools
+   row and the destination sections for Original too. The native sidebar is released only once the
+   All Tools drawer (the real #toolMenu) is usable; until then the native shell stays as it was. */
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"]:not(.am-tools-open) :is(#toolMenu,#portal-nav-sidebar,.portal-nav-sidebar){display:none!important}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #logoWrapper{display:none!important}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #pageBody.portal-container{grid-template-rows:auto auto auto minmax(0,1fr)!important}
+@media(min-width:768px){html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #pageBody.portal-container{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"paBanner" "jumpLinks" "header" "mainContainer"!important}}
+@media(max-width:767.98px){html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #pageBody.portal-container{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto minmax(0,1fr) var(--portal-header-height)!important}}
+
+/* Bar: one quiet strip; brand and primary navigation at left, native utilities at right. */
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header{position:relative!important;height:auto!important;min-height:60px;width:100%!important;padding:10px 28px!important;display:flex;flex-wrap:wrap;align-items:center!important;justify-content:flex-start!important;gap:10px!important;background:linear-gradient(180deg,rgba(9,16,16,.96),rgba(6,11,12,.94))!important;border-bottom:1px solid rgba(157,248,214,.12)!important;box-shadow:0 1px 0 rgba(0,0,0,.4)!important;z-index:40}
+html.aether-enabled[data-aether-theme="aether"] .am-nav{order:1;flex:0 1 auto;display:flex;align-items:center;flex-wrap:nowrap;gap:10px;min-width:0;padding:0!important;border:0;background:transparent;position:relative;z-index:30;font:500 13px/1.4 var(--ae-ui)}
+html.aether-enabled[data-aether-theme="aether"] .am-brand{display:inline-flex;align-items:center;gap:9px;margin-right:12px;font:400 23px/1 "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:-.06em;color:#f3f5ec;white-space:nowrap}
+html.aether-enabled[data-aether-theme="aether"] .am-brand::before{content:"";width:7px;height:7px;border-radius:50%;background:#9df8d6;box-shadow:0 0 0 3px rgba(157,248,214,.12),0 0 14px #6df3ba}
+html.aether-enabled[data-aether-theme="aether"] .am-primary{order:1;display:flex;gap:2px;min-width:0;overflow:auto;scrollbar-width:none;padding:3px;border:1px solid rgba(157,248,214,.12);border-radius:999px;background:rgba(157,248,214,.03)}
+html.aether-enabled[data-aether-theme="aether"] .portal-header :is(.am-button,.am-context a){font:500 13px/1.4 var(--ae-ui)!important;letter-spacing:0;border:1px solid rgba(157,248,214,.2);background:transparent;color:#b7d3c7!important;border-radius:8px;padding:6px 12px;cursor:pointer;text-decoration:none!important;white-space:nowrap;transition:color .15s,background-color .15s,border-color .15s}
+html.aether-enabled[data-aether-theme="aether"] .portal-header :is(.am-button,.am-context a):hover{color:#fff!important;border-color:rgba(157,248,214,.48);background:rgba(157,248,214,.06)}
+html.aether-enabled[data-aether-theme="aether"] .portal-header .am-nav [data-am-section]{flex:none;border-color:transparent;border-radius:999px;padding:6px 14px}
+html.aether-enabled[data-aether-theme="aether"] .portal-header :is(.am-button[aria-pressed="true"],.am-context [aria-current="page"],.am-more-toggle.am-more-current,.am-more-toggle[aria-expanded="true"]){background:rgba(157,248,214,.14)!important;color:#ecfff7!important;border-color:rgba(157,248,214,.4)!important}
+html.aether-enabled[data-aether-theme="aether"] .am-nav [data-am-section][aria-pressed="true"]{box-shadow:inset 0 0 0 1px rgba(157,248,214,.18),0 0 18px rgba(109,243,186,.12)}
+html.aether-enabled[data-aether-theme="aether"] .am-nav>[data-am-tools]{order:2;flex:none}
+html.aether-enabled[data-aether-theme="aether"] .am-close-tools{display:none}
+/* Native breadcrumb: the real links, right-aligned and quiet. */
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header>div:has(>.portal-header-breadcrumb){order:2;flex:1 1 0;min-width:0;width:auto!important;height:auto!important;margin:0!important;justify-content:flex-end}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header .portal-header-breadcrumb{width:auto!important;min-width:0;flex-wrap:nowrap;justify-content:flex-end;gap:6px;overflow:hidden;white-space:nowrap;padding-right:6px}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header .portal-header-breadcrumb :is(a,span,div){color:#86a89b!important;font:400 12px/1.4 var(--ae-ui)!important;text-decoration:none;margin:0!important;padding:0!important}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header .portal-header-breadcrumb a:hover{color:#dffff3!important}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header .portal-header-breadcrumb-item{min-width:0;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header .portal-header-breadcrumb :is(.header-tool-title,.manage-overview-link){flex:none}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header .portal-header-breadcrumb .manage-overview-link{margin-left:8px!important;padding-left:8px!important;border-left:1px solid rgba(157,248,214,.16)}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header>div:has(>.portal-header-breadcrumb) .portal-header-breadcrumb{display:none!important}
+/* Narrower bars keep one row: the Aether word and the Spotlight label give way first. */
+@media(max-width:1280px){html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #aether-native-toggle .ae-toggle-brand,html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .ae-spot-trigger-label{display:none!important}html.aether-enabled[data-aether-theme="aether"] .portal-header .am-nav [data-am-section]{padding:6px 11px}}
+/* Aether controls then native utilities, in the same order as Minimal. */
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #aether-native-toggle{order:3;margin:0!important}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #aether-theme-control{order:4;margin:0!important}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #aether-theme-control>span{display:none}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #aether-spotlight-trigger{order:5;margin:0!important}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #sakai-system-indicators{order:6;margin:0!important;gap:2px;padding-left:10px;border-left:1px solid rgba(157,248,214,.12)}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #sakai-system-indicators>li{margin:0!important;padding:0!important;display:flex;align-items:center}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #sakai-system-indicators>li.d-none{display:none}
+@media(min-width:768px){html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #sakai-system-indicators>li.d-md-inline{display:flex}}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #sakai-system-indicators .icon-button{width:36px;height:36px;min-width:0;padding:0!important;margin:0!important;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:9px;background:transparent!important;transition:border-color .15s,background-color .15s}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #sakai-system-indicators .icon-button:hover{border-color:rgba(157,248,214,.3);background:rgba(157,248,214,.06)!important}
+html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] #sakai-system-indicators .sakai-accountProfileImage{width:30px;height:30px}
+
+/* Course context row: course name, then the tools that fit and a More menu (minimal.js fitTools). */
+html.aether-enabled[data-aether-theme="aether"] .portal-header>.am-context{order:99;flex:0 0 100%;display:block;min-width:0;margin:2px 0 0;padding-top:10px;border-top:1px solid rgba(157,248,214,.09);scrollbar-width:none}
+html.aether-enabled[data-aether-theme="aether"] .portal-header>.am-context .am-course-title{display:block;max-width:100%;margin:0 0 9px;font:400 19px/1.3 "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:-.035em;color:#f3f5ec;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.aether-enabled[data-aether-theme="aether"] .am-toolrow{display:flex;align-items:center;gap:6px;min-width:0}
+html.aether-enabled[data-aether-theme="aether"] .am-tools{display:flex;flex:0 1 auto;gap:6px;min-width:0;overflow:hidden;padding:3px;margin:-3px}
+html.aether-enabled[data-aether-theme="aether"] .am-tools>a{flex:none}
+html.aether-enabled[data-aether-theme="aether"] .am-more{position:relative;flex:none}
+html.aether-enabled[data-aether-theme="aether"] :is(.am-more,.am-more-menu)[hidden]{display:none}
+html.aether-enabled[data-aether-theme="aether"] .am-more-toggle::after{content:"";display:inline-block;width:6px;height:6px;margin:0 0 3px 8px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+html.aether-enabled[data-aether-theme="aether"] .am-more-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:50;display:grid;gap:2px;min-width:220px;max-height:60vh;overflow:auto;padding:6px;background:rgba(9,16,16,.98);border:1px solid rgba(157,248,214,.2);border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+html.aether-enabled[data-aether-theme="aether"] .portal-header .am-more-menu a{display:block;border-color:transparent}
+
+/* All Tools: the native #toolMenu, opened as a drawer under the bar. */
+html.aether-enabled[data-aether-theme="aether"].am-tools-open :is(.portal-header,.am-nav){z-index:30002}
+html.aether-enabled[data-aether-theme="aether"].am-tools-open #toolMenu{display:block!important;position:fixed!important;top:var(--am-drawer-top,108px)!important;left:12px;bottom:12px;width:min(350px,calc(100vw - 24px))!important;z-index:30001;overflow:auto;padding:12px;background:rgba(8,14,14,.97)!important;border:1px solid rgba(157,248,214,.2);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.7)}
+html.aether-enabled[data-aether-theme="aether"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar){display:block!important;position:fixed!important;top:var(--am-drawer-top,108px)!important;left:12px;bottom:12px;width:min(350px,calc(100vw - 24px))!important;z-index:30000;overflow:auto;padding-top:46px!important;background:rgba(8,14,14,.97)!important;border:1px solid rgba(157,248,214,.2);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.7)}
+html.aether-enabled[data-aether-theme="aether"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar) #toolMenu{position:static!important;width:100%!important;max-height:none!important;border:0;border-radius:0;overflow:visible;box-shadow:none;inset:auto!important;background:transparent!important}
+html.aether-enabled[data-aether-theme="aether"].am-tools-open #toolMenu>ul{display:block!important;overflow:visible!important;padding-top:34px!important}
+html.aether-enabled[data-aether-theme="aether"].am-tools-open #toolMenu .site-page-list{display:block!important}
+html.aether-enabled[data-aether-theme="aether"].am-tools-open .am-close-tools{display:block;position:fixed;top:calc(var(--am-drawer-top,108px) + 10px);left:min(254px,calc(100vw - 110px));z-index:30002}
+html.aether-enabled[data-aether-theme="aether"].am-tools-open :is(#portal-nav-sidebar,.portal-nav-sidebar) .sticky-footer{background:rgba(8,14,14,.98)!important;border-top:1px solid rgba(157,248,214,.12)}
+
+/* Courses / Grades / Resources destinations: a floating sheet under the bar. */
+html.aether-enabled[data-aether-theme="aether"] .am-section[hidden]{display:none!important}
+html.aether-enabled[data-aether-theme="aether"] .am-section:not([hidden]){position:fixed;z-index:29000;top:130px;left:max(16px,calc((100vw - 1000px)/2));right:max(16px,calc((100vw - 1000px)/2));max-height:65vh;overflow:auto;padding:22px;background:rgba(8,14,14,.97);border:1px solid rgba(157,248,214,.2);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.7);color:#d7f5ea}
+html.aether-enabled[data-aether-theme="aether"] .am-section h2{margin:0 0 16px;font:400 24px/1.2 "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:-.04em;color:#f3f5ec}
+html.aether-enabled[data-aether-theme="aether"] .am-destinations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+html.aether-enabled[data-aether-theme="aether"] .am-destinations a{display:block;padding:12px 14px;border:1px solid rgba(157,248,214,.14);border-radius:10px;background:rgba(157,248,214,.03);color:#d7f5ea!important;text-decoration:none!important;font:500 13px/1.45 var(--ae-ui);transition:border-color .15s,background-color .15s}
+html.aether-enabled[data-aether-theme="aether"] .am-destinations a:hover{border-color:rgba(157,248,214,.45);background:rgba(157,248,214,.07);color:#fff!important}
+html.aether-enabled[data-aether-theme="aether"] .am-section .am-button{margin:0 8px 0 0;font:500 13px/1.4 var(--ae-ui);border:1px solid rgba(157,248,214,.22);background:transparent;color:#bfd8cd;border-radius:8px;padding:7px 12px;cursor:pointer}
+html.aether-enabled[data-aether-theme="aether"] .am-section .am-button:hover{border-color:#9df8d6;color:#fff}
+html.aether-enabled[data-aether-theme="aether"] .am-section .am-note{color:#86a89b;font-size:13px}
+/* Course shortcuts move behind a disclosure, as in Minimal; the header row is the primary tool list. */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .am-tool-customization{margin:0 0 24px;padding:10px 0;border-block:1px solid rgba(157,248,214,.1)}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .am-tool-customization>summary{cursor:pointer;color:#9fbdb1;font:500 13px/1.4 var(--ae-ui)}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .am-tool-customization>summary:hover{color:#dffff3}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .am-tool-customization[open]>summary{margin-bottom:14px}
+
+@media(max-width:900px){html.aether-enabled[data-aether-theme="aether"][data-am-navigation="ready"] .portal-header{padding:8px 16px!important}html.aether-enabled[data-aether-theme="aether"] .am-nav{flex:1 1 100%}html.aether-enabled[data-aether-theme="aether"] .am-primary{flex:1 1 auto}html.aether-enabled[data-aether-theme="aether"] .am-brand{margin-right:4px}}
+@media(max-width:540px){html.aether-enabled[data-aether-theme="aether"] .am-nav{flex-wrap:wrap}html.aether-enabled[data-aether-theme="aether"] .am-brand{margin-right:auto}html.aether-enabled[data-aether-theme="aether"] .am-nav>[data-am-tools]{order:1}html.aether-enabled[data-aether-theme="aether"] .am-primary{order:2;flex-basis:100%}html.aether-enabled[data-aether-theme="aether"] .am-nav [data-am-section]{font-size:12px!important;padding:6px 9px}html.aether-enabled[data-aether-theme="aether"] .am-destinations{grid-template-columns:1fr}html.aether-enabled[data-aether-theme="aether"] #aether-theme-select{max-width:128px}}
+
+/* ===== Home: the folded field is the centrepiece =====
+   The sculpture moves to the middle of a taller stage (scene.js reads --ae-scene-*); the copy sits over
+   it on a soft scrim, and the plate, figure caption, brand and tagline become corner marks. */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home{--ae-scene-x:.5;--ae-scene-y:.47;--ae-scene-scale:.52;display:grid;place-items:center;min-height:clamp(540px,calc(100vh - 150px),760px);border-radius:20px;border-color:rgba(157,248,214,.14);background:radial-gradient(ellipse 55% 60% at 50% 47%,rgba(25,117,92,.24),transparent 72%),radial-gradient(ellipse 120% 90% at 50% 120%,rgba(2,210,227,.07),transparent 60%),#060b0c;text-align:center}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home::before{background:radial-gradient(ellipse 40% 30% at 50% 56%,rgba(4,8,9,.72),rgba(4,8,9,.36) 55%,transparent 100%),radial-gradient(ellipse 100% 100% at 50% 50%,transparent 62%,rgba(3,6,7,.75) 100%),repeating-linear-gradient(90deg,rgba(157,248,214,.025) 0 1px,transparent 1px 96px)}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-light-layer{background:none}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-living-canvas{opacity:1}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy{position:static;width:min(820px,92%);max-width:none;padding:72px 0 76px!important;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:center;column-gap:10px}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>*{position:relative;z-index:3}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-eyebrow{justify-content:center;margin-bottom:26px;letter-spacing:.24em;font-size:11px}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-heading{max-width:none;margin:0 auto 22px!important;font-size:clamp(46px,6.2vw,96px)!important;line-height:.95!important;text-shadow:0 2px 40px rgba(0,0,0,.55)}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-heading em{margin-top:6px}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-intro{max-width:420px;margin:0 auto 30px!important;font-size:14px;line-height:1.7;color:#c4dccf}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-actions{justify-content:center}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home :is(.ae-hero-cta,.ae-motion-btn),html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>.ae-dl-global{height:42px;min-height:42px;border-radius:999px!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-cta:not(.ae-deadlines-cta){padding:0 20px;box-shadow:0 0 0 1px rgba(157,248,214,.25),0 10px 30px rgba(109,243,186,.18)}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home :is(.ae-deadlines-cta,.ae-motion-btn),html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>.ae-dl-global{background:rgba(6,11,12,.86)!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home :is(.ae-deadlines-cta,.ae-motion-btn):hover{background:rgba(20,40,36,.92)!important}
+/* Corner marks */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>.ae-hero-brand{position:absolute;left:28px;top:26px;margin:0;flex:none}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>.ae-hero-micro{position:absolute;left:28px;bottom:24px;margin:0;flex:none}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-instrument{top:22px;right:24px}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sculpture-caption{right:28px;bottom:24px}
+/* Sparkles ring the sculpture instead of trailing to the right (content.js measures them from layout). */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sparkle:nth-child(1){left:73%!important;top:61%!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sparkle:nth-child(2){left:57%!important;top:84%!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sparkle:nth-child(3){left:31%!important;top:71%!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sparkle:nth-child(4){left:26%!important;top:34%!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sparkle:nth-child(5){left:42%!important;top:12%!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sparkle:nth-child(6){left:63%!important;top:14%!important}
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sparkle:nth-child(7){left:75%!important;top:35%!important}
+@media(max-width:780px){html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home{--ae-scene-y:.42;--ae-scene-scale:.42;min-height:560px;border-radius:16px}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy{width:100%;padding:76px 20px 70px!important}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-living-canvas{opacity:.75}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>.ae-hero-brand{left:20px;top:20px}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>.ae-hero-micro{left:20px;bottom:18px}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-sculpture-caption{display:none}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>.ae-hero-actions{flex:1 1 100%;flex-wrap:wrap}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-actions>*{flex:1 1 auto}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-actions>.ae-hero-cta:first-child{flex-basis:100%}html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-hero-copy>.ae-dl-global{margin-top:10px!important}}

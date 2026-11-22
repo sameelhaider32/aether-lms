@@ -19,7 +19,10 @@ module.exports=async({page,context,test,go,preview,reportDir,assert})=>{
   await page.screenshot({path:path.join(reportDir,'four-pinned-courses.png')});
  });
  await test('Reader features: native pin changes update the deck and hero, including zero pins',async()=>{
+  // Original keeps the native sidebar inside All Tools, so the native pin control is reached there.
+  if(await page.locator('[data-am-tools]').count())await page.locator('[data-am-tools]').click();
   const pin=page.locator('#toolMenu li[data-type=recent] .site-opt-pin');await pin.click();
+  if(await page.locator('html.am-tools-open').count())await page.keyboard.press('Escape');
   await page.waitForFunction(()=>document.querySelectorAll('.ae-course-card').length===5);
   assert.equal(await page.locator('.ae-instrument-number').textContent(),'05');
   await page.evaluate(()=>document.querySelectorAll('#toolMenu li[data-type=pinned]').forEach(row=>row.dataset.type='recent'));

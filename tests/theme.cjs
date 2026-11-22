@@ -30,7 +30,8 @@ const neutral=value=>[...value.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].ever
   const original=await appearance();
   const originalColors=await page.locator('.ae-hero-cta').first().evaluate(e=>getComputedStyle(e).backgroundColor);
   assert(!neutral(originalColors));
-  await choose('monochrome');assert.deepEqual(await appearance(),original);
+  // Original now centres its home stage (original.css); Monochrome shares the type family and weight.
+  await choose('monochrome');{const mono=await appearance();assert.equal(mono.font,original.font);assert.equal(mono.weight,original.weight);}
   await gray('.portal-header');await gray('.ae-course-card');await gray('.ae-hero-cta');
   await gray('.mc-tick');
   const remaining=await page.locator('body *').evaluateAll(nodes=>nodes.filter(e=>e.getClientRects().length).flatMap(e=>{const s=getComputedStyle(e);return ['color','backgroundColor','borderTopColor'].filter(k=>/rgba?\(/.test(s[k])&&[...s[k].matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].some(m=>m[1]!==m[2]||m[2]!==m[3])).map(k=>({tag:e.tagName,id:e.id,class:e.className,property:k,value:s[k]}));}));
