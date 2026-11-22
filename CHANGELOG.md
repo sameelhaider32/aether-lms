@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.0 — Minimal Workspace
+
+- Add a third selectable appearance with neutral light tokens, horizontal primary/contextual navigation and a preserved native All Tools drawer.
+- Recompose Home around real pinned courses, a calendar and read-only Next Up from the existing account-scoped academic store. No fabricated progress or new data backend.
+- Share the Minimal material/geometry across supported academic views, statistics, Resources, Spotlight, previews and downloads; retain Geist and both existing appearances.
+- Mount navigation synchronously with the existing adapter to avoid a measured extra-frame layout shift. Do not start decorative graphics in Minimal; preserve their return in other appearances.
+- Add focused navigation, theme, date, coverage, frame, native-handler and mobile checks plus a reviewed five-width visual matrix.
+
 ## 2.0.0 — 2026-10-31
 
 - Shared local Geist typography, readable metadata, refined component geometry and selective glass across Original and Monochrome.

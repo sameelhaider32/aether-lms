@@ -11,12 +11,12 @@
   const context = 'html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable)';
   const surface = '.wicket-modal:has(canvas) .w_content_1:has(canvas),.gb-modal-dialog:has(> .gb-modal-content > canvas)';
   const originals = new WeakMap(), modes = new WeakMap();
-  const monochrome = () => host.dataset.aetherTheme === "monochrome";
+  const monochrome = () => ["monochrome","minimal","minimal-dark"].includes(host.dataset.aetherTheme);
   let library = null, queued = false, disposed = false;
   const active = chart => host.classList.contains('aether-enabled') &&
     document.documentElement.matches(context) && chart.canvas?.isConnected && chart.canvas.closest(surface);
   const color = value => typeof value === 'string' ?
-    ((monochrome() ? {'#15597e':'#9a9a9a', '#5bc0de':'#eeeeee'} : {'#15597e':'#329d79', '#5bc0de':'#9df8d6'})[value.toLowerCase()] || value) : value;
+    ((host.dataset.aetherTheme==='minimal' ? {'#15597e':'#222222','#5bc0de':'#777777'} : monochrome() ? {'#15597e':'#9a9a9a', '#5bc0de':'#eeeeee'} : {'#15597e':'#329d79', '#5bc0de':'#9df8d6'})[value.toLowerCase()] || value) : value;
 
   function restore(chart) {
     const records = originals.get(chart);
@@ -33,7 +33,7 @@
   function theme(chart) {
     if (!active(chart)) return restore(chart);
     let changed = false;
-    if (modes.get(chart) !== monochrome()) { changed = restore(chart); modes.set(chart, monochrome()); }
+    if (modes.get(chart) !== host.dataset.aetherTheme) { changed = restore(chart); modes.set(chart, host.dataset.aetherTheme); }
     let records = originals.get(chart);
     if (!records) { records = new Map(); originals.set(chart, records); }
     function set(object, key, value) {
@@ -57,10 +57,10 @@
       }
     }
     const options = chart.options;
-    set(options?.title, 'fontColor', monochrome() ? '#eeeeee' : '#9df8d6');
+    set(options?.title, 'fontColor', monochrome() ? (host.dataset.aetherTheme==='minimal'?'#111111':'#eeeeee') : '#9df8d6');
     for (const axis of [...(options?.scales?.xAxes || []), ...(options?.scales?.yAxes || [])]) {
-      set(axis.ticks, 'fontColor', monochrome() ? '#c2c2c2' : '#a7cfbd');
-      set(axis.scaleLabel, 'fontColor', monochrome() ? '#eeeeee' : '#9df8d6');
+      set(axis.ticks, 'fontColor', monochrome() ? (host.dataset.aetherTheme==='minimal'?'#444444':'#c2c2c2') : '#a7cfbd');
+      set(axis.scaleLabel, 'fontColor', monochrome() ? (host.dataset.aetherTheme==='minimal'?'#111111':'#eeeeee') : '#9df8d6');
       set(axis.gridLines, 'color', monochrome() ? 'rgba(160,160,160,0.14)' : 'rgba(88,143,116,0.14)');
       set(axis.gridLines, 'zeroLineColor', monochrome() ? 'rgba(160,160,160,0.14)' : 'rgba(88,143,116,0.14)');
     }

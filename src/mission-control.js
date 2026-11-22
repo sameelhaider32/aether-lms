@@ -2,7 +2,7 @@
 (() => {
  'use strict';
  const D=globalThis.AetherAcademicData;
- let view=null,ctx=null,controller=null,job=null,generation=0,account=null,active=false,clock=0,identityTimer=0,focusJob=null;
+ let view=null,ctx=null,controller=null,job=null,generation=0,account=null,active=false,clock=0,identityTimer=0,focusJob=null,startupFrame=0;
  let data={records:[],courses:[],sources:[],checkedAt:0},baseline=null,baselineReady=false,newIds=new Set(),showPastAll=false,refreshError='';
  const defaults={course:'',type:'',status:'',sort:'time',days:14,offset:0},filters={...defaults};
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -52,7 +52,7 @@
   const details=el('details','mc-source-details');details.append(el('summary','','Sources & coverage'),el('ul','mc-source-list'),el('p','mc-note','Clear the data held in this tab and its announcement baseline. Refresh to check your sources again.'),button('Clear session data',()=>{clear();globalThis.AetherAcademicStore?.clear();render();},'Clear Mission Control data and announcement baseline'));section.append(details,el('p','mc-footer','Read-only · Academic actions stay in Sakai · Dates use your browser time zone unless the source specifies one.'));
   return section;
  }
- function clear(){generation++;controller?.abort();controller=null;job=null;clearInterval(identityTimer);clearTimeout(clock);identityTimer=clock=0;account=null;baseline=null;baselineReady=false;newIds.clear();filters.course='';showPastAll=false;refreshError='';data={records:[],courses:[],sources:[],checkedAt:0};}
+ function clear(){cancelAnimationFrame(startupFrame);startupFrame=0;generation++;controller?.abort();controller=null;job=null;clearInterval(identityTimer);clearTimeout(clock);identityTimer=clock=0;account=null;baseline=null;baselineReady=false;newIds.clear();filters.course='';showPastAll=false;refreshError='';data={records:[],courses:[],sources:[],checkedAt:0};}
  async function verify(){try{return await globalThis.AetherFileState?.session()||null;}catch{return null;}}
  async function refresh(force=false){
   if(!active||!enabled()||job)return job;if(!force&&data.checkedAt&&Date.now()-data.checkedAt<300000)return;
@@ -140,9 +140,9 @@
   reconcile(view.querySelector('.mc-source-list'),data.sources.map((s,i)=>keyed(el('li','',`${s.type} · ${s.state}: ${s.note}`),'source:'+i)));
   if(focused?.isConnected&&document.activeElement!==focused&&!focused.hidden)focused.focus({preventScroll:true});
   for(const [node,top]of scrolls)if(node.scrollTop!==top)node.scrollTop=top;
-  clearTimeout(clock);if(active&&enabled()&&view.isConnected)clock=setTimeout(()=>render(),60000);
+  clearTimeout(clock);if(active&&enabled()&&view.isConnected)clock=setTimeout(()=>{render();window.dispatchEvent(new Event('aether-academic-clock'));},60000);
  }
- function sync(){const next=enabled();if(!next){active=false;clear();render();return;}if(!active){active=true;setTimeout(()=>refresh(),0);}}
+ function sync(){const next=enabled();if(!next){active=false;clear();render();return;}if(!active){active=true;if(/^minimal/.test(document.documentElement.dataset.aetherTheme))startupFrame=requestAnimationFrame(()=>{startupFrame=0;setTimeout(()=>refresh(),0);});else setTimeout(()=>refresh(),0);}}
  function mount(context){ctx=context;if(!context?.home){active=false;clear();return null;}if(!view)view=build();sync();if(active&&account&&data.checkedAt){const local=globalThis.AetherAcademicSources.native(ctx.main,{id:'',title:'Home summary'}).map(r=>({...r,pageLocal:true}));data.records=D.unique([...data.records.filter(r=>!r.pageLocal),...local]);}render();return view;}
  window.addEventListener('aether-settings-change',sync);
  document.addEventListener('aether-session-change',()=>{const resume=active&&enabled()&&!!controller;clear();render();if(resume)refresh(true);});

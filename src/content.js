@@ -6,6 +6,9 @@
   if (window.top !== window || location.hostname !== "lms.lums.edu.pk") return;
   if (!/^\/+(?:portal(?:\/|$)|$)/.test(location.pathname)) return;
   const doc = document.documentElement;
+  let presentationTheme=doc.dataset.aetherTheme;
+  // One document-level counter tells every hero its cached box is stale; no listener per hero instance.
+  let layoutEpoch=0;const staleLayout=()=>{layoutEpoch++;};addEventListener("scroll",staleLayout,{capture:true,passive:true});addEventListener("resize",staleLayout,{passive:true});
   if (doc.dataset.aetherV08 === "installed") return;
   doc.dataset.aetherV08 = "installed";
 
@@ -133,12 +136,12 @@
     if(!header.querySelector('#aether-theme-control')){
       const control=make('label','');control.id='aether-theme-control';
       const name=make('span','','THEME'),select=make('select','');select.id='aether-theme-select';select.setAttribute('aria-label','Aether theme');
-      for(const [value,title] of [['aether','Aether Original'],['monochrome','Monochrome']]){const option=make('option','',title);option.value=value;select.append(option);}
+      for(const [value,title] of [['aether','Aether Original'],['monochrome','Monochrome'],['minimal','Aether Minimal'],['minimal-dark','Aether Minimal Dark']]){const option=make('option','',title);option.value=value;select.append(option);}
       select.value=globalThis.AetherTheme?.get()||'aether';
       select.addEventListener('change',()=>globalThis.AetherTheme?.set(select.value));
       control.append(name,select);native.after(control);
     }}
-  window.addEventListener('aether-theme-change',()=>{const select=document.querySelector('#aether-theme-select');if(select)select.value=globalThis.AetherTheme?.get()||'aether';});
+  window.addEventListener('aether-theme-change',()=>{const next=doc.dataset.aetherTheme;if(next!==presentationTheme){if(/^minimal/.test(next)!==/^minimal/.test(presentationTheme)){heroSignature='';requestRefresh(true);}presentationTheme=next;}const select=document.querySelector('#aether-theme-select');if(select)select.value=globalThis.AetherTheme?.get()||'aether';});
   function createFlare(parent,x,y,index){const n=make("span","ae-sparkle");n.style.left=x+"%";n.style.top=y+"%";n.style.setProperty("--n",String(index));parent.append(n);return n;}
   function makeHero(ctx){
     // Keep the general campus slogan on Home only. Course pages use the real
@@ -150,18 +153,38 @@
     const layer=make("div","ae-light-layer");layer.setAttribute("aria-hidden","true");hero.append(layer);
     const flares=[[62,23],[78,18],[88,37],[69,77],[93,66],[57,57],[84,85]];
     const sparks=flares.map((p,i)=>createFlare(layer,p[0],p[1],i));
-    hero.addEventListener("pointermove",e=>{
-      const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/Math.max(1,r.width),y=(e.clientY-r.top)/Math.max(1,r.height);
-      hero.style.setProperty("--px",(x*100).toFixed(1)+"%");hero.style.setProperty("--py",(y*100).toFixed(1)+"%");
+    // One write per frame from a box measured only after scroll or resize: reading layout on every
+    // pointermove right after writing these properties forced a style pass per event.
+    let heroBox=null,heroEpoch=-1,heroPoint=null,heroFrame=0,heroLast=["",""];const sparkLast=flares.map(()=>["",""]),sparkNow=flares.map(()=>[.18,1]);
+    // Sparkle positions come from layout (an appearance may arrange them differently), measured with the box.
+    let sparkAt=flares.map(p=>[p[0]/100,p[1]/100]);
+    hero.addEventListener("pointerenter",()=>{heroBox=null;},{passive:true});
+    hero.addEventListener("pointermove",e=>{heroPoint=[e.clientX,e.clientY];hero.classList.add("ae-hero-tracking");if(!heroFrame)heroFrame=requestAnimationFrame(paintHero);},{passive:true});
+    function paintHero(){
+      heroFrame=0;if(!heroPoint||!hero.isConnected)return;
+      if(heroEpoch!==layoutEpoch){heroBox=null;heroEpoch=layoutEpoch;}
+      if(!heroBox){heroBox=hero.getBoundingClientRect();const w=Math.max(1,heroBox.width),h=Math.max(1,heroBox.height);sparkAt=sparks.map(s=>[s.offsetLeft/w,s.offsetTop/h]);}
+      const r=heroBox,x=(heroPoint[0]-r.left)/Math.max(1,r.width),y=(heroPoint[1]-r.top)/Math.max(1,r.height);
+      // Unchanged values are not rewritten: every write restarts sparkle transitions and restyles the hero.
+      const px=(Math.round(x*200)/2).toFixed(1)+"%",py=(Math.round(y*200)/2).toFixed(1)+"%";
+      if(px!==heroLast[0])hero.style.setProperty("--px",heroLast[0]=px);if(py!==heroLast[1])hero.style.setProperty("--py",heroLast[1]=py);
+      // Sparkles ease here (CSS transitions are paused while tracking, see original.css): restarting a
+      // transition on every frame cost a style pass per sparkle per frame.
+      let settling=false;
       for(let i=0;i<sparks.length;i++){
-        const q=flares[i],dist=Math.hypot(q[0]/100-x,q[1]/100-y);
-        sparks[i].style.setProperty("--lit",String(Math.max(.18,1.7-Math.max(0,dist-.04)*5)));
-        sparks[i].style.setProperty("--zoom",String(1+Math.max(0,.26-dist)*8));
+        const q=sparkAt[i],dist=Math.hypot(q[0]-x,q[1]-y),now=sparkNow[i];
+        const goalLit=Math.max(.18,1.7-Math.max(0,dist-.04)*5),goalZoom=1+Math.max(0,.26-dist)*8;
+        now[0]+=(goalLit-now[0])*.28;now[1]+=(goalZoom-now[1])*.28;
+        if(Math.abs(goalLit-now[0])+Math.abs(goalZoom-now[1])>.01)settling=true;
+        const lit=now[0].toFixed(2),zoom=now[1].toFixed(2),last=sparkLast[i];
+        if(lit!==last[0])sparks[i].style.setProperty("--lit",last[0]=lit);
+        if(zoom!==last[1])sparks[i].style.setProperty("--zoom",last[1]=zoom);
       }
-    },{passive:true});
-    hero.addEventListener("pointerleave",()=>sparks.forEach(s=>{s.style.removeProperty("--lit");s.style.removeProperty("--zoom");}));
+      if(settling)heroFrame=requestAnimationFrame(paintHero);
+    }
+    hero.addEventListener("pointerleave",()=>{cancelAnimationFrame(heroFrame);heroFrame=0;heroPoint=null;hero.classList.remove("ae-hero-tracking");sparkLast.forEach(l=>{l[0]=l[1]="";});sparkNow.forEach(n=>{n[0]=.18;n[1]=1;});sparks.forEach(s=>{s.style.removeProperty("--lit");s.style.removeProperty("--zoom");});});
     const copy=make("div","ae-hero-copy");
-    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 2.0'));
+    if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 2.1'));
     const eyebrow=make("div","ae-hero-eyebrow");eyebrow.append(make("span","ae-status-dot"),document.createTextNode(course?`LUMS / ${ctx.courseCode||"COURSE"} / ${(ctx.toolTitle||"OVERVIEW").toUpperCase()}`:`LUMS / ACADEMIC WORKSPACE / ${new Date().getFullYear()}`));copy.append(eyebrow);
     const h1=make("h1","ae-hero-heading");
     if(ctx.home){h1.append(document.createTextNode("A little space "),make("em","","for big ideas."));}
@@ -178,6 +201,8 @@
     const cta=btn("ae-hero-cta",ctx.home?"Explore courses":ctx.resources?"View resources":"Course tools",()=>{
       let node=document.querySelector(target);
       if(!node&&ctx.resources)node=[...ctx.main.children].find(el=>el!==workspace&&el.classList.contains("Mrphs-container"));
+      // Course shortcuts may sit behind the "Customize course shortcuts" disclosure; open it first.
+      const fold=node?.closest("details");if(fold&&!fold.open)fold.open=true;
       node?.scrollIntoView({behavior:motion?"smooth":"auto",block:"start"});
     });cta.insertAdjacentHTML("beforeend",TEXT.arrow);actions.append(cta);
     if(ctx.home){
@@ -243,7 +268,7 @@
     section.append(list);return section;}
 
   function mountAmbient(){
-    if(!enabled || !document.body || ambientRoot?.isConnected)return;
+    if(!enabled || /^minimal/.test(doc.dataset.aetherTheme) || !document.body || ambientRoot?.isConnected)return;
     ambientRoot=make("div","ae-global-ambient");
     ambientRoot.id="aether-global-ambient";
     ambientRoot.setAttribute("aria-hidden","true");
@@ -256,6 +281,7 @@
   function cancelEffectsStart(){cancelAnimationFrame(effectFrame);effectFrame=0;cancelIdle(effectIdle);effectIdle=0;effectPreview?.dispose();effectPreview=null;}
   function scheduleEffects(canvas){
     if(canvas)effectCanvas=canvas;
+    if(/^minimal/.test(doc.dataset.aetherTheme)){cancelEffectsStart();scene?.dispose();scene=null;disposeAmbient();return;}
     if(!enabled||!effectCanvas?.isConnected)return;
     // Stars draw during parsing, independently of tool frames and page readiness.
     mountAmbient();
@@ -273,7 +299,7 @@
       }catch(error){console.debug('Aether scene unavailable',error);}
     });});
   }
-  function render(force=false){mountToolbar();const ctx=context();if(!ctx){globalThis.AetherSpotlight?.mount(null);globalThis.AetherMissionControl?.mount(null);if(enabled)mountAmbient();return;}
+  function render(force=false){mountToolbar();const ctx=context();globalThis.AetherMinimal?.mount(ctx);if(!ctx){globalThis.AetherSpotlight?.mount(null);globalThis.AetherMissionControl?.mount(null);if(enabled)mountAmbient();return;}
     if(!force&&ctx.signature===renderedSignature&&workspace?.isConnected){globalThis.AetherSpotlight?.mount(ctx);return;}
     const key=[ctx.home,ctx.courseTitle,ctx.toolTitle,ctx.resources,ctx.assignment].join('|');
     const count=workspace?.querySelector('.ae-instrument-number');if(count)count.textContent=String(pinnedCourses(ctx).length).padStart(2,'0');
@@ -288,7 +314,7 @@
     const mission=globalThis.AetherMissionControl?.mount(ctx);if(mission)workspace.append(mission);
     const tools=makeTools(ctx);if(tools)workspace.append(tools);
     const status=make('div','ae-screen-reader-only');status.id='aether-reorder-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');workspace.append(status);
-    ctx.main.prepend(workspace);globalThis.AetherSpotlight?.mount(ctx);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
+    ctx.main.prepend(workspace);globalThis.AetherMinimal?.mount(ctx);globalThis.AetherSpotlight?.mount(ctx);globalThis.AetherMotion?.enhance(workspace);globalThis.AetherCourseFade?.enhance(workspace);doc.classList.toggle('aether-enabled',enabled);setMotion(motionRequested,false);scheduleEffects(canvas);
   }
   function requestRefresh(force=false){refreshForced ||= force;if(refreshPending)return;refreshPending=true;
     requestAnimationFrame(()=>{refreshPending=false;const forced=refreshForced;refreshForced=false;render(forced);});
@@ -299,7 +325,7 @@
     for(const r of records){
       const target=r.target.nodeType===1?r.target:r.target.parentElement;
       if(r.type==='childList'&&[...r.addedNodes,...r.removedNodes].length&&[...r.addedNodes,...r.removedNodes].every(n=>n.nodeType===1&&n.matches('[data-ae-preview-control],[data-ae-assignment-badges],[data-ae-download-control],#aether-theme-control,#aether-global-ambient')))continue;
-      if(target?.closest('#aether-theme-control,#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
+      if(target?.closest('#aether-minimal-nav,.am-context,#aether-minimal-planning,#aether-minimal-section,#aether-theme-control,#aether-spotlight,#aether-spotlight-trigger,#aether-download-manager,[data-ae-download-control],#aether-workspace,#aether-native-toggle,#aether-global-ambient,.ae-resource-preview,[data-ae-preview-control]'))continue;
       if(target===document.body&&document.body.classList.contains('is-logged-out')){globalThis.AetherMissionControl?.mount(null);requestRefresh();return;}
       if(target?.closest('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item')){requestRefresh();return;}
       if([...r.addedNodes,...r.removedNodes].some(n=>n.nodeType===1&&n.matches('.Mrphs-sakai-summary-calendar,.Mrphs-sakai-summary-assignment,.Mrphs-sakai-synoptic-announcement,.announcement-item'))){requestRefresh();return;}

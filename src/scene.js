@@ -14,6 +14,7 @@
     uniform float uTime;
     uniform float uHover;
     uniform float uStill;
+    uniform vec3 uFrame;
     varying float vLight;
     varying float vStar;
     varying float vHover;
@@ -39,7 +40,7 @@
       float perspective = 3.65 / (3.65 + p.z);
       p.xy *= perspective;
       float aspect = uViewport.x / max(1.,uViewport.y);
-      vec2 ndc = vec2(.46 + p.x * .60 / aspect, p.y * .60);
+      vec2 ndc = vec2(uFrame.x + p.x * uFrame.z / aspect, uFrame.y + p.y * uFrame.z);
       float dist = length(vec2((ndc.x-uPointer.x*2.+1.)*aspect, ndc.y-(1.-uPointer.y*2.)));
       float hit = uHover * exp(-pow(dist*4.1,2.0));
       ndc += normalize(ndc-vec2(uPointer.x*2.-1.,1.-uPointer.y*2.)+vec2(.0001)) * hit * .017;
@@ -74,6 +75,9 @@
       gl_FragColor = vec4(vColor*(.84 + vStar*.25 + vHover*.8), min(.93,alpha));
     }`;
 
+  // Where the sculpture sits in its canvas: --ae-scene-x/-y (0..1 of the box) and --ae-scene-scale.
+  // Read only on resize or appearance change, never per frame.
+  function frameOf(canvas){const s=getComputedStyle(canvas),n=(name,fallback)=>{const v=parseFloat(s.getPropertyValue(name));return Number.isFinite(v)?v:fallback;};return {x:n('--ae-scene-x',.73),y:n('--ae-scene-y',.5),scale:n('--ae-scene-scale',.6)};}
   function compile(gl, kind, code) {
     const shader = gl.createShader(kind);
     if (!shader) throw new Error("shader allocation failed");
@@ -89,7 +93,7 @@
     if(!ctx)return {setMotion(){},dispose(){}};
     const parent=canvas.closest(".ae-hero, .ae-global-ambient");
     let active=false,disposed=false,raf=0,last=0,time=0,motion=opts.motion!==false;
-    let pointer={x:.78,y:.5},hover=false,size={width:0,height:0};
+    let frame=frameOf(canvas),pointer={x:frame.x+.05,y:.5},hover=false,size={width:0,height:0};
     const N=opts.preview?1600:tier().count>7200?2400:1000;
     const points=Array.from({length:N},(_,i)=>({
       a:(i+.13)/N*6.28318530718,
@@ -104,7 +108,7 @@
       if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
       const aspect=w/h;
       ctx.clearRect(0,0,w,h);ctx.globalCompositeOperation="lighter";
-      const cx=w*.73,cy=h*.5,scale=h*.32;
+      const cx=w*frame.x,cy=h*frame.y,scale=h*.32*frame.scale/.6;
       const rz=.25+time*.10,rx=.86+(pointer.y-.5)*-.23,ry=.33+(pointer.x-.5)*.60;
       const crz=Math.cos(rz),srz=Math.sin(rz),crx=Math.cos(rx),srx=Math.sin(rx),cry=Math.cos(ry),sry=Math.sin(ry);
       const projected=[];
@@ -143,7 +147,7 @@
     function update(){const run=motion&&visible&&!document.hidden&&!disposed;if(run&&!active){active=true;last=0;raf=requestAnimationFrame(tick);}else if(!run&&active){active=false;cancelAnimationFrame(raf);draw();}}
     function move(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=canvas.getBoundingClientRect();pointer={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height};hover=true;if(!active)draw();}
     function leave(){hover=false;if(!active)draw();}
-    const ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(entries=>{size=entries[0].contentRect;if(!active)draw();}):null;ro?.observe(canvas);
+    const ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(entries=>{size=entries[0].contentRect;frame=frameOf(canvas);if(!active)draw();}):null;ro?.observe(canvas);
     const io=typeof IntersectionObserver!=='undefined'?new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??true;update();}):null;io?.observe(canvas);
     parent?.addEventListener("pointermove",move,{passive:true});parent?.addEventListener("pointerleave",leave,{passive:true});
     document.addEventListener("visibilitychange",update);
@@ -155,7 +159,8 @@
     let disposed = false, active = false, visible = true, motion = opts.motion !== false;
     let raf = 0, last = 0, elapsed = 0, lastElapsed = 0, quality=1, average=16, samples=0, drawStep=1;
     let hover = 0, hoverTarget = 0;
-    let pointer = { x: .78, y: .54 };
+    let frame = frameOf(canvas), rest = () => ({ x: frame.x + .05, y: frame.y + .04 });
+    let pointer = rest(), aim = rest();
     const fallback = { setMotion() {}, dispose() {} };
     let gl, program, buffer, ro, io;let size={width:0,height:0},sizeDirty=true,lastDpr=0;
     try {
@@ -178,7 +183,8 @@
       const attr=gl.getAttribLocation(program,"aParticle");
       gl.enableVertexAttribArray(attr);gl.vertexAttribPointer(attr,3,gl.FLOAT,false,0,0);
       gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
-      const uniforms={viewport:gl.getUniformLocation(program,"uViewport"),pointer:gl.getUniformLocation(program,"uPointer"),time:gl.getUniformLocation(program,"uTime"),hover:gl.getUniformLocation(program,"uHover")};
+      const uniforms={viewport:gl.getUniformLocation(program,"uViewport"),pointer:gl.getUniformLocation(program,"uPointer"),time:gl.getUniformLocation(program,"uTime"),hover:gl.getUniformLocation(program,"uHover"),frame:gl.getUniformLocation(program,"uFrame")};
+      const setFrame=()=>gl.uniform3f(uniforms.frame,frame.x*2-1,1-frame.y*2,frame.scale);setFrame();
       function resize() {
         if(disposed)return;
         const r=size;if(!r.width||!r.height)return false;
@@ -197,8 +203,8 @@
         raf=0;if(disposed||!active||gl.isContextLost())return;
         if(now-last<tier().interval){raf=requestAnimationFrame(render);return;}
         if(last){average=average*.94+Math.min(100,now-last)*.06;if(++samples>24&&quality===1&&average>38){quality=2;sizeDirty=true;canvas.dataset.aeQuality='balanced';}}
-        elapsed+=last?Math.min((now-last)/1000,.08):0;last=now;
-        hover+=(hoverTarget-hover)*.17;
+        const step=last?Math.min((now-last)/1000,.08):0;elapsed+=step;last=now;
+        const ease=1-Math.exp(-step*7.5);pointer.x+=(aim.x-pointer.x)*ease;pointer.y+=(aim.y-pointer.y)*ease;hover+=(hoverTarget-hover)*(1-Math.exp(-step*9));
         if(!resize())return void (raf=requestAnimationFrame(render));gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
         gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);
         gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);
@@ -210,22 +216,26 @@
       function drawStill(){if(disposed||gl.isContextLost()||!resize())return;gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);gl.uniform1f(uniforms.time,elapsed);gl.uniform1f(uniforms.hover,0);drawPoints();if(!canvas.dataset.aeRendered){canvas.dataset.aeRendered="webgl";opts.onReady?.();}}
       function schedule(){const next=motion&&visible&&!document.hidden&&!disposed&&!gl.isContextLost();if(next&&!active){active=true;last=0;raf=requestAnimationFrame(render);} else if(!next&&active){active=false;cancelAnimationFrame(raf);raf=0;drawStill();}}
       const hero=canvas.closest(".ae-hero, .ae-global-ambient");
-      function onPointer(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=canvas.getBoundingClientRect();pointer={x:Math.min(1,Math.max(0,(e.clientX-r.left)/Math.max(1,r.width))),y:Math.min(1,Math.max(0,(e.clientY-r.top)/Math.max(1,r.height)))};hoverTarget=1;if(!active)drawStill();}
-      function leave(){hoverTarget=0;}
+      let box=null;const forgetBox=()=>{box=null;};
+      function onPointer(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=box||(box=canvas.getBoundingClientRect());aim={x:Math.min(1,Math.max(0,(e.clientX-r.left)/Math.max(1,r.width))),y:Math.min(1,Math.max(0,(e.clientY-r.top)/Math.max(1,r.height)))};hoverTarget=1;if(!active){pointer={...aim};drawStill();}}
+      function leave(){hoverTarget=0;aim=rest();}
       const onVisible=()=>schedule();
+      // An appearance switch can move the sculpture without resizing its canvas.
+      const onTheme=()=>{const next=frameOf(canvas);if(next.x===frame.x&&next.y===frame.y&&next.scale===frame.scale)return;frame=next;setFrame();if(!hoverTarget)aim=rest();if(!active)drawStill();};
       let portable=null;
       const onContextLost=e=>{e.preventDefault();active=false;cancelAnimationFrame(raf);if(portable)return;const replacement=document.createElement('canvas');replacement.className=canvas.className;replacement.setAttribute('aria-hidden','true');canvas.after(replacement);canvas.style.visibility='hidden';const alt=create2DFallback(replacement,{motion});portable={setMotion:v=>alt.setMotion(v),dispose(){alt.dispose();replacement.remove();canvas.style.removeProperty('visibility');}};};
       canvas.addEventListener("webglcontextlost",onContextLost);
       hero?.addEventListener("pointermove",onPointer,{passive:true});hero?.addEventListener("pointerleave",leave,{passive:true});
-      document.addEventListener("visibilitychange",onVisible);
+      addEventListener("scroll",forgetBox,{capture:true,passive:true});addEventListener("resize",forgetBox,{passive:true});
+      document.addEventListener("visibilitychange",onVisible);addEventListener("aether-theme-change",onTheme);
       io=typeof IntersectionObserver!=="undefined"?new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??true;schedule();},{threshold:.03}):null;
       io?.observe(canvas);
-      ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(entries=>{size=entries[0].contentRect;sizeDirty=true;if(!active)drawStill();}):null;
+      ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(entries=>{size=entries[0].contentRect;sizeDirty=true;box=null;onTheme();if(!active)drawStill();}):null;
       ro?.observe(canvas);
       drawStill();schedule();
       return {
         setMotion(v){motion=Boolean(v);if(portable)portable.setMotion(v);else schedule();},
-        dispose(){if(disposed)return;disposed=true;active=false;cancelAnimationFrame(raf);portable?.dispose();ro?.disconnect();io?.disconnect();document.removeEventListener("visibilitychange",onVisible);hero?.removeEventListener("pointermove",onPointer);hero?.removeEventListener("pointerleave",leave);canvas.removeEventListener("webglcontextlost",onContextLost);gl.deleteBuffer(buffer);gl.deleteProgram(program);gl.getExtension("WEBGL_lose_context")?.loseContext();}
+        dispose(){if(disposed)return;disposed=true;active=false;cancelAnimationFrame(raf);portable?.dispose();ro?.disconnect();io?.disconnect();document.removeEventListener("visibilitychange",onVisible);removeEventListener("aether-theme-change",onTheme);hero?.removeEventListener("pointermove",onPointer);hero?.removeEventListener("pointerleave",leave);removeEventListener("scroll",forgetBox,{capture:true});removeEventListener("resize",forgetBox);canvas.removeEventListener("webglcontextlost",onContextLost);gl.deleteBuffer(buffer);gl.deleteProgram(program);gl.getExtension("WEBGL_lose_context")?.loseContext();}
       };
     } catch(err) {
       console.warn("Aether: using portable canvas particle scene",err.message);

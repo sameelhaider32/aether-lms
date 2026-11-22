@@ -1,0 +1,1142 @@
+{
+  "baseline": [
+    {
+      "key": "aether-390-home",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            390,
+            64
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(20, 27, 32, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            12,
+            76,
+            366,
+            194
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-workspace": {
+          "box": [
+            12,
+            285,
+            366,
+            4572.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            12,
+            285,
+            366,
+            522.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-course-dock": {
+          "box": [
+            12,
+            835.2,
+            366,
+            644
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-deck": {
+          "box": [
+            12,
+            901.2,
+            366,
+            578
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-card": {
+          "box": [
+            12,
+            901.2,
+            366,
+            182
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        }
+      }
+    },
+    {
+      "key": "aether-390-resources",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            390,
+            64
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(20, 27, 32, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            12,
+            76,
+            366,
+            194
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-workspace": {
+          "box": [
+            12,
+            285,
+            366,
+            520.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            12,
+            285,
+            366,
+            277.6
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#records": {
+          "box": [
+            25,
+            1005.4,
+            340,
+            3986.9
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(207, 220, 212)",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    },
+    {
+      "key": "monochrome-390-home",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            390,
+            64
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(16, 16, 16, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            12,
+            76,
+            366,
+            194
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-workspace": {
+          "box": [
+            12,
+            285,
+            366,
+            4572.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            12,
+            285,
+            366,
+            522.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-course-dock": {
+          "box": [
+            12,
+            835.2,
+            366,
+            644
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-deck": {
+          "box": [
+            12,
+            901.2,
+            366,
+            578
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-card": {
+          "box": [
+            12,
+            901.2,
+            366,
+            182
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        }
+      }
+    },
+    {
+      "key": "monochrome-390-resources",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            390,
+            64
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(16, 16, 16, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            12,
+            76,
+            366,
+            194
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-workspace": {
+          "box": [
+            12,
+            285,
+            366,
+            520.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            12,
+            285,
+            366,
+            277.6
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#records": {
+          "box": [
+            25,
+            1005.4,
+            340,
+            3986.9
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(216, 216, 216)",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    },
+    {
+      "key": "aether-1440-home",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            1440,
+            71.3
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(20, 27, 32, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            24,
+            95.3,
+            220,
+            3134.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-workspace": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            2701.1
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            516.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-course-dock": {
+          "box": [
+            268,
+            654.5,
+            1148,
+            274.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-deck": {
+          "box": [
+            268,
+            731.3,
+            1148,
+            198
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-card": {
+          "box": [
+            268,
+            731.3,
+            372,
+            198
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        }
+      }
+    },
+    {
+      "key": "aether-1440-resources",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            1440,
+            71.3
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(20, 27, 32, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            24,
+            95.3,
+            220,
+            1732.7
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-workspace": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            379.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            241.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#records": {
+          "box": [
+            289,
+            619.9,
+            1106,
+            1157
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(207, 220, 212)",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    },
+    {
+      "key": "monochrome-1440-home",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            1440,
+            71.3
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(16, 16, 16, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            24,
+            95.3,
+            220,
+            3134.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-workspace": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            2701.1
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            516.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-course-dock": {
+          "box": [
+            268,
+            654.5,
+            1148,
+            274.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-deck": {
+          "box": [
+            268,
+            731.3,
+            1148,
+            198
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-card": {
+          "box": [
+            268,
+            731.3,
+            372,
+            198
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        }
+      }
+    },
+    {
+      "key": "monochrome-1440-resources",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            1440,
+            71.3
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(16, 16, 16, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            24,
+            95.3,
+            220,
+            1732.7
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-workspace": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            379.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            241.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#records": {
+          "box": [
+            289,
+            619.9,
+            1106,
+            1157
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(216, 216, 216)",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    }
+  ],
+  "candidate": [
+    {
+      "key": "aether-390-home",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            390,
+            64
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(20, 27, 32, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            12,
+            76,
+            366,
+            194
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-workspace": {
+          "box": [
+            12,
+            285,
+            366,
+            4572.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            12,
+            285,
+            366,
+            522.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-course-dock": {
+          "box": [
+            12,
+            835.2,
+            366,
+            644
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-deck": {
+          "box": [
+            12,
+            901.2,
+            366,
+            578
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-card": {
+          "box": [
+            12,
+            901.2,
+            366,
+            182
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        }
+      }
+    },
+    {
+      "key": "aether-390-resources",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            390,
+            64
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(20, 27, 32, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            12,
+            76,
+            366,
+            194
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-workspace": {
+          "box": [
+            12,
+            285,
+            366,
+            520.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            12,
+            285,
+            366,
+            277.6
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#records": {
+          "box": [
+            25,
+            1005.4,
+            340,
+            3986.9
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(207, 220, 212)",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    },
+    {
+      "key": "monochrome-390-home",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            390,
+            64
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(16, 16, 16, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            12,
+            76,
+            366,
+            194
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-workspace": {
+          "box": [
+            12,
+            285,
+            366,
+            4572.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            12,
+            285,
+            366,
+            522.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-course-dock": {
+          "box": [
+            12,
+            835.2,
+            366,
+            644
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-deck": {
+          "box": [
+            12,
+            901.2,
+            366,
+            578
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-card": {
+          "box": [
+            12,
+            901.2,
+            366,
+            182
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        }
+      }
+    },
+    {
+      "key": "monochrome-390-resources",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            390,
+            64
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(16, 16, 16, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            12,
+            76,
+            366,
+            194
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-workspace": {
+          "box": [
+            12,
+            285,
+            366,
+            520.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            12,
+            285,
+            366,
+            277.6
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#records": {
+          "box": [
+            25,
+            1005.4,
+            340,
+            3986.9
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(216, 216, 216)",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    },
+    {
+      "key": "aether-1440-home",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            1440,
+            71.3
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(20, 27, 32, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            24,
+            95.3,
+            220,
+            3134.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-workspace": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            2701.1
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            516.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-course-dock": {
+          "box": [
+            268,
+            654.5,
+            1148,
+            274.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-deck": {
+          "box": [
+            268,
+            731.3,
+            1148,
+            198
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-card": {
+          "box": [
+            268,
+            731.3,
+            372,
+            198
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        }
+      }
+    },
+    {
+      "key": "aether-1440-resources",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            1440,
+            71.3
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(20, 27, 32, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            24,
+            95.3,
+            220,
+            1732.7
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#aether-workspace": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            379.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            241.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(240, 245, 247)",
+          "background": "rgb(18, 23, 27)"
+        },
+        "#records": {
+          "box": [
+            289,
+            619.9,
+            1106,
+            1157
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(207, 220, 212)",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    },
+    {
+      "key": "monochrome-1440-home",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            1440,
+            71.3
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(16, 16, 16, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            24,
+            95.3,
+            220,
+            3134.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-workspace": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            2701.1
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            516.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-course-dock": {
+          "box": [
+            268,
+            654.5,
+            1148,
+            274.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-deck": {
+          "box": [
+            268,
+            731.3,
+            1148,
+            198
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-course-card": {
+          "box": [
+            268,
+            731.3,
+            372,
+            198
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        }
+      }
+    },
+    {
+      "key": "monochrome-1440-resources",
+      "values": {
+        ".portal-header": {
+          "box": [
+            0,
+            0,
+            1440,
+            71.3
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(16, 16, 16, 0.91)"
+        },
+        "#toolMenu": {
+          "box": [
+            24,
+            95.3,
+            220,
+            1732.7
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#aether-workspace": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            379.8
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        ".ae-hero": {
+          "box": [
+            268,
+            110.3,
+            1148,
+            241.2
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(247, 247, 247)",
+          "background": "rgb(17, 17, 17)"
+        },
+        "#records": {
+          "box": [
+            289,
+            619.9,
+            1106,
+            1157
+          ],
+          "font": "\"Geist Sans\", \"Segoe UI\", sans-serif",
+          "color": "rgb(216, 216, 216)",
+          "background": "rgba(0, 0, 0, 0)"
+        }
+      }
+    }
+  ]
+}

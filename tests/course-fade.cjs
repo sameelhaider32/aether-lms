@@ -33,7 +33,7 @@ module.exports=async({page,test,go,reportDir,assert})=>{
   await prepare();await position('enter');const card=page.locator('.ae-course-card').first(),link=card.locator('.ae-course-link');
   await link.evaluate(a=>a.focus({preventScroll:true}));
   assert.equal(await card.evaluate(c=>getComputedStyle(c).opacity),'1');assert.equal(await card.locator('.ae-course-title-ink').evaluate(c=>getComputedStyle(c).opacity),'1');
-  await page.keyboard.press('Enter');await page.waitForURL('**/portal/site/cs200');await page.locator('.ae-tool-link').first().waitFor();
+  await page.keyboard.press('Enter');await page.waitForURL('**/portal/site/cs200');await page.locator('.ae-tool-link').first().waitFor({state:'attached'});
  });
  await test('Course dissolve: Motion Off, OS preference and reorder show solid readable cards',async()=>{
   await prepare();await position('enter');await page.locator('.ae-motion-btn').evaluate(b=>b.click());
@@ -81,7 +81,7 @@ module.exports=async({page,test,go,reportDir,assert})=>{
  };
  await test('Home polish: section order, scoped single chevrons and native filter state',async()=>{
   await prepare();
-  assert.deepEqual(await page.locator('#aether-workspace').evaluate(n=>[...n.children].slice(0,3).map(e=>e.matches('.ae-hero')?'hero':e.matches('.ae-courses')?'courses':e.id)),['hero','courses','aether-mission-control']);
+  assert.deepEqual(await page.locator('#aether-workspace').evaluate(n=>[...n.children].filter(e=>!e.hidden).slice(0,3).map(e=>e.matches('.ae-hero')?'hero':e.matches('.ae-courses')?'courses':e.id)),['hero','courses','aether-mission-control']);
   const nativeStyle=await page.addStyleTag({content:`html.aether-enabled main#content select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='m1 1 3 3 3-3' stroke='red'/%3E%3C/svg%3E")!important;background-repeat:repeat!important;background-size:auto!important;background-position:0 0!important;font-family:Georgia,serif}html.aether-enabled main#content :is(h2,h3,h4,p){font-family:Georgia,serif}`});
   await page.evaluate(()=>{const s=document.createElement('select');s.id='native-polish-select';s.innerHTML='<option>Native Sakai</option>';document.querySelector('main#content').append(s);window.polishMission=document.querySelector('#aether-mission-control');});
   await page.locator('.mc-item h4').first().waitFor({state:'attached'});await page.evaluate(()=>document.fonts.ready);

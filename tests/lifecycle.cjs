@@ -63,6 +63,11 @@ function reader(kind='pdf',options={}){
   gate.resolve();await loading;await r.flush();assert.equal(r.messages.filter(m=>m.state==='rendered').at(-1).page,2);assert.equal(r.renders,2);assert.equal(prevented,2);
   await r.emit('keydown',{key:'ArrowLeft',target:{matches:()=>true},preventDefault(){throw Error('Native select key was intercepted');}});await r.flush();assert.equal(r.renders,2);
  });
+ await test('PDF: Next pressed while a zoom redraw renders is queued, never lost',async()=>{
+  const options={},r=reader('pdf',options),loading=r.data();await r.flush();await loading;assert.equal(r.messages.filter(m=>m.state==='rendered').at(-1).page,1);
+  const gate=deferred();options.render=gate;r.nodes['zoom-in'].onclick();await r.flush();assert.equal(r.nodes.next.disabled,false);assert.equal(r.nodes.prev.disabled,true);
+  r.nodes.next.click();gate.resolve();await r.flush();assert.equal(r.messages.filter(m=>m.state==='rendered').at(-1).page,2);assert.equal(r.nodes.next.disabled,true);assert.equal(r.nodes.prev.disabled,false);
+ });
  await test('PDF: terminal parse error is reported once and duplicate data cannot revive it',async()=>{
   const parse=deferred(),r=reader('pdf',{parse});const loading=r.data();await tick();parse.reject(Error('broken'));await loading;await r.data();await r.emit('pagehide',{});await r.emit('pagehide',{});assert.equal(r.messages.filter(m=>m.state==='error').length,1);assert.equal(r.destroys,1);
  });

@@ -16,12 +16,14 @@
  }
  function describe(card,primary=card.querySelector('[data-ae-primary="true"]')||card){
    const links=(primary.matches('a')?[primary]:[...primary.querySelectorAll('a')]).filter(a=>!a.closest('.dropdown-menu,[data-ae-preview-control]'));
-   const a=links.find(a=>/\.[a-z0-9]{1,7}$/i.test(label(a)))||links.find(a=>label(a))||links[0];if(!a)return null;
+   // Each link's visible text is walked once, not once per candidate test.
+   const labels=new Map(),text=a=>{if(!labels.has(a))labels.set(a,label(a));return labels.get(a);};
+   const a=links.find(a=>/\.[a-z0-9]{1,7}$/i.test(text(a)))||links.find(a=>text(a))||links[0];if(!a)return null;
    const code=a.getAttribute('onclick')||'',copyright=code.match(/\bopenCopyrightWindow\s*\(\s*(['"])([^'"\r\n]+)\1\s*[,)]/);
    let u=url(copyright?.[2]||a.getAttribute('href')),noticeURL=null;
    if(u?.pathname==='/access/require'){noticeURL=u;const back=u.searchParams.get('url');u=back?url(back.startsWith('/content/')?'/access'+back:back,u.origin):null;}
    if(a.getAttribute('href')==='#'&&!copyright)u=null;
-   const title=label(a)||a.title||'Resource',type=(primary.getAttribute('data-ae-type')||card.getAttribute('data-ae-type')||'').toUpperCase();
+   const title=text(a)||a.title||'Resource',type=(primary.getAttribute('data-ae-type')||card.getAttribute('data-ae-type')||'').toUpperCase();
    let id=card.getAttribute('data-collection-id')||card.getAttribute('data-resource-id')||code.match(/getElementById\(['"]collectionId['"]\)\.value\s*=\s*['"]([^'"]+)['"]/)?.[1]||u?.searchParams.get('collectionId')||'';
    if(!id)id=[...card.querySelectorAll('input[type="checkbox"]')].map(i=>i.value).find(v=>/^\/(?:group|user)\//.test(v))||'';
    if(!id&&u?.pathname.startsWith('/access/content/'))id=u.pathname.slice('/access/content'.length);

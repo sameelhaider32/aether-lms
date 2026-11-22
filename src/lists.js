@@ -199,9 +199,10 @@
   function update(){
     timer=0;clearTimeout(deadlineTimer);nextDeadline=Infinity;scanTime=Date.now();
     if(!enabled()){
-      restore();for(const c of ['ae-resource-surface','ae-list-reduced-motion','ae-academic-surface'])if(root.classList.contains(c))root.classList.remove(c);
+      restore();for(const c of ['ae-resource-surface','ae-list-reduced-motion','ae-academic-surface','ae-frame-enabled'])if(root.classList.contains(c))root.classList.remove(c);
       lastCard=null;return;
     }
+    if(framed&&!root.classList.contains('ae-frame-enabled'))root.classList.add('ae-frame-enabled');
     const scope=framed?document.body:document.querySelector('main#content');if(!scope)return;
     live=new Set();
     const tables=[...scope.querySelectorAll('table')];
