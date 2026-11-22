@@ -37,6 +37,7 @@
         "src/spotlight-grades.js",
         "src/spotlight.js",
         "src/minimal.js",
+        "src/liquid-glass.js",
         "src/content.js"
       ],
       "run_at": "document_start",

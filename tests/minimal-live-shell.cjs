@@ -120,6 +120,12 @@ const DARK='rgb(31, 34, 37)',LIGHT='rgb(250, 250, 250)';
   await p.locator('[data-am-tools]').click();assert(await p.locator('#toolMenu').isVisible());await p.keyboard.press('Escape');assert(!(await p.locator('#toolMenu').isVisible()));
   assert.equal((await frameState()).bg,'rgba(0, 0, 0, 0)','Original frames are transparent so the glass panel shows through');
   assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  // Liquid glass: panels carry a lens filter whose map is inline (no request), and it all goes with the appearance.
+  await p.waitForFunction(()=>document.querySelector('main#content div.Mrphs-container[data-ae-liquid]'));
+  const lens=await p.evaluate(()=>{const n=document.querySelector('main#content div.Mrphs-container[data-ae-liquid]'),f=getComputedStyle(n).backdropFilter,id=(f.match(/url\("?#([^")]+)/)||[])[1];return {f,href:document.getElementById(id)?.querySelector('feImage')?.getAttribute('href')?.slice(0,22)};});
+  assert(/^url\(/.test(lens.f),'panel backdrop starts with the lens filter');assert.equal(lens.href,'data:image/png;base64,');
+  await choose('minimal');await p.waitForFunction(()=>!document.querySelector('[data-ae-liquid],#aether-liquid-glass,#aether-liquid-glass-maps'));
+  await choose('aether');await p.waitForFunction(()=>document.querySelector('main#content div.Mrphs-container[data-ae-liquid]'));
  });
  await test('monochrome: native grid, header and frames are untouched by Minimal rules',async()=>{
   await go(route('Overview'));await choose('monochrome');await p.locator('#aether-minimal-nav').waitFor({state:'detached'});
