@@ -221,7 +221,11 @@ html.aether-enabled[data-aether-theme="aether"] :is(#aether-workspace .ae-course
  background:var(--ae-glass-spec) padding-box,linear-gradient(165deg,var(--ae-glass-a),var(--ae-glass-b) 46%,var(--ae-glass-c)) padding-box,var(--ae-glass-rim) border-box!important;
  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),inset 0 -18px 34px -24px rgba(157,248,214,.30),0 1px 1px rgba(0,0,0,.38),0 26px 50px -26px rgba(0,0,0,.9)!important;
 }
-html.aether-enabled[data-aether-theme="aether"] :is(#aether-workspace .ae-course-card,#aether-workspace .ae-hero:not(.ae-hero-home),#aether-mission-control :is(.mc-panel,.mc-summary),main#content div.Mrphs-container){border-radius:20px!important;-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%)}
+html.aether-enabled[data-aether-theme="aether"] :is(#aether-workspace .ae-course-card,#aether-workspace .ae-hero:not(.ae-hero-home),#aether-mission-control :is(.mc-panel,.mc-summary)){border-radius:20px!important;-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%)}
+/* Sakai tool panels hold whole resource and assignment lists. A live backdrop blur behind them made
+   list updates fall behind on machines that render without a GPU, so they use a denser tint instead
+   of blurring; the stars behind them are faint enough that the panel still reads as glass. */
+html.aether-enabled[data-aether-theme="aether"] main#content div.Mrphs-container{--ae-glass-a:rgba(24,40,38,.62);--ae-glass-b:rgba(8,16,16,.58);--ae-glass-c:rgba(12,30,27,.62);border-radius:20px!important}
 html.aether-enabled[data-aether-theme="aether"] #aether-mission-control .mc-summary>*{background:transparent!important}
 html.aether-enabled[data-aether-theme="aether"] :is(.am-section,.am-more-menu){--ae-glass-a:rgba(30,48,45,.86);--ae-glass-b:rgba(9,18,17,.84);--ae-glass-c:rgba(13,33,29,.86);border-radius:18px!important;-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%)}
 html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-home .ae-instrument{--ae-glass-a:rgba(30,48,45,.52);--ae-glass-b:rgba(8,16,16,.46);--ae-glass-c:rgba(14,34,30,.5);border-radius:14px!important;-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%)}
@@ -256,9 +260,8 @@ html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero :is(.
 @media(prefers-reduced-transparency:reduce){html.aether-enabled[data-aether-theme="aether"] :is(#aether-workspace .ae-course-card,#aether-workspace .ae-hero:not(.ae-hero-home),#aether-workspace .ae-hero-home .ae-instrument,#aether-mission-control :is(.mc-panel,.mc-summary),main#content div.Mrphs-container,.am-section,.am-more-menu){--ae-glass-a:#1a2826;--ae-glass-b:#101a19;--ae-glass-c:#132422;-webkit-backdrop-filter:none;backdrop-filter:none}}
 /* Liquid glass (liquid-glass.js): tiles that carry a lens map refract what is behind them at the
    edges and let it show through, so they change as the galaxy and the page move underneath. The
-   tint drops and the blur nearly goes; large panels keep more of both so long text stays readable,
-   and pop-up sheets keep their dense tint. */
+   tint drops and the blur nearly goes. Large panels keep the static glass above (the script skips
+   them), and pop-up sheets keep their dense tint. */
 html.aether-enabled[data-aether-theme="aether"]:not(#ae-glass) [data-ae-liquid][data-ae-liquid]{--ae-glass-a:rgba(30,50,47,.16);--ae-glass-b:rgba(8,16,16,.10);--ae-glass-c:rgba(12,34,30,.16);-webkit-backdrop-filter:var(--ae-liquid) blur(1.5px) saturate(175%) brightness(1.05)!important;backdrop-filter:var(--ae-liquid) blur(1.5px) saturate(175%) brightness(1.05)!important}
-html.aether-enabled[data-aether-theme="aether"]:not(#ae-glass) [data-ae-liquid][data-ae-liquid-size="large"]{--ae-glass-a:rgba(26,44,41,.30);--ae-glass-b:rgba(8,16,16,.24);--ae-glass-c:rgba(12,30,27,.30);-webkit-backdrop-filter:var(--ae-liquid) blur(5px) saturate(170%) brightness(1.03)!important;backdrop-filter:var(--ae-liquid) blur(5px) saturate(170%) brightness(1.03)!important}
 html.aether-enabled[data-aether-theme="aether"]:not(#ae-glass) [data-ae-liquid]:is(.am-section,.am-more-menu){--ae-glass-a:rgba(30,48,45,.80);--ae-glass-b:rgba(9,18,17,.76);--ae-glass-c:rgba(13,33,29,.80);-webkit-backdrop-filter:var(--ae-liquid) blur(14px) saturate(170%)!important;backdrop-filter:var(--ae-liquid) blur(14px) saturate(170%)!important}
 html.aether-enabled[data-aether-theme="aether"]:not(#ae-glass) #aether-workspace .ae-hero [data-ae-liquid]:is(.ae-hero-actions>*,.ae-dl-global){background:radial-gradient(120% 120% at 30% -20%,rgba(255,255,255,.18),transparent 60%) padding-box,linear-gradient(165deg,rgba(40,62,58,.18),rgba(8,16,16,.12)) padding-box,linear-gradient(150deg,rgba(255,255,255,.6),rgba(255,255,255,.1) 30%,rgba(157,248,214,.32)) border-box!important}

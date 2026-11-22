@@ -62,18 +62,32 @@
     return key;
   }
 
+  /* Large panels keep the static glass: a lens over a whole panel costs a full-panel filter pass
+     on every background frame, which is too much on machines that render without a GPU. */
   function fit(el) {
     const w = Math.round(el.offsetWidth / 4) * 4, h = Math.round(el.offsetHeight / 4) * 4;
-    if (w < 24 || h < 24) return;
+    if (w < 24 || h < 24 || w * h > 160000) { if (el.dataset.aeLiquid) { delete el.dataset.aeLiquid; delete el.dataset.aeLiquidSize; } return; }
     const r = Math.round(parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0);
     const key = filterFor(w, h, r);
     if (el.dataset.aeLiquid !== key) el.dataset.aeLiquid = key;
-    el.dataset.aeLiquidSize = w * h > 160000 ? 'large' : 'small';
   }
 
+  function track(el) { if (!sizes.has(el)) { sizes.add(el); resize.observe(el); } }
+  /* Only nodes that were added are examined, never the whole page, so unrelated page widgets
+     (clocks, counters, Sakai's own updates) cost nothing. */
+  let pending = [];
   function scan() {
     timer = 0; if (!running) return;
-    for (const el of document.querySelectorAll(SELECTOR)) if (!sizes.has(el)) { sizes.add(el); resize.observe(el); }
+    const nodes = pending; pending = [];
+    for (const node of nodes) {
+      if (!node.isConnected) continue;
+      if (node.matches(SELECTOR)) track(node);
+      if (node.firstElementChild) for (const el of node.querySelectorAll(SELECTOR)) track(el);
+    }
+  }
+  function added(records) {
+    for (const r of records) for (const n of r.addedNodes) if (n.nodeType === 1 && n !== svg && n !== sheet) pending.push(n);
+    if (pending.length && !timer) timer = setTimeout(scan, 160);
   }
 
   function start() {
@@ -83,15 +97,15 @@
     svg.append(document.createElementNS(NS, 'defs')); document.body.append(svg);
     sheet = document.createElement('style'); sheet.id = 'aether-liquid-glass-maps'; document.head.append(sheet);
     resize = new ResizeObserver(entries => { for (const e of entries) if (e.target.isConnected) fit(e.target); });
-    watch = new MutationObserver(() => { if (!timer) timer = setTimeout(scan, 160); });
+    watch = new MutationObserver(added);
     watch.observe(document.body, { childList: true, subtree: true });
-    scan();
+    for (const el of document.querySelectorAll(SELECTOR)) track(el);
   }
 
   function stop() {
-    if (!running) return; running = false; clearTimeout(timer); timer = 0;
+    if (!running) return; running = false; clearTimeout(timer); timer = 0; pending = [];
     resize.disconnect(); watch.disconnect();
-    for (const el of document.querySelectorAll('[data-ae-liquid]')) { delete el.dataset.aeLiquid; delete el.dataset.aeLiquidSize; }
+    for (const el of document.querySelectorAll('[data-ae-liquid]')) delete el.dataset.aeLiquid;
     svg.remove(); sheet.remove(); svg = sheet = resize = watch = null; maps.clear(); sizes = new WeakSet();
   }
 
