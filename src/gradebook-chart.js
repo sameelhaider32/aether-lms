@@ -11,7 +11,7 @@
   const context = 'html.ae-academic-surface:has([class*="Mrphs-sakai-gradebook"],#gradeSummaryTable)';
   const surface = '.wicket-modal:has(canvas) .w_content_1:has(canvas),.gb-modal-dialog:has(> .gb-modal-content > canvas)';
   const originals = new WeakMap(), modes = new WeakMap();
-  const monochrome = () => ["monochrome","minimal"].includes(host.dataset.aetherTheme);
+  const monochrome = () => ["monochrome","minimal","minimal-dark"].includes(host.dataset.aetherTheme);
   let library = null, queued = false, disposed = false;
   const active = chart => host.classList.contains('aether-enabled') &&
     document.documentElement.matches(context) && chart.canvas?.isConnected && chart.canvas.closest(surface);

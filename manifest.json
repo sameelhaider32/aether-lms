@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Aether LMS \u2014 The Academic Interface",
+  "name": "Aether LMS — The Academic Interface",
   "description": "An editorial academic workspace with local procedural graphics, tactile records and protected native Sakai workflows.",
   "version": "2.1.0",
   "minimum_chrome_version": "111",
@@ -17,22 +17,7 @@
       "matches": [
         "https://lms.lums.edu.pk/*"
       ],
-      "css": [
-        "src/theme.css",
-        "src/resource-polish.css",
-        "src/cards.css",
-        "src/workspace.css",
-        "src/preview.css",
-        "src/design.css",
-        "src/academic.css",
-        "src/download.css",
-        "src/mission-control.css",
-        "src/palette.css",
-        "src/spotlight.css",
-        "src/spotlight-content.css",
-        "src/minimal.css",
-        "src/minimal.css"
-      ],
+      "css": [],
       "js": [
         "src/prepaint.js",
         "src/theme-settings.js",
@@ -51,7 +36,6 @@
         "src/spotlight-content-ui.js",
         "src/spotlight-grades.js",
         "src/spotlight.js",
-        "src/minimal.js",
         "src/minimal.js",
         "src/content.js"
       ],
@@ -82,15 +66,19 @@
       "css": [
         "src/fonts.css",
         "src/resource-frame.css",
+        "src/theme.css",
         "src/resource-polish.css",
         "src/cards.css",
+        "src/workspace.css",
         "src/preview.css",
         "src/design.css",
         "src/academic.css",
         "src/download.css",
+        "src/mission-control.css",
         "src/palette.css",
+        "src/spotlight.css",
+        "src/spotlight-content.css",
         "src/system.css",
-        "src/minimal.css",
         "src/minimal.css"
       ],
       "run_at": "document_start",
@@ -139,7 +127,6 @@
         "src/palette.css",
         "preview/content.html",
         "preview/content-extract.js",
-        "src/minimal.css",
         "src/minimal.css"
       ],
       "matches": [

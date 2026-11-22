@@ -5,7 +5,7 @@
  const root=document.documentElement,D=globalThis.AetherAcademicData;
  let ctx=null,nav=null,aside=null,section=null,drawer=false,opener=null,frame=0,selection='Dashboard',navSignature='',nativeState=[],toolsExpanded=false,toolWidths=null,moreWidth=0,fitFrame=0;
  let month=new Date(),day=new Date().getDate();month.setDate(1);
- const active=()=>root.classList.contains('aether-enabled')&&root.dataset.aetherTheme==='minimal'&&!!ctx;
+ const active=()=>root.classList.contains('aether-enabled')&&/^minimal/.test(root.dataset.aetherTheme)&&!!ctx;
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  const button=(text,fn)=>{const b=el('button','am-button',text);b.type='button';b.addEventListener('click',fn);return b;};
  function anchor(text,href,original){const a=el('a','',text),url=D?.url(href);if(!url)return el('span','am-note',text+' · unavailable');a.href=url;if(original)a.addEventListener('click',e=>{if(!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!e.altKey&&e.button===0){const links=[...document.querySelectorAll('#toolMenu .is-current-site .site-page-list a[href]')],current=links.find(n=>n.href===url&&D.clean(n.textContent)===text)||links.find(n=>n.href===url);if(current){e.preventDefault();current.click();}}});return a;}

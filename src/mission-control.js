@@ -142,7 +142,7 @@
   for(const [node,top]of scrolls)if(node.scrollTop!==top)node.scrollTop=top;
   clearTimeout(clock);if(active&&enabled()&&view.isConnected)clock=setTimeout(()=>{render();window.dispatchEvent(new Event('aether-academic-clock'));},60000);
  }
- function sync(){const next=enabled();if(!next){active=false;clear();render();return;}if(!active){active=true;if(document.documentElement.dataset.aetherTheme==='minimal')startupFrame=requestAnimationFrame(()=>{startupFrame=0;setTimeout(()=>refresh(),0);});else setTimeout(()=>refresh(),0);}}
+ function sync(){const next=enabled();if(!next){active=false;clear();render();return;}if(!active){active=true;if(/^minimal/.test(document.documentElement.dataset.aetherTheme))startupFrame=requestAnimationFrame(()=>{startupFrame=0;setTimeout(()=>refresh(),0);});else setTimeout(()=>refresh(),0);}}
  function mount(context){ctx=context;if(!context?.home){active=false;clear();return null;}if(!view)view=build();sync();if(active&&account&&data.checkedAt){const local=globalThis.AetherAcademicSources.native(ctx.main,{id:'',title:'Home summary'}).map(r=>({...r,pageLocal:true}));data.records=D.unique([...data.records.filter(r=>!r.pageLocal),...local]);}render();return view;}
  window.addEventListener('aether-settings-change',sync);
  document.addEventListener('aether-session-change',()=>{const resume=active&&enabled()&&!!controller;clear();render();if(resume)refresh(true);});

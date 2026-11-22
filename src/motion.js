@@ -6,7 +6,7 @@
   try { if(top.location.origin!=='https://lms.lums.edu.pk'||!/^\/+(?:portal(?:\/|$)|$)/.test(top.location.pathname))return;host=top.document.documentElement; } catch { return; }
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),coarse=matchMedia('(pointer: coarse)');
   const subscribers=new Map();let nextId=0,raf=0,disposed=false;
-  const moving=()=>host.classList.contains('aether-enabled')&&host.dataset.aetherTheme!=='minimal'&&!host.classList.contains('aether-reduced-motion')&&!reduced.matches;
+  const moving=()=>host.classList.contains('aether-enabled')&&!/^minimal/.test(host.dataset.aetherTheme)&&!host.classList.contains('aether-reduced-motion')&&!reduced.matches;
   function tick(now){
     raf=0;if(disposed||document.hidden)return;
     for(const [id,item] of [...subscribers]){

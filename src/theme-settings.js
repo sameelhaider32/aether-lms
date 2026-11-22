@@ -3,7 +3,7 @@
   'use strict';
   if (globalThis.AetherTheme) return;
   const key = 'aether:v16:theme', root = document.documentElement;
-  const normalize = value => ['monochrome','minimal'].includes(value) ? value : 'aether';
+  const normalize = value => ['monochrome','minimal','minimal-dark'].includes(value) ? value : 'aether';
   const preview = location.protocol === 'chrome-extension:' && /\/preview\/(pdf|office)\.html$/.test(location.pathname);
   if (preview) root.classList.add('ae-preview-theme');
   let host;

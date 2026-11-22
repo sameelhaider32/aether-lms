@@ -134,12 +134,12 @@
     if(!header.querySelector('#aether-theme-control')){
       const control=make('label','');control.id='aether-theme-control';
       const name=make('span','','THEME'),select=make('select','');select.id='aether-theme-select';select.setAttribute('aria-label','Aether theme');
-      for(const [value,title] of [['aether','Aether Original'],['monochrome','Monochrome'],['minimal','Aether Minimal']]){const option=make('option','',title);option.value=value;select.append(option);}
+      for(const [value,title] of [['aether','Aether Original'],['monochrome','Monochrome'],['minimal','Aether Minimal'],['minimal-dark','Aether Minimal Dark']]){const option=make('option','',title);option.value=value;select.append(option);}
       select.value=globalThis.AetherTheme?.get()||'aether';
       select.addEventListener('change',()=>globalThis.AetherTheme?.set(select.value));
       control.append(name,select);native.after(control);
     }}
-  window.addEventListener('aether-theme-change',()=>{const next=doc.dataset.aetherTheme;if(next!==presentationTheme){if(next==='minimal'||presentationTheme==='minimal'){heroSignature='';requestRefresh(true);}presentationTheme=next;}const select=document.querySelector('#aether-theme-select');if(select)select.value=globalThis.AetherTheme?.get()||'aether';});
+  window.addEventListener('aether-theme-change',()=>{const next=doc.dataset.aetherTheme;if(next!==presentationTheme){if(/^minimal/.test(next)!==/^minimal/.test(presentationTheme)){heroSignature='';requestRefresh(true);}presentationTheme=next;}const select=document.querySelector('#aether-theme-select');if(select)select.value=globalThis.AetherTheme?.get()||'aether';});
   function createFlare(parent,x,y,index){const n=make("span","ae-sparkle");n.style.left=x+"%";n.style.top=y+"%";n.style.setProperty("--n",String(index));parent.append(n);return n;}
   function makeHero(ctx){
     // Keep the general campus slogan on Home only. Course pages use the real
@@ -244,7 +244,7 @@
     section.append(list);return section;}
 
   function mountAmbient(){
-    if(!enabled || doc.dataset.aetherTheme==='minimal' || !document.body || ambientRoot?.isConnected)return;
+    if(!enabled || /^minimal/.test(doc.dataset.aetherTheme) || !document.body || ambientRoot?.isConnected)return;
     ambientRoot=make("div","ae-global-ambient");
     ambientRoot.id="aether-global-ambient";
     ambientRoot.setAttribute("aria-hidden","true");
@@ -257,7 +257,7 @@
   function cancelEffectsStart(){cancelAnimationFrame(effectFrame);effectFrame=0;cancelIdle(effectIdle);effectIdle=0;effectPreview?.dispose();effectPreview=null;}
   function scheduleEffects(canvas){
     if(canvas)effectCanvas=canvas;
-    if(doc.dataset.aetherTheme==='minimal'){cancelEffectsStart();scene?.dispose();scene=null;disposeAmbient();return;}
+    if(/^minimal/.test(doc.dataset.aetherTheme)){cancelEffectsStart();scene?.dispose();scene=null;disposeAmbient();return;}
     if(!enabled||!effectCanvas?.isConnected)return;
     // Stars draw during parsing, independently of tool frames and page readiness.
     mountAmbient();

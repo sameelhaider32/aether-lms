@@ -94,6 +94,23 @@ const DARK='rgb(31, 34, 37)',LIGHT='rgb(250, 250, 250)';
   assert.equal(await columns(),1);assert.equal(await p.locator('.portal-header>.am-context').count(),0);
   await p.screenshot({path:path.join(out,'dashboard-1440.png')});
  });
+ await test('Minimal Dark: fourth selector entry, same layout, dark surfaces, persists over reload',async()=>{
+  await go(route('Overview'));assert.deepEqual(await p.locator('#aether-theme-select option').evaluateAll(o=>o.map(n=>n.value)),['aether','monochrome','minimal','minimal-dark']);
+  await choose('minimal');await p.locator('.portal-header>.am-context').waitFor();await fitted();
+  const light={header:await box('.portal-header'),row:await box('.am-toolrow'),hero:await box('.ae-hero'),panel:await box('main#content .Mrphs-container')};
+  assert.equal(await p.locator('main#content .Mrphs-container').first().evaluate(n=>getComputedStyle(n).backgroundColor),LIGHT);
+  await choose('minimal-dark');await p.waitForFunction(()=>getComputedStyle(document.querySelector('main#content .Mrphs-container')).backgroundColor==='rgb(0, 0, 0)');
+  assert.equal(await p.locator('#aether-minimal-nav').count(),1);assert.equal(await columns(),1);
+  const dark={header:await box('.portal-header'),row:await box('.am-toolrow'),hero:await box('.ae-hero'),panel:await box('main#content .Mrphs-container')};
+  for(const k of Object.keys(light))for(const d of ['x','y','w','h'])assert(Math.abs(light[k][d]-dark[k][d])<1,k+'.'+d+' is identical in both Minimal variants');
+  const c=await p.evaluate(()=>{const g=(s,p)=>getComputedStyle(document.querySelector(s))[p];const f=document.querySelector('main#content iframe').contentDocument;return {body:g('body','backgroundColor'),header:g('.portal-header','backgroundColor'),ink:g('.am-course-title','color'),current:g('.am-context [aria-current=page]','backgroundColor'),currentInk:g('.am-context [aria-current=page]','color'),hero:g('.ae-hero','backgroundColor'),frame:getComputedStyle(f.body).backgroundColor,frameInk:getComputedStyle(f.body).color,scheme:g('html','colorScheme')};});
+  assert.deepEqual(c,{body:'rgb(0, 0, 0)',header:'rgb(0, 0, 0)',ink:'rgb(232, 232, 232)',current:'rgb(232, 232, 232)',currentInk:'rgb(11, 11, 11)',hero:'rgb(0, 0, 0)',frame:'rgb(0, 0, 0)',frameInk:'rgb(228, 228, 228)',scheme:'dark'});
+  await p.screenshot({path:path.join(out,'dark-course-1440.png')});
+  await p.reload({waitUntil:'domcontentloaded'});await p.locator('#aether-minimal-nav').waitFor();assert.equal(await p.locator('#aether-theme-select').inputValue(),'minimal-dark');assert.equal(await p.locator('html').getAttribute('data-aether-theme'),'minimal-dark');
+  await go(home);await p.locator('#aether-minimal-planning').waitFor();await p.waitForFunction(()=>document.querySelector('#aether-mission-control')?.dataset.loading==='false');await p.screenshot({path:path.join(out,'dark-dashboard-1440.png'),fullPage:false});
+  await p.setViewportSize({width:390,height:844});assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await p.screenshot({path:path.join(out,'dark-dashboard-390.png')});await p.setViewportSize({width:1440,height:900});
+  await choose('minimal');await p.waitForFunction(()=>getComputedStyle(document.querySelector('.ae-hero')).backgroundColor==='rgb(250, 250, 250)');
+ });
  for(const theme of ['aether','monochrome']){
   await test(`${theme}: native grid, header and frames are untouched by Minimal rules`,async()=>{
    await go(route('Overview'));await choose(theme);await p.locator('#aether-minimal-nav').waitFor({state:'detached'});
