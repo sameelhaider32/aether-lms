@@ -118,7 +118,7 @@ const DARK='rgb(31, 34, 37)',LIGHT='rgb(250, 250, 250)';
   const header=await box('.portal-header');for(const s of ['#aether-minimal-nav','#aether-native-toggle','#aether-theme-control','#aether-spotlight-trigger','.portal-header>.am-context']){const b=await box(s);assert(b.y>=header.y-1&&b.bottom<=header.bottom+1,s+' stays inside the header');}
   assert.notEqual(await p.locator('.portal-header').evaluate(n=>getComputedStyle(n).backgroundColor),LIGHT);
   await p.locator('[data-am-tools]').click();assert(await p.locator('#toolMenu').isVisible());await p.keyboard.press('Escape');assert(!(await p.locator('#toolMenu').isVisible()));
-  assert.equal((await frameState()).bg,'rgb(14, 21, 21)','Original frames use the Aether panel surface');
+  assert.equal((await frameState()).bg,'rgba(0, 0, 0, 0)','Original frames are transparent so the glass panel shows through');
   assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  });
  await test('monochrome: native grid, header and frames are untouched by Minimal rules',async()=>{

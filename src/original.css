@@ -19,7 +19,11 @@ html.ae-frame-enabled[data-aether-theme="aether"]{
  --sakai-background-color-5:#273a37;--sakai-background-color-6:#2e4440;--sakai-background-color-7:#354e4a;
  --button-background:#16211f;--button-border-color:#2c4640;--button-text-color:#d7f5ea;--sakai-border-color:#26393a;
 }
-html.ae-frame-enabled[data-aether-theme="aether"] body{background:#0e1515!important}
+/* Tool frames sit inside glass panels, so their page is transparent and the panel shows through. */
+html.ae-frame-enabled[data-aether-theme="aether"],html.ae-frame-enabled[data-aether-theme="aether"] body{background:transparent!important}
+/* A frame page that declares a light scheme inside a dark page gets an opaque white canvas from
+   the browser; matching the scheme keeps it transparent. */
+html.ae-frame-enabled[data-aether-theme="aether"]{color-scheme:dark}
 html.ae-frame-enabled[data-aether-theme="aether"] :is(input[type=button],input[type=submit],button.btn,a.btn,.btn-group>.btn){background:#16211f!important;border:1px solid #2c4640!important;color:#d7f5ea!important;border-radius:6px!important;box-shadow:none!important;transition:border-color .15s,background-color .15s}
 html.ae-frame-enabled[data-aether-theme="aether"] :is(input[type=button],input[type=submit],button.btn,a.btn):hover{border-color:#5fd8b4!important;background:#1b2b28!important}
 
@@ -233,6 +237,19 @@ html.aether-enabled[data-aether-theme="aether"] main#content .ae-record-card.ae-
 html.aether-enabled[data-aether-theme="aether"] main#content div.Mrphs-container>:is(.Mrphs-toolBody,nav.Mrphs-toolTitleNav){background:transparent!important}
 /* Embedded tool frames (calendar, announcements) sit in the glass panel as a rounded inset well. */
 html.aether-enabled[data-aether-theme="aether"] main#content div.Mrphs-container iframe.portletMainIframe{border-radius:14px!important;border:1px solid rgba(157,248,214,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);overflow:hidden}
+/* Inside tool frames: cards reuse the nested glass, list wrappers and header rows lose their hard
+   boxes and lines, and calendar days become separate rounded tiles. :not(#ae-glass) only lifts
+   specificity above the shared card rules, whose :is() list carries an id. */
+html.ae-frame-enabled[data-aether-theme="aether"]:not(#ae-glass) .ae-record-card.ae-record-card{--ae-glass-a:rgba(255,255,255,.03);--ae-glass-b:rgba(255,255,255,.006);--ae-glass-c:rgba(157,248,214,.028);--ae-glass-rim:linear-gradient(150deg,rgba(255,255,255,.30),rgba(255,255,255,.08) 20%,rgba(157,248,214,.03) 50%,rgba(157,248,214,.16));--ae-glass-spec:radial-gradient(360px 180px at var(--ae-hover-x,10%) var(--ae-hover-y,-10%),rgba(255,255,255,.06),transparent 70%);border:1px solid transparent!important;border-radius:14px!important;background:var(--ae-glass-spec) padding-box,linear-gradient(165deg,var(--ae-glass-a),var(--ae-glass-b) 46%,var(--ae-glass-c)) padding-box,var(--ae-glass-rim) border-box!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 24px -16px rgba(0,0,0,.8)!important}
+html.ae-frame-enabled[data-aether-theme="aether"]:not(#ae-glass) .ae-record-card.ae-record-card:is(:hover,:focus-within){--ae-glass-rim:linear-gradient(150deg,rgba(255,255,255,.78),rgba(157,248,214,.30) 20%,rgba(157,248,214,.08) 48%,rgba(255,255,255,.04) 66%,rgba(157,248,214,.52));--ae-glass-spec:radial-gradient(360px 200px at var(--ae-hover-x,10%) var(--ae-hover-y,-10%),rgba(255,255,255,.11),rgba(157,248,214,.03) 50%,transparent 74%)}
+html.ae-frame-enabled[data-aether-theme="aether"]:not(#ae-glass) .ae-record-card.ae-record-card[data-ae-assignment-state]{--ae-glass-a:var(--ae-surface-a);--ae-glass-b:var(--ae-surface-b);--ae-glass-c:var(--ae-surface-b);--ae-glass-rim:linear-gradient(150deg,rgba(255,255,255,.34),color-mix(in srgb,var(--ae-status) 22%,transparent) 30%,color-mix(in srgb,var(--ae-status) 10%,transparent) 60%,color-mix(in srgb,var(--ae-status) 55%,transparent))}
+html.ae-frame-enabled[data-aether-theme="aether"]:not(#ae-glass) div.table:has(>table.ae-card-table){background:transparent!important;border:0!important;box-shadow:none!important}
+html.ae-frame-enabled[data-aether-theme="aether"]:not(#ae-glass) :is(table.ae-card-table,table.ae-card-table>tbody){border:0!important;background:transparent!important}
+html.ae-frame-enabled[data-aether-theme="aether"]:not(#ae-glass) .ae-card-header-row{border:0!important;background:transparent!important}
+html.ae-frame-enabled[data-aether-theme="aether"]:not(#ae-glass) .ae-card-header-row>th{border:1px solid rgba(157,248,214,.14)!important;border-radius:10px!important;background:rgba(255,255,255,.03)!important}
+html.ae-frame-enabled[data-aether-theme="aether"] :is(.alert,[class*="sak-banner-"]){border-radius:12px!important}
+html.ae-frame-enabled[data-aether-theme="aether"] table.mainCalendar{border-collapse:separate!important;border-spacing:4px!important;border:0!important}
+html.ae-frame-enabled[data-aether-theme="aether"] table.mainCalendar td{border:1px solid rgba(157,248,214,.08)!important;border-radius:10px!important}
 /* Hero buttons become glass pills over the galaxy; the primary keeps its mint fill. */
 html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero :is(.ae-hero-actions>:not(:first-child),.ae-dl-global){border:1px solid transparent!important;background:radial-gradient(120% 120% at 30% -20%,rgba(255,255,255,.16),transparent 60%) padding-box,linear-gradient(165deg,rgba(40,62,58,.42),rgba(8,16,16,.38)) padding-box,linear-gradient(150deg,rgba(255,255,255,.55),rgba(255,255,255,.1) 30%,rgba(157,248,214,.3)) border-box!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 10px 24px -12px rgba(0,0,0,.8)!important;-webkit-backdrop-filter:blur(14px) saturate(180%);backdrop-filter:blur(14px) saturate(180%)}
 html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero :is(.ae-hero-actions>:not(:first-child),.ae-dl-global):hover{background:radial-gradient(120% 120% at 30% -20%,rgba(255,255,255,.24),transparent 60%) padding-box,linear-gradient(165deg,rgba(52,82,76,.5),rgba(10,22,21,.44)) padding-box,linear-gradient(150deg,rgba(255,255,255,.8),rgba(157,248,214,.3) 30%,rgba(157,248,214,.55)) border-box!important}
