@@ -8,7 +8,8 @@ module.exports=async({page,context,go,assert})=>{
  try{
   await evaluate('globalThis.fixtureSubscribe=AetherMotion.subscribe;AetherMotion.subscribe=function(fn,interval){if(interval>0){globalThis.fixtureAmbientTick=fn;return ()=>{globalThis.fixtureAmbientTick=null}}return fixtureSubscribe(fn,interval)}');
   await button.click();assert((await evaluate('typeof fixtureAmbientTick==="function"')).result.value,'ambient callback captured');
-  const settle=()=>evaluate('for(let i=0;i<60;i++)fixtureAmbientTick(0,0)');
+  // Real frames carry increasing timestamps; the field paces itself from them.
+  let clock=0;const settle=()=>{const from=clock;clock+=60*16;return evaluate('for(let i=0;i<60;i++)fixtureAmbientTick('+from+'+i*16,16)');};
   await page.mouse.move(1438,998);await settle();
   const canvas=page.locator('.ae-global-canvas'),point=await canvas.evaluate(c=>{const {data}=c.getContext('2d').getImageData(0,0,c.width,c.height);let best={x:100,y:100,alpha:0};for(let y=60;y<400;y++)for(let x=50;x<450;x++){const i=(y*c.width+x)*4;if(data[i+3]>best.alpha)best={x,y,alpha:data[i+3]};}return best;});
   const brightness=()=>canvas.evaluate((c,p)=>{const {data}=c.getContext('2d').getImageData(Math.max(0,p.x-45),Math.max(0,p.y-45),90,90);let total=0;for(let i=3;i<data.length;i+=4)total+=data[i];return total;},point),before=await brightness();

@@ -7,6 +7,8 @@
   if (!/^\/+(?:portal(?:\/|$)|$)/.test(location.pathname)) return;
   const doc = document.documentElement;
   let presentationTheme=doc.dataset.aetherTheme;
+  // One document-level counter tells every hero its cached box is stale; no listener per hero instance.
+  let layoutEpoch=0;const staleLayout=()=>{layoutEpoch++;};addEventListener("scroll",staleLayout,{capture:true,passive:true});addEventListener("resize",staleLayout,{passive:true});
   if (doc.dataset.aetherV08 === "installed") return;
   doc.dataset.aetherV08 = "installed";
 
@@ -151,16 +153,31 @@
     const layer=make("div","ae-light-layer");layer.setAttribute("aria-hidden","true");hero.append(layer);
     const flares=[[62,23],[78,18],[88,37],[69,77],[93,66],[57,57],[84,85]];
     const sparks=flares.map((p,i)=>createFlare(layer,p[0],p[1],i));
-    hero.addEventListener("pointermove",e=>{
-      const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/Math.max(1,r.width),y=(e.clientY-r.top)/Math.max(1,r.height);
-      hero.style.setProperty("--px",(x*100).toFixed(1)+"%");hero.style.setProperty("--py",(y*100).toFixed(1)+"%");
+    // One write per frame from a box measured only after scroll or resize: reading layout on every
+    // pointermove right after writing these properties forced a style pass per event.
+    let heroBox=null,heroEpoch=-1,heroPoint=null,heroFrame=0,heroLast=["",""];const sparkLast=flares.map(()=>["",""]),sparkNow=flares.map(()=>[.18,1]);
+    hero.addEventListener("pointermove",e=>{heroPoint=[e.clientX,e.clientY];hero.classList.add("ae-hero-tracking");if(!heroFrame)heroFrame=requestAnimationFrame(paintHero);},{passive:true});
+    function paintHero(){
+      heroFrame=0;if(!heroPoint||!hero.isConnected)return;
+      if(heroEpoch!==layoutEpoch){heroBox=null;heroEpoch=layoutEpoch;}const r=heroBox||(heroBox=hero.getBoundingClientRect()),x=(heroPoint[0]-r.left)/Math.max(1,r.width),y=(heroPoint[1]-r.top)/Math.max(1,r.height);
+      // Unchanged values are not rewritten: every write restarts sparkle transitions and restyles the hero.
+      const px=(Math.round(x*200)/2).toFixed(1)+"%",py=(Math.round(y*200)/2).toFixed(1)+"%";
+      if(px!==heroLast[0])hero.style.setProperty("--px",heroLast[0]=px);if(py!==heroLast[1])hero.style.setProperty("--py",heroLast[1]=py);
+      // Sparkles ease here (CSS transitions are paused while tracking, see original.css): restarting a
+      // transition on every frame cost a style pass per sparkle per frame.
+      let settling=false;
       for(let i=0;i<sparks.length;i++){
-        const q=flares[i],dist=Math.hypot(q[0]/100-x,q[1]/100-y);
-        sparks[i].style.setProperty("--lit",String(Math.max(.18,1.7-Math.max(0,dist-.04)*5)));
-        sparks[i].style.setProperty("--zoom",String(1+Math.max(0,.26-dist)*8));
+        const q=flares[i],dist=Math.hypot(q[0]/100-x,q[1]/100-y),now=sparkNow[i];
+        const goalLit=Math.max(.18,1.7-Math.max(0,dist-.04)*5),goalZoom=1+Math.max(0,.26-dist)*8;
+        now[0]+=(goalLit-now[0])*.28;now[1]+=(goalZoom-now[1])*.28;
+        if(Math.abs(goalLit-now[0])+Math.abs(goalZoom-now[1])>.01)settling=true;
+        const lit=now[0].toFixed(2),zoom=now[1].toFixed(2),last=sparkLast[i];
+        if(lit!==last[0])sparks[i].style.setProperty("--lit",last[0]=lit);
+        if(zoom!==last[1])sparks[i].style.setProperty("--zoom",last[1]=zoom);
       }
-    },{passive:true});
-    hero.addEventListener("pointerleave",()=>sparks.forEach(s=>{s.style.removeProperty("--lit");s.style.removeProperty("--zoom");}));
+      if(settling)heroFrame=requestAnimationFrame(paintHero);
+    }
+    hero.addEventListener("pointerleave",()=>{cancelAnimationFrame(heroFrame);heroFrame=0;heroPoint=null;hero.classList.remove("ae-hero-tracking");sparkLast.forEach(l=>{l[0]=l[1]="";});sparkNow.forEach(n=>{n[0]=.18;n[1]=1;});sparks.forEach(s=>{s.style.removeProperty("--lit");s.style.removeProperty("--zoom");});});
     const copy=make("div","ae-hero-copy");
     if(ctx.home)copy.append(make('div','ae-hero-brand','AETHER / 2.1'));
     const eyebrow=make("div","ae-hero-eyebrow");eyebrow.append(make("span","ae-status-dot"),document.createTextNode(course?`LUMS / ${ctx.courseCode||"COURSE"} / ${(ctx.toolTitle||"OVERVIEW").toUpperCase()}`:`LUMS / ACADEMIC WORKSPACE / ${new Date().getFullYear()}`));copy.append(eyebrow);

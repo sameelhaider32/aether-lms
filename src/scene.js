@@ -210,22 +210,24 @@
       function drawStill(){if(disposed||gl.isContextLost()||!resize())return;gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uniforms.viewport,canvas.width,canvas.height);gl.uniform2f(uniforms.pointer,pointer.x,pointer.y);gl.uniform1f(uniforms.time,elapsed);gl.uniform1f(uniforms.hover,0);drawPoints();if(!canvas.dataset.aeRendered){canvas.dataset.aeRendered="webgl";opts.onReady?.();}}
       function schedule(){const next=motion&&visible&&!document.hidden&&!disposed&&!gl.isContextLost();if(next&&!active){active=true;last=0;raf=requestAnimationFrame(render);} else if(!next&&active){active=false;cancelAnimationFrame(raf);raf=0;drawStill();}}
       const hero=canvas.closest(".ae-hero, .ae-global-ambient");
-      function onPointer(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=canvas.getBoundingClientRect();aim={x:Math.min(1,Math.max(0,(e.clientX-r.left)/Math.max(1,r.width))),y:Math.min(1,Math.max(0,(e.clientY-r.top)/Math.max(1,r.height)))};hoverTarget=1;if(!active){pointer={...aim};drawStill();}}
+      let box=null;const forgetBox=()=>{box=null;};
+      function onPointer(e){if(!motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=box||(box=canvas.getBoundingClientRect());aim={x:Math.min(1,Math.max(0,(e.clientX-r.left)/Math.max(1,r.width))),y:Math.min(1,Math.max(0,(e.clientY-r.top)/Math.max(1,r.height)))};hoverTarget=1;if(!active){pointer={...aim};drawStill();}}
       function leave(){hoverTarget=0;aim={x:.78,y:.54};}
       const onVisible=()=>schedule();
       let portable=null;
       const onContextLost=e=>{e.preventDefault();active=false;cancelAnimationFrame(raf);if(portable)return;const replacement=document.createElement('canvas');replacement.className=canvas.className;replacement.setAttribute('aria-hidden','true');canvas.after(replacement);canvas.style.visibility='hidden';const alt=create2DFallback(replacement,{motion});portable={setMotion:v=>alt.setMotion(v),dispose(){alt.dispose();replacement.remove();canvas.style.removeProperty('visibility');}};};
       canvas.addEventListener("webglcontextlost",onContextLost);
       hero?.addEventListener("pointermove",onPointer,{passive:true});hero?.addEventListener("pointerleave",leave,{passive:true});
+      addEventListener("scroll",forgetBox,{capture:true,passive:true});addEventListener("resize",forgetBox,{passive:true});
       document.addEventListener("visibilitychange",onVisible);
       io=typeof IntersectionObserver!=="undefined"?new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??true;schedule();},{threshold:.03}):null;
       io?.observe(canvas);
-      ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(entries=>{size=entries[0].contentRect;sizeDirty=true;if(!active)drawStill();}):null;
+      ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(entries=>{size=entries[0].contentRect;sizeDirty=true;box=null;if(!active)drawStill();}):null;
       ro?.observe(canvas);
       drawStill();schedule();
       return {
         setMotion(v){motion=Boolean(v);if(portable)portable.setMotion(v);else schedule();},
-        dispose(){if(disposed)return;disposed=true;active=false;cancelAnimationFrame(raf);portable?.dispose();ro?.disconnect();io?.disconnect();document.removeEventListener("visibilitychange",onVisible);hero?.removeEventListener("pointermove",onPointer);hero?.removeEventListener("pointerleave",leave);canvas.removeEventListener("webglcontextlost",onContextLost);gl.deleteBuffer(buffer);gl.deleteProgram(program);gl.getExtension("WEBGL_lose_context")?.loseContext();}
+        dispose(){if(disposed)return;disposed=true;active=false;cancelAnimationFrame(raf);portable?.dispose();ro?.disconnect();io?.disconnect();document.removeEventListener("visibilitychange",onVisible);hero?.removeEventListener("pointermove",onPointer);hero?.removeEventListener("pointerleave",leave);removeEventListener("scroll",forgetBox,{capture:true});removeEventListener("resize",forgetBox);canvas.removeEventListener("webglcontextlost",onContextLost);gl.deleteBuffer(buffer);gl.deleteProgram(program);gl.getExtension("WEBGL_lose_context")?.loseContext();}
       };
     } catch(err) {
       console.warn("Aether: using portable canvas particle scene",err.message);

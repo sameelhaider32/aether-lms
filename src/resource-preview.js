@@ -197,7 +197,10 @@
    const wrap=document.createElement('span');wrap.setAttribute('data-ae-preview-control','');wrap.className='ae-preview-control';
    const button=document.createElement('button');button.type='button';button.setAttribute('data-ae-preview-open','');button.className='ae-preview-trigger';button.textContent='Preview';button.setAttribute('aria-label','Preview '+info(card).title);wrap.append(button);cell.append(wrap);fileBadge(card,wrap);
   }
-  for(const a of document.querySelectorAll('main#content a[href],.Mrphs-toolBody a[href],.portletBody a[href],.attachList a[href],#addSubmissionForm a[href]')){
+  // Links inside resource cards already have their own control; excluding them in the selector avoids a
+  // closest() walk and a describe() per link on large folders.
+  const notCard=':not(.ae-record-card[data-ae-kind="resource"] a)';
+  for(const a of document.querySelectorAll(['main#content a[href]','.Mrphs-toolBody a[href]','.portletBody a[href]','.attachList a[href]','#addSubmissionForm a[href]'].map(s=>s+notCard).join(','))){
    const data=attachmentInfo(a);if(!data)continue;if(attachmentControls.has(a)){fileBadge(a,attachmentControls.get(a));continue;}
    a.setAttribute('data-ae-attachment','');const wrap=document.createElement('span');wrap.setAttribute('data-ae-preview-control','');wrap.className='ae-preview-control ae-attachment-preview-control';
    const button=document.createElement('button');button.type='button';button.setAttribute('data-ae-preview-open','');button.className='ae-preview-trigger';button.textContent='Preview';button.setAttribute('aria-label','Preview '+data.title);wrap.append(button);attachmentControls.set(a,wrap);attachmentOwners.set(wrap,a);a.after(wrap);fileBadge(a,wrap);

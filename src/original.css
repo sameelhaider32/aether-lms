@@ -80,3 +80,5 @@ html.aether-enabled[data-aether-theme="aether"] #aether-mission-control .mc-grid
 html.ae-frame-enabled[data-aether-theme="aether"] .calOtherDayWithActivity{background:rgba(20,60,52,.45)!important;color:#8fbfb0!important}
 html.ae-frame-enabled[data-aether-theme="aether"] .calDayWithActivity{background:#143c34!important;color:#bff7e3!important}
 html.ae-frame-enabled[data-aether-theme="aether"] .calToday{background:rgba(157,248,214,.16)!important;color:#eafff6!important;box-shadow:inset 0 0 0 1px #9df8d6!important}
+/* While the pointer is over the hero, sparkles are eased in script; their CSS transitions return on leave. */
+html.aether-enabled[data-aether-theme="aether"] #aether-workspace .ae-hero-tracking .ae-sparkle{transition:none!important}

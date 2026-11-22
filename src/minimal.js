@@ -5,6 +5,8 @@
  const root=document.documentElement,D=globalThis.AetherAcademicData;
  let ctx=null,nav=null,aside=null,section=null,drawer=false,opener=null,frame=0,selection='Dashboard',navSignature='',nativeState=[],toolsExpanded=false,toolWidths=null,moreWidth=0,fitFrame=0;
  let month=new Date(),day=new Date().getDate();month.setDate(1);
+ // Intl formatters are costly to build; one each instead of one per calendar day and agenda row.
+ const fmt={full:new Intl.DateTimeFormat(undefined,{dateStyle:'full'}),month:new Intl.DateTimeFormat(undefined,{month:'long',year:'numeric'}),short:new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}),at:new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})};
  const active=()=>root.classList.contains('aether-enabled')&&/^minimal/.test(root.dataset.aetherTheme)&&!!ctx;
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  const button=(text,fn)=>{const b=el('button','am-button',text);b.type='button';b.addEventListener('click',fn);return b;};
@@ -35,24 +37,24 @@
  }
  function calendar(){
   if(!aside)return;const focused=aside.contains(document.activeElement)?document.activeElement:null,focusKey=focused?.dataset.amKey,panelIndex=focused?[...aside.children].indexOf(focused.closest('.am-panel')):-1;const data=snapshot(),records=data.records.filter(r=>Number.isFinite(r.time)&&r.type!=='announcement'),box=el('section','am-panel'),head=el('div','am-calendar-head');
-  head.append(button('←',()=>{month.setMonth(month.getMonth()-1);day=1;paint();}),el('h2','',month.toLocaleDateString(undefined,{month:'long',year:'numeric'})),button('→',()=>{month.setMonth(month.getMonth()+1);day=1;paint();}));
+  head.append(button('←',()=>{month.setMonth(month.getMonth()-1);day=1;paint();}),el('h2','',fmt.month.format(month)),button('→',()=>{month.setMonth(month.getMonth()+1);day=1;paint();}));
   head.firstChild.dataset.amKey='previous-month';head.lastChild.dataset.amKey='next-month';head.firstChild.setAttribute('aria-label','Previous month');head.lastChild.setAttribute('aria-label','Next month');box.append(head);
   const grid=el('div','am-calendar');grid.setAttribute('aria-label','Academic calendar');
   for(const name of ['Su','Mo','Tu','We','Th','Fr','Sa'])grid.append(el('span','am-weekday',name));
   const buckets=new Map();for(const r of records){const d=new Date(r.time);if(d.getFullYear()===month.getFullYear()&&d.getMonth()===month.getMonth()){const n=d.getDate();if(!buckets.has(n))buckets.set(n,[]);buckets.get(n).push(r);}}
   const first=new Date(month.getFullYear(),month.getMonth(),1).getDay(),count=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
   for(let i=0;i<first;i++)grid.append(el('span'));
-  for(let n=1;n<=count;n++){const date=new Date(month.getFullYear(),month.getMonth(),n),end=new Date(month.getFullYear(),month.getMonth(),n+1),items=buckets.get(n)||[],b=button(String(n),()=>{day=n;paint();aside.querySelector(`[data-am-day="${n}"]`)?.focus();});b.dataset.amDay=n;b.dataset.amKey='day-'+n;b.setAttribute('aria-pressed',String(day===n));b.setAttribute('aria-label',date.toLocaleDateString(undefined,{dateStyle:'full'})+' · '+items.length+' observed items');if(items.length)b.classList.add('am-has-events');if(date.toDateString()===new Date().toDateString())b.setAttribute('aria-current','date');grid.append(b);}
+  for(let n=1;n<=count;n++){const date=new Date(month.getFullYear(),month.getMonth(),n),end=new Date(month.getFullYear(),month.getMonth(),n+1),items=buckets.get(n)||[],b=button(String(n),()=>{day=n;paint();aside.querySelector(`[data-am-day="${n}"]`)?.focus();});b.dataset.amDay=n;b.dataset.amKey='day-'+n;b.setAttribute('aria-pressed',String(day===n));b.setAttribute('aria-label',fmt.full.format(date)+' · '+items.length+' observed items');if(items.length)b.classList.add('am-has-events');if(date.toDateString()===new Date().toDateString())b.setAttribute('aria-current','date');grid.append(b);}
   box.append(grid,el('p','am-note',data.sources.some(s=>s.type==='Events'&&s.state==='partial')?'Observed calendar and deadlines · partial coverage':data.sources.some(s=>s.type==='Events')?'Calendar API unavailable · native summaries and observed deadlines only.':'Calendar coverage not yet verified. Check sources in Planner.'));
   const selected=new Date(month.getFullYear(),month.getMonth(),day),end=new Date(month.getFullYear(),month.getMonth(),day+1),items=buckets.get(day)||[];
-  box.append(el('h3','',selected.toLocaleDateString(undefined,{month:'short',day:'numeric'})));
+  box.append(el('h3','',fmt.short.format(selected)));
   for(const r of items.slice(0,8))box.append(record(r));if(!items.length)box.append(el('p','am-note','No observed items for this day.'));
   const next=el('section','am-panel');next.append(el('h2','','Next Up'),el('p','am-note','Read-only · observed deadlines and events'));
   const upcoming=records.filter(r=>r.time>=Date.now()&&(r.type!=='assignment'||D.attention(r))).sort((a,b)=>a.time-b.time).slice(0,5);
   for(const r of upcoming)next.append(record(r));if(!upcoming.length)next.append(el('p','am-note',data.checkedAt?'No upcoming items observed. Check Sources & coverage below.':'Sources not yet available. Open Mission Control below.'));
   next.append(anchor('Full planner & coverage','#aether-mission-control'));aside.replaceChildren(box,next);if(focusKey)aside.children[panelIndex]?.querySelector(`[data-am-key="${CSS.escape(focusKey)}"]`)?.focus({preventScroll:true});
  }
- function record(r){const a=anchor(r.title,r.url);a.classList.add('am-agenda-item');a.dataset.amKey=JSON.stringify([r.type,r.siteId,r.id]);a.append(el('small','',r.course+' · '+new Date(r.time).toLocaleString(undefined,{month:'short',day:'numeric',...(r.exact?{hour:'numeric',minute:'2-digit'}:{})})+' · '+D.state(r).label));return a;}
+ function record(r){const a=anchor(r.title,r.url);a.classList.add('am-agenda-item');a.dataset.amKey=JSON.stringify([r.type,r.siteId,r.id]);a.append(el('small','',r.course+' · '+(r.exact?fmt.at:fmt.short).format(new Date(r.time))+' · '+D.state(r).label));return a;}
  function paint(){frame=0;if(!active()){document.querySelectorAll('#aether-workspace .am-greeting,#aether-workspace .am-observed').forEach(n=>n.remove());close(false);delete root.dataset.amNavigation;document.querySelector('.portal-header>.am-context')?.remove();nav?.remove();nav=null;aside?.remove();aside=null;section?.remove();section=null;return;}
   const workspace=document.querySelector('#aether-workspace');
   if(!nav?.isConnected){navSignature='';nav=el('nav','am-nav');nav.id='aether-minimal-nav';nav.setAttribute('aria-label','Aether primary navigation');nav.append(el('strong','am-brand','Aether'));

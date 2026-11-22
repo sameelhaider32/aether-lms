@@ -8,7 +8,7 @@
   const ctx=canvas.getContext('2d',{alpha:true});if(!ctx)return {setMotion(){},dispose(){}};
   const engine=globalThis.AetherMotion,reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let stop=null,disposed=false,width=0,height=0,dpr=1,time=0,pointer={x:.5,y:.5},target={x:.5,y:.5},hover=0,hoverTarget=0;
-  let lastPaint=0,contourAge=Infinity,contourPointer={x:-1,y:-1},resizeFrame=0;
+  let lastPaint=0,contourAge=Infinity,contourPointer={x:-1,y:-1},resizeFrame=0,cost=1;
   const low=matchMedia('(pointer: coarse)').matches||navigator.connection?.saveData||(navigator.deviceMemory||8)<=2;
   let points=[];
   const sprite=(size,paint)=>{const c=document.createElement('canvas');c.width=c.height=size;const g=c.getContext('2d');if(g)paint(g,size);return c;};
@@ -37,9 +37,9 @@
    }g.stroke();
    contourAge=0;contourPointer={x:pointer.x,y:pointer.y};
   }
-  function draw(){if(disposed||!width)return;
+  function draw(deferField=false){if(disposed||!width)return;
    // The field drifts at .12 rad/s, so rebuilding it ~6 times a second is visually continuous.
-   if(contourAge>.16||Math.abs(contourPointer.x-pointer.x)+Math.abs(contourPointer.y-pointer.y)>.04)contours();
+   if(!deferField&&(contourAge>.16||Math.abs(contourPointer.x-pointer.x)+Math.abs(contourPointer.y-pointer.y)>.04))contours();
    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);
    if(layerCtx)ctx.drawImage(layer,0,0);
    ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -69,7 +69,9 @@
   function resize(){resizeFrame=0;width=innerWidth;height=innerHeight;rows=Math.max(8,Math.round(cols*height/Math.max(1,width)));values=new Float32Array((cols+1)*(rows+1));
    const count=Math.round(Math.max(low?60:140,Math.min(low?120:360,width*height/(low?7500:5200))));
    points=Array.from({length:count},(_,i)=>({x:(i*.61803398875+.13)%1,y:(i*.754877666+.27)%1,z:.2+(i%7)/9}));
-   dpr=Math.min(devicePixelRatio||1,low?1:1.25);canvas.width=layer.width=Math.round(width*dpr);canvas.height=layer.height=Math.round(height*dpr);contourAge=Infinity;draw();}
+   dpr=Math.min(devicePixelRatio||1,low?1:1.25);canvas.width=layer.width=Math.round(width*dpr);canvas.height=layer.height=Math.round(height*dpr);contourAge=Infinity;
+   // Stars paint immediately; the contour field (the costly part) follows on the next frame, outside page startup.
+   draw(true);requestAnimationFrame(()=>{if(!disposed&&contourAge===Infinity)draw();});}
   function queueResize(){if(!resizeFrame)resizeFrame=requestAnimationFrame(resize);}
   function schedule(){stop?.();stop=null;if(!motion||reduced.matches){hover=hoverTarget=0;pointer={...target};}contourAge=Infinity;draw();if(!motion||reduced.matches||document.hidden||disposed)return;
    lastPaint=0;
@@ -79,8 +81,9 @@
     pointer.x+=(target.x-pointer.x)*ease;pointer.y+=(target.y-pointer.y)*ease;hover+=(hoverTarget-hover)*ease;
     // Display rate while the pointer is settling; 30fps is enough for an idle twinkle.
     const settling=Math.abs(target.x-pointer.x)+Math.abs(target.y-pointer.y)>.0008||Math.abs(hoverTarget-hover)>.004;
-    if(!settling&&now-lastPaint<(low?100:32))return;
-    lastPaint=now;draw();
+    const budget=Math.min(50,Math.max(0,cost*5-2));
+    if(now-lastPaint<(settling?budget:Math.max(low?100:32,budget)))return;
+    lastPaint=now;const started=performance.now();draw();cost=cost*.85+(performance.now()-started)*.15;
    },low?50:8);}
   function move(e){if(!motion||reduced.matches||low)return;target={x:e.clientX/Math.max(1,width),y:e.clientY/Math.max(1,height)};hoverTarget=1;}
   function leave(){hoverTarget=0;}
